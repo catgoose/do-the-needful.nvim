@@ -3,16 +3,9 @@ local ins = vim.inspect
 
 local M = {}
 
-local config_file = ".do-the-needful.json"
-local global_config = string.format("%s/%s", vim.fn.stdpath("data"), config_file)
-local project_config = string.format("%s/%s", vim.loop.cwd(), config_file)
-
 local _opts = {
-	needful = {},
-	configs = {
-		global = global_config,
-		project = project_config,
-	},
+	tasks = {},
+	config = ".tasks.json",
 }
 
 M.config_order = { "project", "global" }
@@ -44,6 +37,13 @@ end
 function M.init(opts)
 	opts = opts or {}
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
+	_opts = vim.tbl_extend("keep", {
+		configs = {
+			global = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
+			project = string.format("%s/%s", vim.loop.cwd(), _opts.config),
+		},
+	}, _opts)
+
 	log.trace(string.format("config.init(): extending opts %s over _opts %s", ins(opts), ins(_opts)))
 	return M.opts()
 end

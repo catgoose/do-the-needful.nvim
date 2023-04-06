@@ -32,7 +32,7 @@ local compose_task = function(f_handle, tasks)
 			log.debug("tasks._compose_task(): json returned from decode_json is nil")
 			return {}
 		end
-		vim.list_extend(tasks, json.needful)
+		vim.list_extend(tasks, json.tasks)
 		log.trace(
 			string.format(
 				"tasks._compose_task(): composing task for file %s and tasks %s",
@@ -61,7 +61,7 @@ end
 local function aggregrate_tasks()
 	local tasks = {}
 	vim.list_extend(tasks, tasks_from_configs())
-	vim.list_extend(tasks, opts().needful)
+	vim.list_extend(tasks, opts().tasks)
 	return tasks
 end
 

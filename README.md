@@ -47,7 +47,7 @@ Only `name` and `cmd` are required to do the needful
 
 ```lua
 local opts = {
-    needful = {
+    tasks = {
         {
             name = "exa", -- name of task
             cmd = "exa", -- command to run
@@ -62,6 +62,7 @@ local opts = {
             },
         },
     },
+    config = ".tasks.json" -- name of config file for project/global config
 }
 
 return {
@@ -79,12 +80,12 @@ return {
 ## Editing project and global configs
 
 When calling the task config editing functions if the respective
-`.do-the-needful.json` does not exist, a sample task will be created with the
+`.tasks.json` does not exist, a sample task will be created with the
 expected JSON schema:
 
 ```JSON
 {
-    "needful": [
+    "tasks": [
         {
             "name": "",
             "cmd": "",
@@ -96,12 +97,12 @@ expected JSON schema:
 
 ### Project config
 
-Use `require("do-the-needful).edit_config('project')` to edit `.do-the-needful.json`
+Use `require("do-the-needful).edit_config('project')` to edit `.tasks.json`
 in the current directory
 
 ### Global config
 
-Use `require("do-the-needful).edit_config('global')` to edit `.do-the-needful.json`
+Use `require("do-the-needful).edit_config('global')` to edit `.tasks.json`
 in `vim.fn.stdpath("data)`
 
 ## Telescope pickers

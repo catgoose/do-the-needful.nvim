@@ -15,10 +15,10 @@ return telescope.register_extension({
 		["do-the-needful"] = function(opts)
 			pickers.action_picker(opts)
 		end,
-		edit_project = function()
+		project = function()
 			require("do-the-needful.edit").edit_config("project")
 		end,
-		edit_global = function()
+		global = function()
 			require("do-the-needful.edit").edit_config("global")
 		end,
 	},

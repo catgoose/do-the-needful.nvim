@@ -13,7 +13,7 @@ function M.edit_config(config)
 	e.edit_config(config)
 end
 
-function M.needful()
+function M.please()
 	require("do-the-needful.telescope").tasks()
 end
 

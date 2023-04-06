@@ -47,7 +47,7 @@ end
 ---@diagnostic disable-next-line: unused-local
 local function task_previewer(opts)
 	return previewers.new_buffer_previewer({
-		title = "Task",
+		title = "please",
 		define_preview = function(self, entry, _)
 			vim.api.nvim_buf_set_option(self.state.bufnr, "filetype", "lua")
 			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, tsk.task_preview(entry.value))
@@ -59,7 +59,7 @@ local function task_picker(opts)
 	local tasks = get_tasks()
 	pickers
 		.new(opts, {
-			prompt_title = "Tasks",
+			prompt_title = "Do the needful",
 			finder = finders.new_table({
 				results = tasks,
 				entry_maker = entry_maker,
@@ -80,7 +80,7 @@ end
 
 function M.action_picker(opts)
 	local selections = {
-		{ "Select task", task_picker, opts },
+		{ "Do the needful", task_picker, opts },
 		{ "Edit project config", e.edit_config, "project" },
 		{ "Edit global config", e.edit_config, "global" },
 	}

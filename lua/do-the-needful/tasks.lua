@@ -47,7 +47,7 @@ end
 local function tasks_from_configs()
 	local tasks = {}
 	local configs = opts().configs
-	for _, c in ipairs(cfg.config_order) do
+	for _, c in pairs(cfg.config_order) do
 		local f_handle = Path:new(configs[c])
 		tasks = compose_task(f_handle, tasks)
 		log.trace(
@@ -58,16 +58,37 @@ local function tasks_from_configs()
 	return tasks
 end
 
+local function parse_tokens(tasks)
+	for _, task in pairs(tasks) do
+		for field, token in pairs(cfg.tokens) do
+			if task[field] then
+				for k, v in pairs(token) do
+					task[field] = task[field]:gsub(k, v)
+					log.trace(
+						string.format(
+							"tasks._parse_tokens(): parsing token key %s, token value %s for field %s",
+							k,
+							v,
+							field
+						)
+					)
+				end
+			end
+		end
+	end
+end
+
 local function aggregrate_tasks()
 	local tasks = {}
 	vim.list_extend(tasks, tasks_from_configs())
 	vim.list_extend(tasks, opts().tasks)
+	parse_tokens(tasks)
 	return tasks
 end
 
 function M.collect_tasks()
 	local tasks = {}
-	for _, t in ipairs(aggregrate_tasks()) do
+	for _, t in pairs(aggregrate_tasks()) do
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, cfg.task_defaults))
 		log.trace(
 			string.format(
@@ -84,17 +105,17 @@ end
 function M.task_preview(task)
 	local fields = {}
 	local lines = {}
-	for _, f in ipairs(cfg.field_order) do
+	for _, f in pairs(cfg.field_order) do
 		table.insert(fields, { f, task[f] })
 	end
-	for _, f in ipairs(fields) do
+	for _, f in pairs(fields) do
 		local items = split(ins(f[2]), ", ")
 		local rows = split(ins(f[2]), "\n")
 		if type(f[2]) == "string" then
 			table.insert(lines, f[1] .. " = " .. '"' .. f[2] .. '"')
 		elseif not string.match(ins(f[2]), "\n") then
 			if #f[2] > cfg.wrap_fields_at then
-				for i, l in ipairs(items) do
+				for i, l in pairs(items) do
 					if i == 1 then
 						table.insert(lines, f[1] .. " = {")
 					elseif i == #items then
@@ -109,7 +130,7 @@ function M.task_preview(task)
 				table.insert(lines, f[1] .. " = " .. ins(f[2]))
 			end
 		else
-			for i, l in ipairs(rows) do
+			for i, l in pairs(rows) do
 				if i == 1 then
 					table.insert(lines, f[1] .. " = " .. l)
 				else

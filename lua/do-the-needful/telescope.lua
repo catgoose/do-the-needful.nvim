@@ -25,7 +25,7 @@ local function entry_display(entry)
 	local items = { entry.value.name, " " }
 	local highlights = {}
 	local start = #table.concat(items, "")
-	for _, tag in ipairs(entry.value.tags) do
+	for _, tag in pairs(entry.value.tags) do
 		vim.list_extend(items, { "#", tag, " " })
 		vim.list_extend(highlights, {
 			{ { start, start + 1 }, "TelescopeResultsOperator" },

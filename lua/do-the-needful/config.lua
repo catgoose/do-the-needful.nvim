@@ -29,6 +29,12 @@ M.task_defaults = {
 
 M.wrap_fields_at = 3
 
+M.tokens = {
+	cwd = {
+		["${cwd}"] = vim.loop.cwd(),
+	},
+}
+
 function M.opts()
 	log.trace(string.format("config.opts(): returning _opts %s", ins(_opts)))
 	return _opts

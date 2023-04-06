@@ -3,10 +3,9 @@
 <!--toc:start-->
 
 - [do-the-needful](#do-the-needful)
-  - [Tasks](#tasks)
+  - [please](#please)
   - [Screenshots](#screenshots)
   - [Lazy.nvim setup](#lazynvim-setup)
-    - [Plugin config](#plugin-config)
   - [Editing project and global configs](#editing-project-and-global-configs)
     - [Project config](#project-config)
     - [Global config](#global-config)
@@ -14,19 +13,20 @@
   - [API](#api)
   <!--toc:end-->
 
-Neovim task runner that uses tmux windows to run configurable tasks.
+Neovim task runner that uses tmux windows to do the needful please.
 
 <!--toc:start-->
 
-## Tasks
+## please
 
-Tasks are configurable at a plugin, project, and global level
+Tasks are configurable in plugin setup, project directory, or in
+`vim.fn.stdpath("data")`
 
 ## Screenshots
 
-|           ![Task picker]("Task picker")           |
-| :-----------------------------------------------: |
-| _Task picker_ (`:Telescope do-the-needful tasks`) |
+|           ![Task picker]("Task picker")            |
+| :------------------------------------------------: |
+| _Task picker_ (`:Telescope do-the-needful please`) |
 
 |      ![Task spawned]("Task spawned")      |
 | :---------------------------------------: |
@@ -36,47 +36,49 @@ Tasks are configurable at a plugin, project, and global level
 | :-------------------------------------------: |
 | _Action picker_ (`:Telescope do-the-needful`) |
 
+## Task definition
+
+The plugin config and json configs use the same definition:
+
 ## Lazy.nvim setup
-
-### Plugin config
-
-example config
 
 ```lua
 local opts = {
- needful = {
-  {
-   name = "exa", -- name of task
-   -- required
-   cmd = "exa", -- command to run
-   -- required
-   cwd = "~", -- working directory
-   -- default current directory
-   tags = {"exa", "home", "files"} -- task metadata used for searching
-   -- default {}
-   window = { -- all window options are optional
-    name = "Exa ~", -- name of tmux window
-    -- default: task name
-    close = false, -- close window after execution
-    -- default: true
-    keep_current = false, -- switch to window when running task
-    -- default: false
-    open_relative = true, -- true: open window after/before current window
-    -- default false
-    relative = "after", -- before ore after when open_relative is true
-    -- default "after"
-   },
-  },
- },
+    needful = {
+        {
+            name = "exa", -- name of task
+            -- required
+            cmd = "exa", -- command to run
+            -- required
+            cwd = "~", -- working directory
+            -- default current directory
+            tags = { "exa", "home", "files" }, -- task metadata used for searching
+            -- default {}
+            window = { -- all window options are optional
+                name = "Exa ~", -- name of tmux window
+                -- default: task name
+                close = false, -- close window after execution
+                -- default: true
+                keep_current = false, -- switch to window when running task
+                -- default: false
+                open_relative = true, -- true: open window after/before current window
+                -- default false
+                relative = "after", -- before ore after when open_relative is true
+                -- default "after"
+            },
+        },
+    },
 }
 
 return {
- keys = {
-  { "<leader>;", [[<cmd>Telescope do-the-needful please<cr>]], "n" },
-  { "<leader>:", [[<cmd>Telescope do-the-needful<cr>]], "n" },
- },
- dependencies = "nvim-lua/plenary.nvim",
- opts = opts,
+  "catgoose/do-the-needful",
+  event = "BufReadPre",
+  keys = {
+    { "<leader>;", [[<cmd>Telescope do-the-needful please<cr>]], "n" },
+    { "<leader>:", [[<cmd>Telescope do-the-needful<cr>]], "n" },
+  },
+  dependencies = "nvim-lua/plenary.nvim",
+  opts = opts,
 }
 ```
 
@@ -88,13 +90,13 @@ expected JSON schema:
 
 ```JSON
 {
- "needful": [
-  {
-   "name": "",
-   "cmd": "",
-   "tags": [""]
-  }
- ]
+    "needful": [
+        {
+            "name": "",
+            "cmd": "",
+            "tags": [""]
+        }
+    ]
 }
 ```
 
@@ -118,7 +120,7 @@ The following telescope pickers are available
 ```
 
 ```lua
-:Telescope do-the-needful tasks
+:Telescope do-the-needful please
 -- Displays task picker
 ```
 
@@ -135,7 +137,7 @@ The following telescope pickers are available
 ## API
 
 ```lua
-require("do-the-needful").needful()
+require("do-the-needful").please()
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```

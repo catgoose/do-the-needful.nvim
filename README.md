@@ -3,8 +3,9 @@
 <!--toc:start-->
 
 - [do-the-needful](#do-the-needful)
-  - [please](#please)
+  - [Please](#please)
   - [Screenshots](#screenshots)
+  - [Task definition](#task-definition)
   - [Lazy.nvim setup](#lazynvim-setup)
   - [Editing project and global configs](#editing-project-and-global-configs)
     - [Project config](#project-config)
@@ -17,7 +18,7 @@ Neovim task runner that uses tmux windows to do the needful please.
 
 <!--toc:start-->
 
-## please
+## Please
 
 Tasks are configurable in plugin setup, project directory, or in
 `vim.fn.stdpath("data")`
@@ -42,29 +43,22 @@ The plugin config and json configs use the same definition:
 
 ## Lazy.nvim setup
 
+Only `name` and `cmd` are required to do the needful
+
 ```lua
 local opts = {
     needful = {
         {
             name = "exa", -- name of task
-            -- required
             cmd = "exa", -- command to run
-            -- required
             cwd = "~", -- working directory
-            -- default current directory
             tags = { "exa", "home", "files" }, -- task metadata used for searching
-            -- default {}
             window = { -- all window options are optional
                 name = "Exa ~", -- name of tmux window
-                -- default: task name
                 close = false, -- close window after execution
-                -- default: true
                 keep_current = false, -- switch to window when running task
-                -- default: false
-                open_relative = true, -- true: open window after/before current window
-                -- default false
-                relative = "after", -- before ore after when open_relative is true
-                -- default "after"
+                open_relative = true, -- open window after/before current window
+                relative = "after", -- relative direction
             },
         },
     },
@@ -116,12 +110,12 @@ The following telescope pickers are available
 
 ```lua
 :Telescope do-the-needful
--- Displays picker to select task/config editing actions
+-- Displays picker to select the needful or config editing actions
 ```
 
 ```lua
 :Telescope do-the-needful please
--- Displays task picker
+-- Do the needful please
 ```
 
 ```lua

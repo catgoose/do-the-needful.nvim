@@ -18,8 +18,6 @@
 
 Neovim task runner that uses tmux windows to do the needful please.
 
-<!--toc:start-->
-
 ## Please
 
 Tasks are configurable in plugin setup, project directory, or in

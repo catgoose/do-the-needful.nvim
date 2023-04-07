@@ -97,13 +97,13 @@ expected JSON schema:
 
 ### Project config
 
-Use `require("do-the-needful).edit_config('project')` to edit `.tasks.json`
+Use `require("do-the-needful).edit_config("project")` to edit `.tasks.json`
 in the current directory
 
 ### Global config
 
-Use `require("do-the-needful).edit_config('global')` to edit `.tasks.json`
-in `vim.fn.stdpath("data)`
+Use `require("do-the-needful).edit_config("global")` to edit `.tasks.json`
+in `vim.fn.stdpath("data")`
 
 ## Telescope pickers
 

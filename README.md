@@ -1,5 +1,7 @@
 # do-the-needful
 
+![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
+
 <!--toc:start-->
 
 - [do-the-needful](#do-the-needful)
@@ -25,17 +27,17 @@ Tasks are configurable in plugin setup, project directory, or in
 
 ## Screenshots
 
-|           ![Task picker]("Task picker")            |
-| :------------------------------------------------: |
-| _Task picker_ (`:Telescope do-the-needful please`) |
+| ![Task picker](https://tinyurl.com/bdeerawy "Task picker") |
+| :--------------------------------------------------------: |
+|     _Task picker_ (`:Telescope do-the-needful please`)     |
 
-|      ![Task spawned]("Task spawned")      |
-| :---------------------------------------: |
-| _Spawned task_ relative to current window |
+| ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
+| :----------------------------------------------------------: |
+|        _Spawned task_ and will close upon completion         |
 
-|       ![Action picker]("Action picker")       |
-| :-------------------------------------------: |
-| _Action picker_ (`:Telescope do-the-needful`) |
+| ![Action picker](https://tinyurl.com/23uh9hv3 "Action picker") |
+| :------------------------------------------------------------: |
+|         _Action picker_ (`:Telescope do-the-needful`)          |
 
 ## Task definition
 

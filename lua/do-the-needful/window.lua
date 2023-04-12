@@ -46,7 +46,12 @@ function M.run_task(selection)
 	if not tmux_running() then
 		return nil
 	end
-	local pane = Job:new(window_opts(selection)):sync()
+	local cmd = window_opts(selection)
+	if not cmd then
+		log.error("window.run_tasks(): no return value from window_opts()")
+		return
+	end
+	local pane = Job:new(cmd):sync()
 	if not pane then
 		log.debug(
 			string.format("window.run_task(): pane not found when running job for selected task %s", ins(selection))

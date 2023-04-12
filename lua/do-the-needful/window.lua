@@ -1,6 +1,7 @@
 local Job = require("plenary.job")
 local extend = vim.list_extend
 local log = require("do-the-needful.log").log
+local tmux = require("do-the-needful.tmux")
 local ins = vim.inspect
 
 local M = {}
@@ -17,30 +18,11 @@ local compose_job = function(cmd, cwd)
 end
 
 local function window_opts(s)
-	local cmd = { "tmux", "new-window" }
-	if s.window.keep_current then
-		extend(cmd, { "-d" })
+	local cmd = tmux.build_command(s)
+	if not cmd then
+		log.error("window.window_opts(): no return value from tmux.build_commands()")
+		return
 	end
-	if s.window.open_relative then
-		if s.window.relative == "before" then
-			extend(cmd, { "-b" })
-		else
-			extend(cmd, { "-a" })
-		end
-	end
-	if s.window.name then
-		extend(cmd, { "-n", s.window.name })
-	else
-		extend(cmd, { "-n", s.name })
-	end
-	if s.window.close then
-		extend(cmd, { s.cmd })
-	else
-		extend(cmd, { "-P", "-F", "#{pane_id}" })
-	end
-	log.trace(
-		string.format("window.window_opts(): using selected task %s, building tmux command table: %s", ins(s), ins(s))
-	)
 	return compose_job(cmd, s.cwd)
 end
 
@@ -60,19 +42,21 @@ local function tmux_running()
 	return true
 end
 
-function M.run_task(s)
+function M.run_task(selection)
 	if not tmux_running() then
 		return nil
 	end
-	local pane = Job:new(window_opts(s)):sync()
+	local pane = Job:new(window_opts(selection)):sync()
 	if not pane then
-		log.debug(string.format("window.run_task(): pane not found when running job for selected task %s", ins(s)))
+		log.debug(
+			string.format("window.run_task(): pane not found when running job for selected task %s", ins(selection))
+		)
 		return
 	end
 	pane = pane[1]
-	if not s.window.close then
-		log.trace(string.format("window.run_task(): sending selected task %s to pane %s", ins(s), pane))
-		send_cmd_to_pane(s, pane)
+	if not selection.window.close then
+		log.trace(string.format("window.run_task(): sending selected task %s to pane %s", ins(selection), pane))
+		send_cmd_to_pane(selection, pane)
 	end
 end
 

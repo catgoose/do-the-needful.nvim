@@ -17,10 +17,10 @@ local compose_job = function(cmd, cwd)
 	return job_tbl
 end
 
-local function window_opts(s)
+local function build_command(s)
 	local cmd = tmux.build_command(s)
 	if not cmd then
-		log.error("window.window_opts(): no return value from tmux.build_commands()")
+		log.error("window.build_command(): no return value from tmux.build_command()")
 		return
 	end
 	return compose_job(cmd, s.cwd)
@@ -46,9 +46,9 @@ function M.run_task(selection)
 	if not tmux_running() then
 		return nil
 	end
-	local cmd = window_opts(selection)
+	local cmd = build_command(selection)
 	if not cmd then
-		log.error("window.run_tasks(): no return value from window_opts()")
+		log.error("window.run_tasks(): no return value from build_command()")
 		return
 	end
 	local pane = Job:new(cmd):sync()

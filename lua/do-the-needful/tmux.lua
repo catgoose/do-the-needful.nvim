@@ -8,7 +8,6 @@ function M.build_command(s)
 	if not s then
 		return
 	end
-
 	local cmd = { "tmux", "new-window" }
 	if s.window.keep_current then
 		extend(cmd, { "-d" })

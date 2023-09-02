@@ -1,7 +1,7 @@
 local g = vim.g
 
-if g.tmux_tasks_loaded == 1 then
+if g.do_the_needful == 1 then
 	return
 else
-	g.tmux_tasks_loaded = 1
+	g.do_the_needful = 1
 end

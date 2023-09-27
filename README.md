@@ -107,6 +107,13 @@ in `vim.fn.stdpath("data")`
 
 ## Telescope pickers
 
+Load telescope extension
+
+```lua
+  telescope.load_extension("do-the-needful")
+
+```
+
 The following telescope pickers are available
 
 ```lua

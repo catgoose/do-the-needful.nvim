@@ -6,13 +6,18 @@ local M = {}
 
 local function populate_config()
 	local bufnr = vim.api.nvim_get_current_buf()
+	--  TODO: 2023-10-26 - Can a lua table be converted to JSON here?
 	local lines = {
 		"{",
 		'\t"tasks": [',
 		"\t\t{",
 		'\t\t\t"name": "",',
 		'\t\t\t"cmd": "",',
-		'\t\t\t"tags": [""]',
+		'\t\t\t"tags": [""],',
+		'\t\t\t"window": {',
+		'\t\t\t\t"keep_current": true,',
+		'\t\t\t\t"close": true',
+		"\t\t\t}",
 		"\t\t}",
 		"\t]",
 		"}",

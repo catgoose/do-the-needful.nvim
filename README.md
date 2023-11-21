@@ -143,3 +143,7 @@ require("do-the-needful").please()
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```
+
+## TODO
+
+Add ordering to config for task

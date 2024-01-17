@@ -146,4 +146,6 @@ require("do-the-needful").edit_config("global")
 
 ## TODO
 
-Add ordering to config for task
+- Add ordering to config for task
+- Add prompt configuration to allow for vim.select to ask for input that
+  can be passed into the task

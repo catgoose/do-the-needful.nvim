@@ -49,12 +49,23 @@ Only `name` and `cmd` are required to do the needful
 local opts = {
     tasks = {
         {
-            name = "exa", -- name of task
-            cmd = "exa", -- command to run
-            cwd = "~", -- working directory
-            tags = { "exa", "home", "files" }, -- task metadata used for searching
+            name = "eza", -- name of task
+            cmd = "eza {{dir}}", -- command to run
+            cwd = "~", -- working directory to run task
+            tags = { "eza", "home", "files" }, -- task metadata used for searching
+            ask_tokens = { -- Used to prompt for input to be passed into task
+              dir = {
+                ask = "Which directory to search", -- defaults to name of token
+                -- (dir in this case)
+                type = "string", -- defaults to string if no type is passed in
+                default = "", -- defaults to "".  A function can be supplied to
+                -- evaluate the default
+                left_delimeter = "{{", -- defaults to {{
+                right_delimeter = "}}" -- defaults to }}
+              }
+            }
             window = { -- all window options are optional
-                name = "Exa ~", -- name of tmux window
+                name = "Eza ~", -- name of tmux window
                 close = false, -- close window after execution
                 keep_current = false, -- switch to window when running task
                 open_relative = true, -- open window after/before current window
@@ -76,6 +87,15 @@ return {
   opts = opts,
 }
 ```
+
+## Using ask tokens
+
+Tokens can be used in the `cmd` to prompt for input. Any number of tokens can
+be used and are defined in each task's token table. Left and right delimeters
+can be configured in case there is a conflict between a command needing to use
+the default delimeters (`{{` and `}}`)
+
+The value for the `default` can be a string or a function to be evaluated.
 
 ## Editing project and global configs
 
@@ -143,3 +163,11 @@ require("do-the-needful").please()
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```
+
+## Todo
+
+- [ ] Implement token logic to prompt for input to be passed
+- [ ] Refactor telescope module
+  - [ ] Allow for more configuration of telescope picker
+- [ ] Update readme to add screenshots to screenshots branch
+- [ ] Add ordering or priority to task config

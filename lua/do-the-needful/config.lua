@@ -19,7 +19,7 @@ M.field_order = {
 }
 
 M.task_defaults = {
-	cwd = vim.loop.cwd(),
+	cwd = vim.fn.getcwd(),
 	tags = {},
 	window = {
 		close = true,
@@ -31,7 +31,7 @@ M.wrap_fields_at = 3
 
 M.tokens = {
 	cwd = {
-		["${cwd}"] = vim.loop.cwd(),
+		["${cwd}"] = vim.fn.getcwd(),
 	},
 }
 
@@ -46,7 +46,7 @@ function M.init(opts)
 	_opts = vim.tbl_extend("keep", {
 		configs = {
 			global = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
-			project = string.format("%s/%s", vim.loop.cwd(), _opts.config),
+			project = string.format("%s/%s", vim.fn.getcwd(), _opts.config),
 		},
 	}, _opts)
 

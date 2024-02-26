@@ -50,7 +50,7 @@ local opts = {
     tasks = {
         {
             name = "eza", -- name of task
-            cmd = "eza {{dir}}", -- command to run
+            cmd = "eza ${dir}", -- command to run
             cwd = "~", -- working directory to run task
             tags = { "eza", "home", "files" }, -- task metadata used for searching
             ask_tokens = { -- Used to prompt for input to be passed into task
@@ -60,8 +60,6 @@ local opts = {
                 type = "string", -- defaults to string if no type is passed in
                 default = "", -- defaults to "".  A function can be supplied to
                 -- evaluate the default
-                left_delimeter = "{{", -- defaults to {{
-                right_delimeter = "}}" -- defaults to }}
               }
             }
             window = { -- all window options are optional
@@ -97,9 +95,7 @@ return {
 ## Using ask tokens
 
 Tokens can be used in the `cmd` to prompt for input. Any number of tokens can
-be used and are defined in each task's token table. Left and right delimeters
-can be configured in case there is a conflict between a command needing to use
-the default delimeters (`{{` and `}}`)
+be used and are defined in each task's token table.
 
 The value for the `default` can be a string or a function to be evaluated.
 

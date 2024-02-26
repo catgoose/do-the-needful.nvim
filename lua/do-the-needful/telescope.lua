@@ -49,7 +49,7 @@ local function task_previewer(opts)
 	return previewers.new_buffer_previewer({
 		title = "please",
 		define_preview = function(self, entry, _)
-			vim.api.nvim_buf_set_option_value(self.state.bufnr, "filetype", "lua")
+			vim.api.nvim_set_option_value("filetype", "lua", { buf = self.state.bufnr })
 			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, tsk.task_preview(entry.value))
 		end,
 	})

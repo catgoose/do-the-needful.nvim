@@ -47,7 +47,8 @@ end
 local function tasks_from_configs()
 	local tasks = {}
 	local configs = opts().configs
-	for _, c in pairs(cfg.order) do
+	--  TODO: 2024-02-26 - Handle opts defined tasks
+	for _, c in pairs(opts().config_order) do
 		local f_handle = Path:new(configs[c])
 		tasks = compose_task(f_handle, tasks)
 		log.trace(
@@ -60,7 +61,7 @@ end
 
 local function parse_tokens(tasks)
 	for _, task in pairs(tasks) do
-		for field, token in pairs(cfg.tokens) do
+		for field, token in pairs(opts().global_tokens) do
 			if task[field] then
 				for k, v in pairs(token) do
 					task[field] = task[field]:gsub(k, v)
@@ -78,7 +79,7 @@ local function parse_tokens(tasks)
 	end
 end
 
-local function aggregrate_tasks()
+local function aggregate_tasks()
 	local tasks = {}
 	vim.list_extend(tasks, tasks_from_configs())
 	vim.list_extend(tasks, opts().tasks)
@@ -88,7 +89,7 @@ end
 
 function M.collect_tasks()
 	local tasks = {}
-	for _, t in pairs(aggregrate_tasks()) do
+	for _, t in pairs(aggregate_tasks()) do
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, cfg.task_defaults))
 		log.trace(
 			string.format(

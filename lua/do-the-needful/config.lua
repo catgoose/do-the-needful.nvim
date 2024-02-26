@@ -6,8 +6,12 @@ local M = {}
 local _opts = {
 	tasks = {},
 	config = ".tasks.json",
-	config_order = { "project", "global", "opts" },
-	--  TODO: 2024-02-26 - Validate global_tokens w
+	config_order = {
+		"project",
+		"global",
+		-- "opts",
+	},
+	--  TODO: 2024-02-26 - Validate global_tokens
 	global_tokens = {
 		cwd = {
 			["${cwd}"] = vim.fn.getcwd(),
@@ -41,6 +45,9 @@ end
 
 local validate_config_order = function(config_order)
 	local valid = true
+	if not vim.tbl_islist(config_order) then
+		return not valid
+	end
 	for _, c in pairs(config_order) do
 		if c ~= "project" and c ~= "global" and c ~= "opts" then
 			valid = false
@@ -53,6 +60,7 @@ end
 function M.init(opts)
 	opts = opts or {}
 	opts.priority = ("project" or "global") and opts.priority or "project"
+	opts.config_order = opts.config_order or _opts.config_order
 	if validate_config_order(opts.config_order) then
 		opts.config_order = opts.config_order
 	else

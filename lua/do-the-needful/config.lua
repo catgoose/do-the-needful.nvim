@@ -7,6 +7,12 @@ local _opts = {
 	tasks = {},
 	config = ".tasks.json",
 	config_order = { "project", "global", "opts" },
+	--  TODO: 2024-02-26 - Validate global_tokens w
+	global_tokens = {
+		cwd = {
+			["${cwd}"] = vim.fn.getcwd(),
+		},
+	},
 }
 
 M.field_order = {
@@ -28,12 +34,6 @@ M.task_defaults = {
 
 M.wrap_fields_at = 3
 
-M.tokens = {
-	cwd = {
-		["${cwd}"] = vim.fn.getcwd(),
-	},
-}
-
 function M.opts()
 	log.trace(string.format("config.opts(): returning _opts %s", ins(_opts)))
 	return _opts
@@ -52,6 +52,7 @@ end
 
 function M.init(opts)
 	opts = opts or {}
+	opts.priority = ("project" or "global") and opts.priority or "project"
 	if validate_config_order(opts.config_order) then
 		opts.config_order = opts.config_order
 	else

@@ -78,6 +78,13 @@ local opts = {
         "global", -- .tasks.json in stdpath('data')
         "opts" -- tasks defined in setup opts
     },
+    global_tokens = {
+        cwd = {
+            ["${cwd}"] = function()
+                vim.fn.cwd()
+            end
+        }
+    }
 }
 
 return {
@@ -91,6 +98,12 @@ return {
   opts = opts,
 }
 ```
+
+## Built-in tokens
+
+| Token  | Description            |
+| ------ | ---------------------- |
+| ${cwd} | CWD for task to run in |
 
 ## Using ask tokens
 

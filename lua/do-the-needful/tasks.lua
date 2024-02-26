@@ -47,7 +47,7 @@ end
 local function tasks_from_configs()
 	local tasks = {}
 	local configs = opts().configs
-	for _, c in pairs(cfg.config_order) do
+	for _, c in pairs(cfg.order) do
 		local f_handle = Path:new(configs[c])
 		tasks = compose_task(f_handle, tasks)
 		log.trace(

@@ -74,6 +74,12 @@ local opts = {
         },
     },
     config = ".tasks.json" -- name of config file for project/global config
+    config_order = {-- default: {project, global, opts}.  Order in which
+    -- tasks are aggregated
+        "project", -- .task.json in project directory
+        "global", -- .tasks.json in stdpath('data')
+        "opts" -- tasks defined in setup opts
+    },
 }
 
 return {

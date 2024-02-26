@@ -6,9 +6,8 @@ local M = {}
 local _opts = {
 	tasks = {},
 	config = ".tasks.json",
+	config_order = { "project", "global", "opts" },
 }
-
-M.config_order = { "project", "global" }
 
 M.field_order = {
 	"name",
@@ -40,8 +39,25 @@ function M.opts()
 	return _opts
 end
 
+local validate_config_order = function(config_order)
+	local valid = true
+	for _, c in pairs(config_order) do
+		if c ~= "project" and c ~= "global" and c ~= "opts" then
+			valid = false
+			break
+		end
+	end
+	return valid
+end
+
 function M.init(opts)
 	opts = opts or {}
+	if validate_config_order(opts.config_order) then
+		opts.config_order = opts.config_order
+	else
+		--  TODO: 2024-02-26 - does this need to be a deep extend?
+		opts.config_order = _opts.config_order
+	end
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts = vim.tbl_extend("keep", {
 		configs = {

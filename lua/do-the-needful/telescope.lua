@@ -6,7 +6,7 @@ local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
 local tm = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
-local e = require("do-the-needful.edit")
+local Edit = require("do-the-needful").Edit
 
 Telescope = {}
 
@@ -81,8 +81,8 @@ end
 function Telescope.action_picker(opts)
 	local selections = {
 		{ "Do the needful", task_picker, opts },
-		{ "Edit project config", e.edit_config, "project" },
-		{ "Edit global config", e.edit_config, "global" },
+		{ "Edit project config", Edit.edit_config, "project" },
+		{ "Edit global config", Edit.edit_config, "global" },
 	}
 	pickers
 		.new(opts, {

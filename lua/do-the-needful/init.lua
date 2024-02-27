@@ -1,5 +1,4 @@
 local cfg = require("do-the-needful.config")
-local e = require("do-the-needful.edit")
 
 Needful = {}
 
@@ -7,11 +6,12 @@ function Needful.setup(config)
 	config = config or {}
 	cfg.init(config)
 	Needful.Log = require("do-the-needful.logger").init()
+	Needful.Edit = require("do-the-needful.edit")
 end
 
 function Needful.edit_config(config)
 	config = ("project" or "global") and config or "project"
-	e.edit_config(config)
+	Needful.Edit.edit_config(config)
 end
 
 function Needful.please()

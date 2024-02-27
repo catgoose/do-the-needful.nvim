@@ -45,46 +45,50 @@ The plugin config and json configs use the same definition:
 
 Only `name` and `cmd` are required to do the needful
 
+### Example config
+
 ```lua
 local opts = {
-    tasks = {
-        {
-            name = "eza", -- name of task
-            cmd = "eza ${dir}", -- command to run
-            cwd = "~", -- working directory to run task
-            tags = { "eza", "home", "files" }, -- task metadata used for searching
-            ask_tokens = { -- Used to prompt for input to be passed into task
-              dir = {
-                ask = "Which directory to search", -- defaults to name of token
-                -- (dir in this case)
-                type = "string", -- defaults to string if no type is passed in
-                default = "", -- defaults to "".  A function can be supplied to
-                -- evaluate the default
-              }
-            }
-            window = { -- all window options are optional
-                name = "Eza ~", -- name of tmux window
-                close = false, -- close window after execution
-                keep_current = false, -- switch to window when running task
-                open_relative = true, -- open window after/before current window
-                relative = "after", -- relative direction
-            },
-        },
-    },
-    config = ".tasks.json" -- name of config file for project/global config
-    config_order = {-- default: {project, global, opts}.  Order in which
-    -- tasks are aggregated
-        "project", -- .task.json in project directory
-        "global", -- .tasks.json in stdpath('data')
-        "opts" -- tasks defined in setup opts
-    },
-    global_tokens = {
-        cwd = {
-            ["${cwd}"] = function()
-                vim.fn.cwd()
-            end
+  tasks = {
+    {
+      name = "eza", -- name of task
+      cmd = "eza ${dir}", -- command to run
+      cwd = "~", -- working directory to run task
+      tags = { "eza", "home", "files" }, -- task metadata used for searching
+      ask_tokens = { -- Used to prompt for input to be passed into task
+        ["${dir}"] = {
+          ask = "Which directory to search", -- defaults to the name of token
+          default = "", -- defaults to "".  A function can be supplied to
+          -- evaluate the default
         }
-    }
+      },
+      window = { -- all window options are optional
+        name = "Eza ~", -- name of tmux window
+        close = false, -- close window after execution
+        keep_current = false, -- switch to window when running task
+        open_relative = true, -- open window after/before current window
+        relative = "after", -- relative direction
+      },
+    },
+  },
+  config = ".tasks.json", -- name of config file for project/global config
+  config_order = {-- default: {project, global, opts}.  Order in which
+  -- tasks are aggregated
+    "project", -- .task.json in project directory
+    "global", -- .tasks.json in stdpath('data')
+    "opts" -- tasks defined in setup opts
+  },
+  global_tokens = {
+    ["${cwd}"] = function()
+      vim.fn.cwd()
+    end,
+    ["${do-the-needful}"] = "please"
+  },
+  helper_functions = {
+    dir = function()
+      return vim.fn.cwd()
+    end
+  }
 }
 
 return {
@@ -99,7 +103,25 @@ return {
 }
 ```
 
-## Built-in tokens
+### Default setup opts
+
+```lua
+{
+  log_level = default_log_level,
+  tasks = {},
+  config = ".tasks.json",
+  config_order = {
+   "global",
+   "project",
+   "opts",
+  },
+  global_tokens = {
+    ["${cwd}"] = vim.fn.getcwd(),
+  },
+}
+```
+
+## Built-in global tokens
 
 | Token  | Description            |
 | ------ | ---------------------- |
@@ -115,18 +137,65 @@ The value for the `default` can be a string or a function to be evaluated.
 ## Editing project and global configs
 
 When calling the task config editing functions if the respective
-`.tasks.json` does not exist, a sample task will be created with the
-expected JSON schema:
+`.tasks.json` does not exist, an example task will be created
 
 ```JSON
 {
-    "tasks": [
-        {
-            "name": "",
-            "cmd": "",
-            "tags": [""]
-        }
-    ]
+ "tasks": [
+  {
+   "name": "",
+   "cmd": "",
+   "tags": [""],
+   "window": {
+    "name": "",
+    "close": false,
+    "keep_current": false,
+    "open_relative": true,
+    "relative": "after"
+   }
+  }
+ ]
+}
+```
+
+### JSON schema
+
+```typescript
+{
+  tasks: Array<{
+    name: string;
+    cmd: string;
+    tags: Array<string>;
+    ask_tokens: {
+      "${token}": {
+        ask: string;
+        type: "string" | "function";
+        default: string;
+      };
+    };
+    window: {
+      name: string;
+      close: boolean;
+      keep_current: boolean;
+      open_relative: boolean;
+      relative: string;
+    };
+  }>;
+}
+```
+
+If the value of `ask_tokens.type` is `function` the corresponding `helper_function`
+defined in setup opts will be used
+
+```json
+{
+  "ask_tokens": {
+    "${dir}": {
+      "ask": "Which directory?",
+      "type": "function",
+      "default": "dir"
+    }
+  }
 }
 ```
 

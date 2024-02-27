@@ -35,8 +35,9 @@ local send_cmd_to_pane = function(s, pane)
 end
 
 local function tmux_running()
-	if not vim.env.TWindowUX then
-		Log.error("checking $TWindowUX env...tmux is not running")
+	vim.print(vim.env.TMUX)
+	if not vim.env.TMUX then
+		Log.error("checking $TMUX env...tmux is not running")
 		return nil
 	end
 	return true

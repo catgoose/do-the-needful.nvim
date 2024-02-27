@@ -19,9 +19,9 @@ Constants.val = {
 		tasks = {},
 		config = ".tasks.json",
 		config_order = {
-			"project",
 			"global",
-			-- "opts",
+			"project",
+			"opts",
 		},
 		--  TODO: 2024-02-26 - Validate global_tokens
 		global_tokens = {

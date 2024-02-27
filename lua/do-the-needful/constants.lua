@@ -1,3 +1,5 @@
+local t = require("do-the-needful.utils").indent_str
+
 Constants = {}
 
 Constants.val = {
@@ -20,20 +22,20 @@ Constants.val = {
 	},
 	default_task_lines = {
 		"{",
-		'\t"tasks": [',
-		"\t\t{",
-		'\t\t\t"name": "",',
-		'\t\t\t"cmd": "",',
-		'\t\t\t"tags": [""],',
-		'\t\t\t"window": {',
-		'\t\t\t\t"name": "",',
-		'\t\t\t\t"close": false,',
-		'\t\t\t\t"keep_current": false,',
-		'\t\t\t\t"open_relative": true,',
-		'\t\t\t\t"relative": "after"',
-		"\t\t\t}",
-		"\t\t}",
-		"\t]",
+		t(1, '"tasks": ['),
+		t(2, "{"),
+		t(3, '"name": "",'),
+		t(3, '"cmd": "",'),
+		t(3, '"tags": [""],'),
+		t(3, '"window": {'),
+		t(4, '"name": "",'),
+		t(4, '"close": false,'),
+		t(4, '"keep_current": false,'),
+		t(4, '"open_relative": true,'),
+		t(4, '"relative": "after"'),
+		t(3, "}"),
+		t(2, "}"),
+		t(1, "]"),
 		"}",
 	},
 	default_log_level = "warn",

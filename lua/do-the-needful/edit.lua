@@ -8,7 +8,7 @@ Edit = {}
 local function populate_config()
 	local bufnr = vim.api.nvim_get_current_buf()
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, const.default_task_lines)
-	vim.fn.setcursorcharpos(4, 13)
+	vim.fn.setcursorcharpos(4, 14)
 	Log.trace("edit._populate_config(): populating buffer for nonexisting file")
 end
 
@@ -19,7 +19,6 @@ function Edit.edit_config(config)
 	if not file_h:exists() or #file_h:read() == 0 then
 		populate_config()
 	end
-
 	Log.trace(string.format("init.edit_config(): editing config type: %s", config))
 end
 

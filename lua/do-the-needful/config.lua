@@ -1,11 +1,12 @@
 local const = require("do-the-needful.constants").val
+local utils = require("do-the-needful.utils")
 
 Config = {}
 
 local _opts = const.opts
 
 function Config.opts()
-	return _opts
+	return utils.deep_copy(_opts)
 end
 
 local validate_config_order = function(config_order)
@@ -22,8 +23,8 @@ local validate_config_order = function(config_order)
 	return valid
 end
 
-function Config.init(opts)
-	opts = opts or {}
+local set_opts_defaults = function(opts)
+	--  TODO: 2024-02-27 - handle tasks defined from setup opts
 	opts.priority = ("project" or "global") and opts.priority or "project"
 	opts.config_order = opts.config_order or _opts.config_order
 	if validate_config_order(opts.config_order) then
@@ -31,8 +32,11 @@ function Config.init(opts)
 	else
 		opts.config_order = _opts.config_order
 	end
-	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
+	return opts
+end
 
+local set_local_opts = function(opts)
+	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts = vim.tbl_extend("keep", {
 		configs = {
@@ -40,7 +44,12 @@ function Config.init(opts)
 			project = string.format("%s/%s", vim.fn.getcwd(), _opts.config),
 		},
 	}, _opts)
+end
 
+function Config.init(opts)
+	opts = opts or {}
+	opts = set_opts_defaults(opts)
+	set_local_opts(opts)
 	return Config.opts()
 end
 

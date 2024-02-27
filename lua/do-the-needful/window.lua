@@ -1,7 +1,7 @@
 local Job = require("plenary.job")
-local extend = vim.list_extend
 local Log = require("do-the-needful").Log
 local tmux = require("do-the-needful.tmux")
+local extend = vim.list_extend
 local ins = vim.inspect
 
 Window = {}

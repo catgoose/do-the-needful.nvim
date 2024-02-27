@@ -4,9 +4,9 @@ local pickers = require("telescope.pickers")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
-local tm = require("do-the-needful.window")
+local win = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
-local Edit = require("do-the-needful").Edit
+local edit = require("do-the-needful.edit")
 
 Telescope = {}
 
@@ -69,7 +69,7 @@ local function task_picker(opts)
 				actions.select_default:replace(function()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
-					tm.run_task(selection.value)
+					win.run_task(selection.value)
 				end)
 				return true
 			end,
@@ -81,8 +81,8 @@ end
 function Telescope.action_picker(opts)
 	local selections = {
 		{ "Do the needful", task_picker, opts },
-		{ "Edit project config", Edit.edit_config, "project" },
-		{ "Edit global config", Edit.edit_config, "global" },
+		{ "Edit project config", edit.edit_config, "project" },
+		{ "Edit global config", edit.edit_config, "global" },
 	}
 	pickers
 		.new(opts, {

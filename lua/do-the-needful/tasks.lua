@@ -1,9 +1,8 @@
 local Path = require("plenary.path")
-local cfg = require("do-the-needful.config")
-local opts = cfg.opts
-local ins = vim.inspect
+local opts = require("do-the-needful.config").opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
+local ins = vim.inspect
 
 Tasks = {}
 

@@ -1,5 +1,5 @@
-local extend = vim.list_extend
 local Log = require("do-the-needful").Log
+local extend = vim.list_extend
 local ins = vim.inspect
 
 Tmux = {}

@@ -1,6 +1,6 @@
 local Path = require("plenary.path")
 local cfg = require("do-the-needful.config")
-local log = require("do-the-needful.log").log
+local Log = require("do-the-needful").Log
 
 local M = {}
 
@@ -37,7 +37,7 @@ function M.edit_config(config)
 		populate_config()
 	end
 
-	log.trace(string.format("init.edit_config(): editing config type: %s", config))
+	Log.trace(string.format("init.edit_config(): editing config type: %s", config))
 end
 
 return M

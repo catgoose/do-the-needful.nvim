@@ -2,7 +2,7 @@ local Path = require("plenary.path")
 local cfg = require("do-the-needful.config")
 local opts = cfg.opts
 local ins = vim.inspect
-local log = require("do-the-needful.log").log
+local Log = require("do-the-needful").Log
 
 local M = {}
 
@@ -16,12 +16,12 @@ local function decode_json(f_handle)
 	local ok, json = pcall(vim.json.decode, contents)
 	if not ok then
 		if #contents == 0 then
-			log.warn(string.format("tasks._decode_json(): %s is an empty file", f_handle.filename))
+			Log.warn(string.format("tasks._decode_json(): %s is an empty file", f_handle.filename))
 		else
-			log.error(string.format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
+			Log.error(string.format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
 		end
 	end
-	log.trace(string.format("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
+	Log.trace(string.format("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
 	return ok and json or nil
 end
 
@@ -29,11 +29,11 @@ local compose_task = function(f_handle, tasks)
 	if f_handle:exists() then
 		local json = decode_json(f_handle)
 		if not json then
-			log.debug("tasks._compose_task(): json returned from decode_json is nil")
+			Log.debug("tasks._compose_task(): json returned from decode_json is nil")
 			return {}
 		end
 		vim.list_extend(tasks, json.tasks)
-		log.trace(
+		Log.trace(
 			string.format(
 				"tasks._compose_task(): composing task for file %s and tasks %s",
 				f_handle.filename,
@@ -41,6 +41,7 @@ local compose_task = function(f_handle, tasks)
 			)
 		)
 	end
+	Log.warn(string.format("tasks._compose_task(): file %s does not exist", f_handle.filename))
 	return tasks
 end
 
@@ -51,11 +52,11 @@ local function tasks_from_configs()
 	for _, c in pairs(opts().config_order) do
 		local f_handle = Path:new(configs[c])
 		tasks = compose_task(f_handle, tasks)
-		log.trace(
+		Log.trace(
 			string.format("tasks._tasks_from_configs(): composing task: %s from file %s", ins(tasks), f_handle.filename)
 		)
 	end
-	log.trace(string.format("tasks._tasks_from_configs(): parsing configs: %s", configs))
+	Log.trace(string.format("tasks._tasks_from_configs(): parsing configs: %s", configs))
 	return tasks
 end
 
@@ -65,7 +66,7 @@ local function parse_tokens(tasks)
 			if task[field] then
 				for k, v in pairs(token) do
 					task[field] = task[field]:gsub(k, v)
-					log.trace(
+					Log.trace(
 						string.format(
 							"tasks._parse_tokens(): parsing token key %s, token value %s for field %s",
 							k,
@@ -140,7 +141,7 @@ function M.task_preview(task)
 			end
 		end
 	end
-	log.trace(
+	Log.trace(
 		string.format(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
 			ins(cfg.field_order),

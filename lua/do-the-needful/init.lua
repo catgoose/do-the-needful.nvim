@@ -6,6 +6,7 @@ local M = {}
 function M.setup(config)
 	config = config or {}
 	cfg.init(config)
+	Needful.Log = require("do-the-needful.logger").init()
 end
 
 function M.edit_config(config)

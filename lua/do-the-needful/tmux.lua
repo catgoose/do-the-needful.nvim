@@ -1,5 +1,5 @@
 local extend = vim.list_extend
-local log = require("do-the-needful.log").log
+local Log = require("do-the-needful").Log
 local ins = vim.inspect
 
 local M = {}
@@ -29,7 +29,7 @@ function M.build_command(s)
 	else
 		extend(cmd, { "-P", "-F", "#{pane_id}" })
 	end
-	log.trace(
+	Log.trace(
 		string.format("window.window_opts(): using selected task %s, building tmux command table: %s", ins(s), ins(s))
 	)
 

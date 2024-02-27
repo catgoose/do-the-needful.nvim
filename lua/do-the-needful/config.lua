@@ -1,9 +1,9 @@
-local log = require("do-the-needful.log").log
 local ins = vim.inspect
 
 local M = {}
 
 local _opts = {
+	log_level = const.default_log_level,
 	tasks = {},
 	config = ".tasks.json",
 	config_order = {
@@ -39,7 +39,6 @@ M.task_defaults = {
 M.wrap_fields_at = 3
 
 function M.opts()
-	log.trace(string.format("config.opts(): returning _opts %s", ins(_opts)))
 	return _opts
 end
 
@@ -67,6 +66,7 @@ function M.init(opts)
 		--  TODO: 2024-02-26 - does this need to be a deep extend?
 		opts.config_order = _opts.config_order
 	end
+	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts = vim.tbl_extend("keep", {
 		configs = {
@@ -75,7 +75,6 @@ function M.init(opts)
 		},
 	}, _opts)
 
-	log.trace(string.format("config.init(): extending opts %s over _opts %s", ins(opts), ins(_opts)))
 	return M.opts()
 end
 

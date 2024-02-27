@@ -184,5 +184,4 @@ require("do-the-needful").edit_config("global")
 - [ ] Implement token logic to prompt for input to be passed
 - [ ] Refactor telescope module
   - [ ] Allow for more configuration of telescope picker
-- [ ] Update readme to add screenshots to screenshots branch
 - [ ] Add ordering or priority to task config

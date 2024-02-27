@@ -42,7 +42,6 @@ local compose_task = function(f_handle, tasks)
 			)
 		)
 	end
-	Log.warn(string.format("tasks._compose_task(): file %s does not exist", f_handle.filename))
 	return tasks
 end
 

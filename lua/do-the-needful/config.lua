@@ -1,8 +1,9 @@
-local ins = vim.inspect
+local const = require("do-the-needful.constants").val
 
-local M = {}
+Config = {}
 
 local _opts = {
+	dev = false,
 	log_level = const.default_log_level,
 	tasks = {},
 	config = ".tasks.json",
@@ -19,7 +20,7 @@ local _opts = {
 	},
 }
 
-function M.opts()
+function Config.opts()
 	return _opts
 end
 
@@ -37,7 +38,7 @@ local validate_config_order = function(config_order)
 	return valid
 end
 
-function M.init(opts)
+function Config.init(opts)
 	opts = opts or {}
 	opts.priority = ("project" or "global") and opts.priority or "project"
 	opts.config_order = opts.config_order or _opts.config_order
@@ -56,7 +57,7 @@ function M.init(opts)
 		},
 	}, _opts)
 
-	return M.opts()
+	return Config.opts()
 end
 
-return M
+return Config

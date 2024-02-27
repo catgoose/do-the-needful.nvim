@@ -8,7 +8,7 @@ local tm = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
 local e = require("do-the-needful.edit")
 
-local M = {}
+Telescope = {}
 
 local function get_tasks()
 	return tsk.collect_tasks()
@@ -78,7 +78,7 @@ local function task_picker(opts)
 		:find()
 end
 
-function M.action_picker(opts)
+function Telescope.action_picker(opts)
 	local selections = {
 		{ "Do the needful", task_picker, opts },
 		{ "Edit project config", e.edit_config, "project" },
@@ -111,9 +111,9 @@ function M.action_picker(opts)
 		:find()
 end
 
-function M.tasks(opts)
+function Telescope.tasks(opts)
 	opts = opts or {}
 	task_picker(opts)
 end
 
-return M
+return Telescope

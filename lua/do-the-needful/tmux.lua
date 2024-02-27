@@ -2,9 +2,9 @@ local extend = vim.list_extend
 local Log = require("do-the-needful").Log
 local ins = vim.inspect
 
-local M = {}
+Tmux = {}
 
-function M.build_command(s)
+function Tmux.build_command(s)
 	if not s then
 		return
 	end
@@ -36,4 +36,4 @@ function M.build_command(s)
 	return cmd
 end
 
-return M
+return Tmux

@@ -4,7 +4,7 @@ local Log = require("do-the-needful").Log
 local tmux = require("do-the-needful.tmux")
 local ins = vim.inspect
 
-local M = {}
+Window = {}
 
 local compose_job = function(cmd, cwd)
 	local command = table.remove(cmd, 1)
@@ -42,7 +42,7 @@ local function tmux_running()
 	return true
 end
 
-function M.run_task(selection)
+function Window.run_task(selection)
 	if not tmux_running() then
 		return nil
 	end
@@ -65,4 +65,4 @@ function M.run_task(selection)
 	end
 end
 
-return M
+return Window

@@ -5,7 +5,7 @@ local ins = vim.inspect
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 
-local M = {}
+Tasks = {}
 
 local split = function(var, str)
 	str = str or " "
@@ -106,10 +106,10 @@ function Tasks.collect_tasks()
 	return tasks
 end
 
-function M.task_preview(task)
+function Tasks.task_preview(task)
 	local fields = {}
 	local lines = {}
-	for _, f in pairs(cfg.field_order) do
+	for _, f in pairs(const.field_order) do
 		table.insert(fields, { f, task[f] })
 	end
 	for _, f in pairs(fields) do
@@ -118,7 +118,7 @@ function M.task_preview(task)
 		if type(f[2]) == "string" then
 			table.insert(lines, f[1] .. " = " .. '"' .. f[2] .. '"')
 		elseif not string.match(ins(f[2]), "\n") then
-			if #f[2] > cfg.wrap_fields_at then
+			if #f[2] > const.wrap_fields_at then
 				for i, l in pairs(items) do
 					if i == 1 then
 						table.insert(lines, f[1] .. " = {")
@@ -146,7 +146,7 @@ function M.task_preview(task)
 	Log.trace(
 		string.format(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
-			ins(cfg.field_order),
+			ins(const.field_order),
 			ins(task),
 			ins(lines)
 		)
@@ -154,4 +154,4 @@ function M.task_preview(task)
 	return lines
 end
 
-return M
+return Tasks

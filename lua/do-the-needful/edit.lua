@@ -3,7 +3,7 @@ local cfg = require("do-the-needful.config")
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 
-local M = {}
+Edit = {}
 
 local function populate_config()
 	local bufnr = vim.api.nvim_get_current_buf()
@@ -12,7 +12,7 @@ local function populate_config()
 	Log.trace("edit._populate_config(): populating buffer for nonexisting file")
 end
 
-function M.edit_config(config)
+function Edit.edit_config(config)
 	local file = cfg.opts().configs[config]
 	vim.cmd.e(file)
 	local file_h = Path:new(file)
@@ -23,4 +23,4 @@ function M.edit_config(config)
 	Log.trace(string.format("init.edit_config(): editing config type: %s", config))
 end
 
-return M
+return Edit

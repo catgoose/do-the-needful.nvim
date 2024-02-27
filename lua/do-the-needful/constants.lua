@@ -2,6 +2,8 @@ local t = require("do-the-needful.utils").indent_str
 
 Constants = {}
 
+local default_log_level = "warn"
+
 Constants.val = {
 	plugin_name = "do-the-needful",
 	field_order = {
@@ -10,6 +12,23 @@ Constants.val = {
 		"cwd",
 		"window",
 		"tags",
+	},
+	opts = {
+		dev = false,
+		log_level = default_log_level,
+		tasks = {},
+		config = ".tasks.json",
+		config_order = {
+			"project",
+			"global",
+			-- "opts",
+		},
+		--  TODO: 2024-02-26 - Validate global_tokens
+		global_tokens = {
+			cwd = {
+				["${cwd}"] = vim.fn.getcwd(),
+			},
+		},
 	},
 	wrap_fields_at = 3,
 	task_defaults = {
@@ -38,7 +57,7 @@ Constants.val = {
 		t(1, "]"),
 		"}",
 	},
-	default_log_level = "warn",
+	default_log_level = default_log_level,
 	log_levels = { "trace", "debug", "info", "warn", "error", "fatal" },
 }
 

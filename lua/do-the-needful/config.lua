@@ -2,23 +2,7 @@ local const = require("do-the-needful.constants").val
 
 Config = {}
 
-local _opts = {
-	dev = false,
-	log_level = const.default_log_level,
-	tasks = {},
-	config = ".tasks.json",
-	config_order = {
-		"project",
-		"global",
-		-- "opts",
-	},
-	--  TODO: 2024-02-26 - Validate global_tokens
-	global_tokens = {
-		cwd = {
-			["${cwd}"] = vim.fn.getcwd(),
-		},
-	},
-}
+local _opts = const.opts
 
 function Config.opts()
 	return _opts
@@ -45,10 +29,10 @@ function Config.init(opts)
 	if validate_config_order(opts.config_order) then
 		opts.config_order = opts.config_order
 	else
-		--  TODO: 2024-02-26 - does this need to be a deep extend?
 		opts.config_order = _opts.config_order
 	end
 	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
+
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts = vim.tbl_extend("keep", {
 		configs = {

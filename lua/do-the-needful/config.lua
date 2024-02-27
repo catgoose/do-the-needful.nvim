@@ -19,25 +19,6 @@ local _opts = {
 	},
 }
 
-M.field_order = {
-	"name",
-	"cmd",
-	"cwd",
-	"window",
-	"tags",
-}
-
-M.task_defaults = {
-	cwd = vim.fn.getcwd(),
-	tags = {},
-	window = {
-		close = true,
-		keep_current = false,
-	},
-}
-
-M.wrap_fields_at = 3
-
 function M.opts()
 	return _opts
 end

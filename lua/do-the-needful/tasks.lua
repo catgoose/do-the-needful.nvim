@@ -3,6 +3,7 @@ local cfg = require("do-the-needful.config")
 local opts = cfg.opts
 local ins = vim.inspect
 local Log = require("do-the-needful").Log
+local const = require("do-the-needful.constants").val
 
 local M = {}
 
@@ -88,16 +89,17 @@ local function aggregate_tasks()
 	return tasks
 end
 
-function M.collect_tasks()
+function Tasks.collect_tasks()
 	local tasks = {}
 	for _, t in pairs(aggregate_tasks()) do
-		table.insert(tasks, vim.tbl_deep_extend("keep", t, cfg.task_defaults))
-		log.trace(
+		--  TODO: 2024-02-27 - look into why this is necessary
+		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
+		Log.trace(
 			string.format(
 				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
 				ins(t),
 				ins(tasks),
-				ins(cfg.task_defaults)
+				ins(const.task_defaults)
 			)
 		)
 	end

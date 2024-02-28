@@ -25,14 +25,13 @@ local function decode_json(f_handle)
 	return ok and json or nil
 end
 
-local compose_task = function(f_handle, tasks)
+local tasks_from_json = function(f_handle, tasks)
 	if f_handle:exists() then
 		local json = decode_json(f_handle)
 		if not json then
 			Log.debug("tasks._compose_task(): json returned from decode_json is nil")
 			return {}
 		end
-		vim.list_extend(tasks, json.tasks)
 		Log.trace(
 			string.format(
 				"tasks._compose_task(): composing task for file %s and tasks %s",
@@ -40,23 +39,11 @@ local compose_task = function(f_handle, tasks)
 				ins(tasks)
 			)
 		)
+		return json.tasks
+	else
+		Log.debug(string.format("tasks._compose_task(): %s does not exist", f_handle.filename))
+		return {}
 	end
-	return tasks
-end
-
-local function tasks_from_configs()
-	local tasks = {}
-	local configs = opts().configs
-	--  TODO: 2024-02-26 - Handle opts defined tasks
-	for _, c in pairs(opts().config_order) do
-		local f_handle = Path:new(configs[c])
-		tasks = compose_task(f_handle, tasks)
-		Log.trace(
-			string.format("tasks._tasks_from_configs(): composing task: %s from file %s", ins(tasks), f_handle.filename)
-		)
-	end
-	Log.trace(string.format("tasks._tasks_from_configs(): parsing configs: %s", configs))
-	return tasks
 end
 
 local function parse_tokens(tasks)
@@ -81,8 +68,25 @@ end
 
 local function aggregate_tasks()
 	local tasks = {}
-	vim.list_extend(tasks, tasks_from_configs())
-	vim.list_extend(tasks, opts().tasks)
+	local configs = opts().configs
+	for _, c in pairs(opts().config_order) do
+		local path = configs[c].path
+		if path then
+			local f_handle = Path:new(path)
+			local _tasks = tasks_from_json(f_handle, tasks)
+			vim.list_extend(tasks, _tasks)
+			Log.trace(
+				string.format(
+					"tasks._aggregate_tasks(): composing task: %s from file %s",
+					ins(tasks),
+					f_handle.filename
+				)
+			)
+		else
+			vim.list_extend(tasks, configs[c].tasks)
+		end
+	end
+	Log.trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
 	parse_tokens(tasks)
 	return tasks
 end
@@ -92,7 +96,7 @@ function Tasks.collect_tasks()
 	for _, t in pairs(aggregate_tasks()) do
 		--  TODO: 2024-02-27 - look into why this is necessary
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
-		Log.trace(
+		Log.debug(
 			string.format(
 				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
 				ins(t),

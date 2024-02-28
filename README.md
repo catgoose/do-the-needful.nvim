@@ -185,7 +185,7 @@ return {
     ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
   },
-  functions = {}
+  ask_functions = {}
 }
 ```
 

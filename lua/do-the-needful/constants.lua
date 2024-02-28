@@ -28,6 +28,7 @@ Constants.val = {
 			["${cwd}"] = vim.fn.getcwd,
 			["${do-the-needful}"] = "please",
 		},
+		ask_functions = {},
 	},
 	task_defaults = {
 		cwd = vim.fn.getcwd(),

@@ -1,8 +1,6 @@
 local Job = require("plenary.job")
 local Log = require("do-the-needful").Log
 local tmux = require("do-the-needful.tmux")
-local const = require("do-the-needful.constants").val
-local utils = require("do-the-needful.utils")
 local extend = vim.list_extend
 local ins = vim.inspect
 
@@ -28,23 +26,9 @@ local function build_command(s)
 	return compose_job(cmd, s.cwd)
 end
 
-local parse_tokens = function(cmd)
-	local tokens = const.opts.tokens
-	for k, v in pairs(tokens) do
-		if type(v) == "string" then
-			cmd = utils.escaped_replace(cmd, k, v)
-		end
-		if type(v) == "function" then
-			cmd = utils.escaped_replace(cmd, k, v())
-		end
-	end
-	return cmd
-end
-
---  TODO: 2024-02-27 - handle ask_tokens
 local send_cmd_to_pane = function(selection, pane)
 	local cmd = { "tmux", "send", "-R", "-t", pane }
-	extend(cmd, { parse_tokens(selection.cmd) })
+	extend(cmd, { selection.cmd })
 	extend(cmd, { "Enter" })
 	Log.trace(string.format("window._send_cmd_to_pane(): sending cmd %s to pane %s", ins(cmd), pane))
 	Job:new(compose_job(cmd, selection.cwd)):sync()

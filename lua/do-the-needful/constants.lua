@@ -12,6 +12,7 @@ Constants.val = {
 		"cwd",
 		"window",
 		"tags",
+		"ask_tokens",
 	},
 	opts = {
 		dev = false,

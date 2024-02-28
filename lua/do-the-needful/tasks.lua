@@ -86,6 +86,7 @@ function Tasks.collect_tasks()
 	return tasks
 end
 
+--  BUG: 2024-02-28 - If field doesn't exist, error is raised
 function Tasks.task_preview(task)
 	local fields = {}
 	local lines = {}

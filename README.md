@@ -7,13 +7,19 @@
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
-  - [Task definition](#task-definition)
   - [Lazy.nvim setup](#lazynvim-setup)
+    - [Example config](#example-config)
+    - [Default setup opts](#default-setup-opts)
+  - [Asking for input](#asking-for-input)
+  - [Global tokens defaults](#global-tokens-defaults)
   - [Editing project and global configs](#editing-project-and-global-configs)
+    - [JSON schema](#json-schema)
+    - [Ask tokens](#ask-tokens)
     - [Project config](#project-config)
     - [Global config](#global-config)
   - [Telescope pickers](#telescope-pickers)
   - [API](#api)
+  - [Todo](#todo)
   <!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please.
@@ -21,7 +27,65 @@ Neovim task runner that uses tmux windows to do the needful please.
 ## Please
 
 Tasks are configurable in plugin setup, project directory, or in
-`vim.fn.stdpath("data")`
+`vim.fn.stdpath("data")`. Project and global configs can be opened through
+the telescope picker (`:Telescope do-the-needful`).
+
+When defining tasks only `name` and `cmd` are required to do the needful, but
+configuration is possible.
+
+### Prompting for input
+
+Tasks can be configured to prompt for input to replace token values or functions
+defined to be evaluated upon task selection:
+
+```lua
+ask = { -- Used to prompt for input to be passed into task
+  ["${dir}"] = {
+    title = "Which directory to search", -- defaults to the name of token
+    type = "function", -- function or string
+    default = "get_cwd", -- defaults to "".  If ask.type is string, the literal
+    -- value of default will be used.  If ask.type is function the named
+    -- function in the ask_functions section will be evaluated for the default
+  }
+}
+```
+
+### Ask functions
+
+Ask functions can be defined to evaluate default values for the token prompt:
+
+```lua
+ask_functions = {
+  ["get_cwd"] = function()
+    return vim.fn.cwd()
+  end,
+  ["current_file"] = function()
+    return vim.fn.expand("%")
+  end
+}
+```
+
+### Tmux windows
+
+Tasks run in a new tmux window with the following options available:
+
+```lua
+window = {
+  name = "name", -- name of tmux window
+  close = false, -- close window after execution
+  keep_current = false, -- switch to window when running task
+  open_relative = true, -- open window after/before current window
+  relative = "after", -- relative direction if open_relative = true
+}
+```
+
+### Task metadata
+
+Tasks metadata can be defined to make it easier to do the needful
+
+```lua
+tags = { "eza", "home", "files" }, -- task metadata used for searching
+```
 
 ## Screenshots
 
@@ -37,13 +101,7 @@ Tasks are configurable in plugin setup, project directory, or in
 | :------------------------------------------------------------: |
 |         _Action picker_ (`:Telescope do-the-needful`)          |
 
-## Task definition
-
-The plugin config and json configs use the same definition:
-
 ## Lazy.nvim setup
-
-Only `name` and `cmd` are required to do the needful
 
 ### Example config
 
@@ -55,11 +113,13 @@ local opts = {
       cmd = "eza ${dir}", -- command to run
       cwd = "~", -- working directory to run task
       tags = { "eza", "home", "files" }, -- task metadata used for searching
-      ask_tokens = { -- Used to prompt for input to be passed into task
+      ask = { -- Used to prompt for input to be passed into task
         ["${dir}"] = {
-          ask = "Which directory to search", -- defaults to the name of token
-          default = "", -- defaults to "".  A function can be supplied to
-          -- evaluate the default
+          title = "Which directory to search", -- defaults to the name of token
+          type = "function", -- function or string
+          default = "get_cwd", -- defaults to "".  If ask.type is string, the literal
+          -- value of default will be used.  If ask.type is function the named
+          -- function in the ask_functions section will be evaluated for the default
         }
       },
       window = { -- all window options are optional
@@ -67,7 +127,7 @@ local opts = {
         close = false, -- close window after execution
         keep_current = false, -- switch to window when running task
         open_relative = true, -- open window after/before current window
-        relative = "after", -- relative direction
+        relative = "after", -- relative direction if open_relative = true
       },
     },
   },
@@ -76,17 +136,23 @@ local opts = {
   -- tasks are aggregated
     "project", -- .task.json in project directory
     "global", -- .tasks.json in stdpath('data')
-    "opts" -- tasks defined in setup opts
+    "opts", -- tasks defined in setup opts
   },
-  global_tokens = {
+  tokens = {
     ["${cwd}"] = function()
       vim.fn.cwd()
     end,
-    ["${do-the-needful}"] = "please"
+    ["${do-the-needful}"] = "please",
+    ["${projectname}"] = function()
+      vim.fn.system("basename $(git rev-parse --show-toplevel)")
+    end
   },
-  helper_functions = {
-    dir = function()
+  ask_functions = {
+    ["get_cwd"] = function()
       return vim.fn.cwd()
+    end,
+    ["current_file"] = function()
+      return vim.fn.expand("%")
     end
   }
 }
@@ -107,7 +173,7 @@ return {
 
 ```lua
 {
-  log_level = default_log_level,
+  log_level = "warn",
   tasks = {},
   config = ".tasks.json",
   config_order = {
@@ -115,23 +181,26 @@ return {
    "project",
    "opts",
   },
-  global_tokens = {
-    ["${cwd}"] = vim.fn.getcwd(),
+  tokens = {
+    ["${cwd}"] = vim.fn.getcwd,
+    ["${do-the-needful}"] = "please",
   },
+  functions = {}
 }
 ```
 
-## Built-in global tokens
+## Asking for input
+
+Tokens can be used in the `cmd` definition to prompt for input. Any number of
+tokens can be used and are defined in each task's token table. Gloal tokens
+can be defined in the setup opts
+
+## Global tokens defaults
 
 | Token             | Description    | Type     | Value         |
 | ----------------- | -------------- | -------- | ------------- |
 | ${cwd}            | CWD for task   | function | vim.fn.getcwd |
 | ${do-the-needful} | Do the needful | string   | "please"      |
-
-## Using ask tokens
-
-Tokens can be used in the `cmd` to prompt for input. Any number of tokens can
-be used and are defined in each task's token table.
 
 The value for the `default` can be a string or a function to be evaluated.
 
@@ -167,7 +236,7 @@ When calling the task config editing functions if the respective
     name: string;
     cmd: string;
     tags: Array<string>;
-    ask_tokens: {
+    tokens: {
       "${token}": {
         ask: string;
         type: "string" | "function";
@@ -185,12 +254,14 @@ When calling the task config editing functions if the respective
 }
 ```
 
-If the value of `ask_tokens.type` is `function` the corresponding `helper_function`
-defined in setup opts will be used
+### Ask tokens
+
+If the value of `ask.type` is `function` the corresponding `function`
+defined in setup opts will be evaluated upon task selection for the default
 
 ```json
 {
-  "ask_tokens": {
+  "tokens": {
     "${dir}": {
       "ask": "Which directory?",
       "type": "function",
@@ -198,6 +269,18 @@ defined in setup opts will be used
     }
   }
 }
+```
+
+In this example the function `dir` defined in the setup opts will be evaluated
+
+```lua
+...
+  functions = {
+    dir = function()
+      return vim.fn.cwd()
+    end
+  }
+...
 ```
 
 ### Project config

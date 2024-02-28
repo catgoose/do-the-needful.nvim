@@ -29,7 +29,7 @@ local function build_command(s)
 end
 
 local parse_tokens = function(cmd)
-	local tokens = const.opts.global_tokens
+	local tokens = const.opts.tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
 			cmd = utils.escaped_replace(cmd, k, v)

@@ -256,8 +256,9 @@ When calling the task config editing functions if the respective
 
 ### Ask tokens
 
-If the value of `ask.type` is `function` the corresponding `function`
+If the value of `ask.type` is `function` the corresponding `ask_function`
 defined in setup opts will be evaluated upon task selection for the default
+value in the token prompt dialog.
 
 ```json
 {

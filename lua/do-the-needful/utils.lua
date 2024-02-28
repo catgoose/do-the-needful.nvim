@@ -18,4 +18,11 @@ Utils.indent_str = function(indent_n, str)
 	return ("\t"):rep(indent_n) .. str
 end
 
+-- https://stackoverflow.com/questions/29072601/lua-string-gsub-with-a-hyphen
+Utils.escaped_replace = function(str, what, with)
+	what = string.gsub(what, "[%(%)%.%+%-%*%?%[%]%^%$%%]", "%%%1")
+	with = string.gsub(with, "[%%]", "%%%%")
+	return string.gsub(str, what, with)
+end
+
 return Utils

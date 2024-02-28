@@ -25,6 +25,7 @@ Constants.val = {
 		},
 		global_tokens = {
 			["${cwd}"] = vim.fn.getcwd,
+			["${do-the-needful}"] = "please",
 		},
 	},
 	wrap_fields_at = 3,

@@ -2,6 +2,7 @@ local Job = require("plenary.job")
 local Log = require("do-the-needful").Log
 local tmux = require("do-the-needful.tmux")
 local const = require("do-the-needful.constants").val
+local utils = require("do-the-needful.utils")
 local extend = vim.list_extend
 local ins = vim.inspect
 
@@ -31,10 +32,10 @@ local parse_tokens = function(cmd)
 	local tokens = const.opts.global_tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
-			cmd = cmd:gsub(k, v)
+			cmd = utils.escaped_replace(cmd, k, v)
 		end
 		if type(v) == "function" then
-			cmd = cmd:gsub(k, v())
+			cmd = utils.escaped_replace(cmd, k, v())
 		end
 	end
 	return cmd

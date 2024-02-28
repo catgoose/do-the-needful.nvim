@@ -123,13 +123,10 @@ return {
 
 ## Built-in global tokens
 
-Note: Tokens should be a single word. Using something like `${kebab-case}` will
-not be parsed due to some lua weirdness. Other token formats other than `${token}`
-can probably be used, but I have not tested them.
-
-| Token  | Description  | Type     | Value         |
-| ------ | ------------ | -------- | ------------- |
-| ${cwd} | CWD for task | function | vim.fn.getcwd |
+| Token             | Description    | Type     | Value         |
+| ----------------- | -------------- | -------- | ------------- |
+| ${cwd}            | CWD for task   | function | vim.fn.getcwd |
+| ${do-the-needful} | Do the needful | string   | "please"      |
 
 ## Using ask tokens
 

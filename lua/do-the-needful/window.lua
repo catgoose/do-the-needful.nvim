@@ -54,7 +54,7 @@ function Window.run_task(selection)
 	end
 	local pane = Job:new(cmd):sync()
 	if not pane then
-		Log.debug(
+		Log.warn(
 			string.format("window.run_task(): pane not found when running job for selected task %s", ins(selection))
 		)
 		return

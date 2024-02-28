@@ -29,7 +29,7 @@ local tasks_from_json = function(f_handle, tasks)
 	if f_handle:exists() then
 		local json = decode_json(f_handle)
 		if not json then
-			Log.debug("tasks._compose_task(): json returned from decode_json is nil")
+			Log.warn("tasks._compose_task(): json returned from decode_json is nil")
 			return {}
 		end
 		Log.trace(
@@ -41,7 +41,7 @@ local tasks_from_json = function(f_handle, tasks)
 		)
 		return json.tasks
 	else
-		Log.debug(string.format("tasks._compose_task(): %s does not exist", f_handle.filename))
+		Log.warn(string.format("tasks._compose_task(): %s does not exist", f_handle.filename))
 		return {}
 	end
 end
@@ -95,7 +95,7 @@ function Tasks.collect_tasks()
 	local tasks = {}
 	for _, t in pairs(aggregate_tasks()) do
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
-		Log.debug(
+		Log.trace(
 			string.format(
 				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
 				ins(t),

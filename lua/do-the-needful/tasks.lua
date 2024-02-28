@@ -86,7 +86,6 @@ function Tasks.collect_tasks()
 	return tasks
 end
 
---  BUG: 2024-02-28 - If field doesn't exist, error is raised
 function Tasks.task_preview(task)
 	local fields = {}
 	local lines = {}
@@ -94,32 +93,34 @@ function Tasks.task_preview(task)
 		table.insert(fields, { f, task[f] })
 	end
 	for _, f in pairs(fields) do
-		local items = split(ins(f[2]), ", ")
-		local rows = split(ins(f[2]), "\n")
-		if type(f[2]) == "string" then
-			table.insert(lines, f[1] .. " = " .. '"' .. f[2] .. '"')
-		elseif not string.match(ins(f[2]), "\n") then
-			if #f[2] > const.wrap_fields_at then
-				for i, l in pairs(items) do
-					if i == 1 then
-						table.insert(lines, f[1] .. " = {")
-					elseif i == #items then
-						local last = split(l, " }")
-						table.insert(lines, "\t" .. last[1])
-						table.insert(lines, "}")
-					else
-						table.insert(lines, "\t" .. l .. ",")
+		if f[2] then
+			local items = split(ins(f[2]), ", ")
+			local rows = split(ins(f[2]), "\n")
+			if type(f[2]) == "string" then
+				table.insert(lines, f[1] .. " = " .. '"' .. f[2] .. '"')
+			elseif not string.match(ins(f[2]), "\n") then
+				if #f[2] > const.wrap_fields_at then
+					for i, l in pairs(items) do
+						if i == 1 then
+							table.insert(lines, f[1] .. " = {")
+						elseif i == #items then
+							local last = split(l, " }")
+							table.insert(lines, "\t" .. last[1])
+							table.insert(lines, "}")
+						else
+							table.insert(lines, "\t" .. l .. ",")
+						end
 					end
+				else
+					table.insert(lines, f[1] .. " = " .. ins(f[2]))
 				end
 			else
-				table.insert(lines, f[1] .. " = " .. ins(f[2]))
-			end
-		else
-			for i, l in pairs(rows) do
-				if i == 1 then
-					table.insert(lines, f[1] .. " = " .. l)
-				else
-					table.insert(lines, "\t" .. l)
+				for i, l in pairs(rows) do
+					if i == 1 then
+						table.insert(lines, f[1] .. " = " .. l)
+					else
+						table.insert(lines, "\t" .. l)
+					end
 				end
 			end
 		end

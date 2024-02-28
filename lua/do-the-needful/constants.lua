@@ -29,7 +29,6 @@ Constants.val = {
 			["${do-the-needful}"] = "please",
 		},
 	},
-	wrap_fields_at = 3,
 	task_defaults = {
 		cwd = vim.fn.getcwd(),
 		tags = {},

@@ -88,43 +88,27 @@ end
 
 function Tasks.task_preview(task)
 	local fields = {}
-	local lines = {}
+	local lines = { "{" }
 	for _, f in pairs(const.field_order) do
 		table.insert(fields, { f, task[f] })
 	end
 	for _, f in pairs(fields) do
 		if f[2] then
-			local items = split(ins(f[2]), ", ")
 			local rows = split(ins(f[2]), "\n")
 			if type(f[2]) == "string" then
-				table.insert(lines, f[1] .. " = " .. '"' .. f[2] .. '"')
-			elseif not string.match(ins(f[2]), "\n") then
-				if #f[2] > const.wrap_fields_at then
-					for i, l in pairs(items) do
-						if i == 1 then
-							table.insert(lines, f[1] .. " = {")
-						elseif i == #items then
-							local last = split(l, " }")
-							table.insert(lines, "\t" .. last[1])
-							table.insert(lines, "}")
-						else
-							table.insert(lines, "\t" .. l .. ",")
-						end
-					end
-				else
-					table.insert(lines, f[1] .. " = " .. ins(f[2]))
-				end
+				table.insert(lines, string.format('  %s = "%s",', f[1], f[2]))
 			else
 				for i, l in pairs(rows) do
 					if i == 1 then
-						table.insert(lines, f[1] .. " = " .. l)
+						table.insert(lines, string.format("  %s = %s", f[1], l))
 					else
-						table.insert(lines, "\t" .. l)
+						table.insert(lines, string.format("  %s", l))
 					end
 				end
 			end
 		end
 	end
+	table.insert(lines, "}")
 	Log.trace(
 		string.format(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",

@@ -23,11 +23,8 @@ Constants.val = {
 			"project",
 			"opts",
 		},
-		--  TODO: 2024-02-26 - Validate global_tokens
 		global_tokens = {
-			cwd = {
-				["${cwd}"] = vim.fn.getcwd(),
-			},
+			["${cwd}"] = vim.fn.getcwd,
 		},
 	},
 	wrap_fields_at = 3,

@@ -41,28 +41,7 @@ local tasks_from_json = function(f_handle, tasks)
 		)
 		return json.tasks
 	else
-		Log.warn(string.format("tasks._compose_task(): %s does not exist", f_handle.filename))
 		return {}
-	end
-end
-
-local function parse_tokens(tasks)
-	for _, task in pairs(tasks) do
-		for field, token in pairs(opts().global_tokens) do
-			if task[field] then
-				for k, v in pairs(token) do
-					task[field] = task[field]:gsub(k, v)
-					Log.trace(
-						string.format(
-							"tasks._parse_tokens(): parsing token key %s, token value %s for field %s",
-							k,
-							v,
-							field
-						)
-					)
-				end
-			end
-		end
 	end
 end
 
@@ -73,8 +52,8 @@ local function aggregate_tasks()
 		local path = configs[c].path
 		if path then
 			local f_handle = Path:new(path)
-			local _tasks = tasks_from_json(f_handle, tasks)
-			vim.list_extend(tasks, _tasks)
+			local json_tasks = tasks_from_json(f_handle, tasks)
+			vim.list_extend(tasks, json_tasks)
 			Log.trace(
 				string.format(
 					"tasks._aggregate_tasks(): composing task: %s from file %s",
@@ -87,7 +66,7 @@ local function aggregate_tasks()
 		end
 	end
 	Log.trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
-	parse_tokens(tasks)
+	-- parse_tokens(tasks)
 	return tasks
 end
 

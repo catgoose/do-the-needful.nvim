@@ -24,13 +24,10 @@ local validate_config_order = function(config_order)
 end
 
 local set_opts_defaults = function(opts)
-	--  TODO: 2024-02-27 - handle tasks defined from setup opts
 	opts.priority = ("project" or "global") and opts.priority or "project"
-	opts.config_order = opts.config_order or _opts.config_order
-	if validate_config_order(opts.config_order) then
-		opts.config_order = opts.config_order
-	else
-		opts.config_order = _opts.config_order
+	opts.config_order = validate_config_order(opts.config_order) and opts.config_order or _opts.config_order
+	if #opts.config_order < 3 then
+		opts.config_order = vim.tbl_extend("keep", opts.config_order, _opts.config_order)
 	end
 	return opts
 end

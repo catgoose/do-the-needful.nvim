@@ -94,7 +94,6 @@ end
 function Tasks.collect_tasks()
 	local tasks = {}
 	for _, t in pairs(aggregate_tasks()) do
-		--  TODO: 2024-02-27 - look into why this is necessary
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
 		Log.debug(
 			string.format(

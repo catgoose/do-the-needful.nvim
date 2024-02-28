@@ -17,14 +17,30 @@ local replace_cmd_tokens = function(cmd)
 	return cmd
 end
 
+local get_input_opts = function(token, ask)
+	local funcs = cfg.opts().ask_functions
+	local opts = {
+		prompt = ask.title or token,
+	}
+	if ask.type == "function" and funcs[ask.default] then
+		local ok, default = pcall(funcs[ask.default])
+		opts.default = ok and default or ""
+	else
+		opts.default = ask.default or ""
+	end
+	return opts
+end
+
 --  TODO: 2024-02-28 - Can this be made async or use plenary job?
 local ask_tokens = function(selection)
 	if selection.ask then
-		local funcs = cfg.opts().ask_functions
 		for k, v in pairs(selection.ask) do
 			if selection.cmd:find(k) then
-				vim.ui.input(v, function(input)
-					selection.cmd = utils.escaped_replace(selection.cmd, k, input)
+				vim.ui.input(get_input_opts(k, v), function(input)
+					if input then
+						selection.cmd = utils.escaped_replace(selection.cmd, k, input)
+						vim.print(selection.cmd)
+					end
 				end)
 			end
 		end
@@ -44,7 +60,6 @@ Token.parse = function(selection)
 		cwd = selection.cwd,
 		window = selection.window,
 	}
-	vim.print(task)
 	return task
 end
 

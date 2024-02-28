@@ -149,7 +149,7 @@ local opts = {
   },
   ask_functions = {
     ["get_cwd"] = function()
-      return vim.fn.cwd()
+      return vim.fn.getcwd()
     end,
     ["current_file"] = function()
       return vim.fn.expand("%")

@@ -71,6 +71,7 @@ local function task_picker(opts)
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					local task = token.parse(selection.value)
+					vim.print(task)
 					-- win.run_task(task)
 				end)
 				return true

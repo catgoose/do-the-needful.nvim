@@ -35,22 +35,19 @@ end
 local set_local_opts = function(opts)
 	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
-	_opts = vim.tbl_extend("keep", {
-		configs = {
-			global = {
-				path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
-				tasks = {},
-			},
-			project = {
-				path = string.format("%s/%s", vim.fn.getcwd(), _opts.config),
-				tasks = {},
-			},
-			opts = {
-				path = nil,
-				tasks = utils.deep_copy(_opts.tasks) or {},
-			},
+	_opts.configs = {
+		global = {
+			path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
+			tasks = {},
 		},
-	}, _opts)
+		project = {
+			path = string.format("%s/%s", vim.fn.getcwd(), _opts.config),
+			tasks = {},
+		},
+		opts = {
+			tasks = utils.deep_copy(_opts.tasks) or {},
+		},
+	}
 	_opts.tasks = nil
 end
 

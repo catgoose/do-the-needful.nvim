@@ -69,19 +69,13 @@ require("do-the-needful").edit_config("global")
 ```lua
 :Telescope do-the-needful
 -- Displays picker to select the needful or config editing actions
-```
 
-```lua
 :Telescope do-the-needful please
 -- Do the needful please
-```
 
-```lua
 :Telescope do-the-needful project
 -- Edit project config
-```
 
-```lua
 :Telescope do-the-needful global
 -- Edit global config
 ```
@@ -383,7 +377,6 @@ When calling the task config editing functions if the respective
   }>;
 }
 ```
-
 
 ## Todo
 

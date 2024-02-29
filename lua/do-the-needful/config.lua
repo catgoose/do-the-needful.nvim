@@ -37,11 +37,11 @@ local set_local_opts = function(opts)
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts.configs = {
 		global = {
-			path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
+			path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
 			tasks = {},
 		},
 		project = {
-			path = string.format("%s/%s", vim.fn.getcwd(), _opts.config),
+			path = string.format("%s/%s", vim.fn.getcwd(), _opts.config_file),
 			tasks = {},
 		},
 		opts = {

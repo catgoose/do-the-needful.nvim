@@ -63,12 +63,10 @@ Tokens can be defined to be replaced in task commands:
 
 ```lua
 global_tokens = {
-  ["${cwd}"] = function()
-    vim.fn.cwd()
-  end,
+  ["${cwd}"] = vim.fn.cwd,
   ["${do-the-needful}"] = "please",
   ["${projectname}"] = function()
-    vim.fn.system("basename $(git rev-parse --show-toplevel)")
+    return vim.fn.system("basename $(git rev-parse --show-toplevel)")
   end
 },
 ```
@@ -83,10 +81,10 @@ ask = { -- Used to prompt for input to be passed into task
   ["${dir}"] = {
     title = "Which directory to search", -- defaults to the name of token
     type = "function", -- function or string
-    default = "get_cwd", --[[ defaults to "".  If ask.type is a value other than
-    "function", the literal value of default will be used.  If ask.type is
-    "function", the named function in the ask_functions section will be
-    evaluated for the default value passed into vim.ui.input ]]
+    default = "get_cwd", --[[ defaults to "" if omitted.  If ask.type is a value
+    other than "function", the literal value of default will be used.  If
+    ask.type is "function", the named function in the ask_functions table will
+    be evaluated for the default value passed into vim.ui.input ]]
   }
 }
 ```
@@ -97,9 +95,7 @@ Ask functions can be defined to evaluate default values for the token prompt:
 
 ```lua
 ask_functions = {
-  ["get_cwd"] = function()
-    return vim.fn.getcwd()
-  end,
+  ["get_cwd"] = vim.fn.getcwd,
   ["current_file"] = function()
     return vim.fn.expand("%")
   end
@@ -152,7 +148,7 @@ local opts = {
     {
       name = "ripgrep current directory",
       cmd = "rg ${pattern} ${cwd}",
-      tags = { "eza", "home", "files" },
+      tags = { "ripgrep", "cwd", "search", "pattern" },
       ask = {
         ["${pattern}"] = {
           title = "Pattern to use",
@@ -166,7 +162,7 @@ local opts = {
       },
     },
   },
-  config = ".tasks.json", -- name of config file for project/global config
+  config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
   -- tasks are aggregated
     "project", -- .task.json in project directory
@@ -174,19 +170,17 @@ local opts = {
     "opts", -- tasks defined in setup opts
   },
   global_tokens = {
-    ["${cwd}"] = function()
-      vim.fn.cwd()
-    end,
+    ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
     ["${projectname}"] = function()
-      vim.fn.system("basename $(git rev-parse --show-toplevel)")
+      return vim.fn.system("basename $(git rev-parse --show-toplevel)")
     end
   },
   ask_functions = {
-    ["get_cwd"] = function()
+    get_cwd = function()
       return vim.fn.getcwd()
     end,
-    ["current_file"] = function()
+    current_file = function()
       return vim.fn.expand("%")
     end
   }
@@ -311,10 +305,10 @@ In this example the function `dir` defined in the setup opts will be evaluated
 
 ```lua
 ...
-  functions = {
+  ask_functions = {
     dir = function()
-      return vim.fn.cwd()
-    end
+      return vim.fn.getcwd()
+    end,
   }
 ...
 ```

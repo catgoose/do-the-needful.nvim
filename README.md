@@ -389,6 +389,4 @@ When calling the task config editing functions if the respective
 
 ## Todo
 
-- [ ] Refactor telescope module
-  - [ ] Allow for more configuration of telescope picker
 - [ ] Add ordering or priority to task config

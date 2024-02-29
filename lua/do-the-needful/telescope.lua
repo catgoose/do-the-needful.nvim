@@ -35,6 +35,10 @@ local function entry_display(entry)
 		})
 		start = start + 1 + #tag + 1
 	end
+	vim.list_extend(items, { "#" .. entry.value.source })
+	vim.list_extend(highlights, {
+		{ { start, start + #entry.value.source + 1 }, "TelescopeResultsComment" },
+	})
 	return table.concat(items), highlights
 end
 
@@ -46,8 +50,7 @@ local function entry_maker(task)
 	}
 end
 
----@diagnostic disable-next-line: unused-local
-local function task_previewer(opts)
+local function task_previewer()
 	return previewers.new_buffer_previewer({
 		title = "please",
 		define_preview = function(self, entry, _)
@@ -77,7 +80,7 @@ local function task_picker(opts)
 				end)
 				return true
 			end,
-			previewer = task_previewer(opts),
+			previewer = task_previewer(),
 		})
 		:find()
 end

@@ -29,8 +29,7 @@
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [.tasks.json JSON schema](#tasksjson-json-schema)
-  - [Todo](#todo)
-  <!--toc:end-->
+    <!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please.
 
@@ -66,7 +65,7 @@ require("do-the-needful").edit_config("global")
 
 ### Telescope pickers
 
-```lua
+```other
 :Telescope do-the-needful
 -- Displays picker to select the needful or config editing actions
 
@@ -386,7 +385,3 @@ When calling the task config editing functions if the respective
   }>;
 }
 ```
-
-## Todo
-
-- [ ] Add ordering or priority to task config

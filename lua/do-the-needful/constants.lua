@@ -30,12 +30,13 @@ Constants.val = {
 		},
 		ask_functions = {},
 		telescope = {
-			layout_strategy = "center",
-			layout_config = {
-				width = 0.25,
-				height = 7,
+			action_picker = {
+				layout_strategy = "center",
+				layout_config = {
+					width = 0.25,
+					prompt_position = "bottom",
+				},
 			},
-			prompt_position = "bottom",
 		},
 	},
 	task_defaults = {

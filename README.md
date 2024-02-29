@@ -216,7 +216,16 @@ local opts = {
     current_file = function()
       return vim.fn.expand("%")
     end
-  }
+  },
+  telescope = {
+    action_picker = {
+      layout_strategy = "center",
+      layout_config = {
+        width = 0.25,
+        prompt_position = "bottom",
+      },
+    },
+  },
 }
 
 return {

@@ -66,7 +66,6 @@ local function aggregate_tasks()
 		end
 	end
 	Log.trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
-	-- parse_tokens(tasks)
 	return tasks
 end
 

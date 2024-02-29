@@ -1,4 +1,4 @@
-local config = require("do-the-needful.config")
+local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
 
 Logger = {}
@@ -7,7 +7,7 @@ Logger.log = nil
 Logger.init = function()
 	Logger.log = require("plenary.log").new({
 		plugin = const.plugin_name,
-		level = config.opts().log_level,
+		level = get_opts().log_level,
 		fmt_msg = function(_, mode_name, src_path, src_line, msg)
 			local nameupper = mode_name:upper()
 			local lineinfo = vim.fn.fnamemodify(src_path, ":t") .. ":" .. src_line

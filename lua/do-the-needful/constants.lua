@@ -29,6 +29,14 @@ Constants.val = {
 			["${do-the-needful}"] = "please",
 		},
 		ask_functions = {},
+		telescope = {
+			layout_strategy = "center",
+			layout_config = {
+				width = 0.25,
+				height = 7,
+			},
+			prompt_position = "bottom",
+		},
 	},
 	task_defaults = {
 		cwd = vim.fn.getcwd(),

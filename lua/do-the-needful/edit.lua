@@ -1,5 +1,5 @@
 local Path = require("plenary.path")
-local cfg = require("do-the-needful.config")
+local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 
@@ -13,7 +13,7 @@ local function populate_config()
 end
 
 function Edit.edit_config(config)
-	local file = cfg.opts().configs[config].path
+	local file = get_opts().configs[config].path
 	vim.cmd.e(file)
 	local file_h = Path:new(file)
 	if not file_h:exists() or #file_h:read() == 0 then

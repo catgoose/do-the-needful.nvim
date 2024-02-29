@@ -1,5 +1,5 @@
 local Path = require("plenary.path")
-local opts = require("do-the-needful.config").opts
+local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 local ins = vim.inspect
@@ -47,8 +47,8 @@ end
 
 local function aggregate_tasks()
 	local tasks = {}
-	local configs = opts().configs
-	for _, c in pairs(opts().config_order) do
+	local configs = get_opts().configs
+	for _, c in pairs(get_opts().config_order) do
 		local path = configs[c].path
 		if path then
 			local f_handle = Path:new(path)

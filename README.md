@@ -3,7 +3,6 @@
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -15,13 +14,12 @@
     - [Task metadata](#task-metadata)
     - [Global token replacement](#global-token-replacement)
     - [Prompting for input](#prompting-for-input)
-    - [Ask functions](#ask-functions)
   - [Setup](#setup)
     - [Example Lazy.nvim config](#example-lazynvim-config)
     - [Telescope setup](#telescope-setup)
   - [Configuration](#configuration)
     - [Default setup opts](#default-setup-opts)
-    - [Asking for input](#asking-for-input)
+    - [Ask functions](#ask-functions)
       - [Ask tokens](#ask-tokens)
     - [Global tokens defaults](#global-tokens-defaults)
   - [Editing project and global configs](#editing-project-and-global-configs)
@@ -29,15 +27,21 @@
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [.tasks.json JSON schema](#tasksjson-json-schema)
-    <!--toc:end-->
+<!--toc:end-->
 
-Neovim task runner that uses tmux windows to do the needful please.
+Neovim task runner that uses tmux windows to do the needful please. Task commands
+can be defined containing `${tokens}` which can be replaced by defined values or
+evaluated functions.
 
 ## Please
 
-Tasks are configurable in plugin setup, project directory, or in
-`vim.fn.stdpath("data")`. Project and global configs can be opened through
-the telescope picker (`:Telescope do-the-needful`).
+Tasks can be defined in 3 places:
+
+- Setup opts
+- Global config: `.tasks.json` located in `vim.fn.stdpath("data")`
+- Project config: `.tasks.json` in the project directory
+
+Tasks are selected using a Telescope picker
 
 ## Screenshots
 
@@ -65,7 +69,7 @@ require("do-the-needful").edit_config("global")
 
 ### Telescope pickers
 
-```other
+```lua
 :Telescope do-the-needful
 -- Displays picker to select the needful or config editing actions
 
@@ -92,6 +96,7 @@ window = {
   keep_current = false, -- keep focus on current window when running task
   open_relative = true, -- open window after/before current window
   relative = "after", -- relative direction if open_relative = true
+  -- after or before
 }
 ```
 
@@ -105,7 +110,7 @@ tags = { "eza", "home", "files" }, -- task metadata used for searching
 
 ### Global token replacement
 
-Tokens can be defined to be replaced in task commands:
+`${tokens}` can be defined to be replaced in task commands:
 
 ```lua
 global_tokens = {
@@ -119,8 +124,11 @@ global_tokens = {
 
 ### Prompting for input
 
-Tasks can be configured to prompt for input to replace token values or functions
-defined to be evaluated upon task selection:
+Tasks can be configured to prompt for input. Token values are replaced by
+`global_tokens` values or evaluated `ask_functions` upon task selection:
+
+Ask tokens are defined in each task's `ask` table (opt) or json object (project
+and global)
 
 ```lua
 ask = { -- Used to prompt for input to be passed into task
@@ -132,19 +140,6 @@ ask = { -- Used to prompt for input to be passed into task
     ask.type is "function", the named function in the ask_functions table will
     be evaluated for the default value passed into vim.ui.input ]]
   }
-}
-```
-
-### Ask functions
-
-Ask functions can be defined to evaluate default values for the token prompt:
-
-```lua
-ask_functions = {
-  ["get_cwd"] = vim.fn.getcwd,
-  ["current_file"] = function()
-    return vim.fn.expand("%")
-  end
 }
 ```
 
@@ -197,9 +192,9 @@ local opts = {
   config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
   -- tasks are aggregated
-    "project", -- .task.json in project directory
-    "global", -- .tasks.json in stdpath('data')
     "opts", -- tasks defined in setup opts
+    "global", -- .tasks.json in stdpath('data')
+    "project", -- .task.json in project directory
   },
   global_tokens = {
     ["${cwd}"] = vim.fn.getcwd,
@@ -270,17 +265,29 @@ telescope.load_extension("do-the-needful")
 }
 ```
 
-### Asking for input
+### Ask functions
 
-Tokens can be used in the `cmd` definition to prompt for input. Any number of
-ask_tokens can be used and are defined in each task's `ask` table. Global tokens
-can be defined in the setup opts
+Ask functions can be defined to evaluate default values for the token prompt:
+
+```lua
+ask_functions = {
+  ["get_cwd"] = vim.fn.getcwd,
+  ["current_file"] = function()
+    return vim.fn.expand("%")
+  end
+}
+```
 
 #### Ask tokens
 
-If the value of `ask.type` is `function` the corresponding `ask_function`
-defined in setup opts will be evaluated upon task selection for the default
-value in the token prompt dialog.
+The value for the `default` can refer to a literal value or a defined `ask_function`.
+
+If the value of `ask.type` is "`function`" the corresponding `ask_function`
+defined in setup opts will be evaluated upon task selection. This value will
+be used for the default value in the token prompt dialog.
+
+In the following example the `ask_function` `dir` will be evaluated and replace
+the token `${dir}` in the task command.
 
 ```json
 {
@@ -293,9 +300,6 @@ value in the token prompt dialog.
   }
 }
 ```
-
-In this example the function `dir` defined in the setup opts will be evaluated
-with `vim.fn.getcwd()`
 
 ```lua
 ...
@@ -311,8 +315,6 @@ with `vim.fn.getcwd()`
 | ----------------- | -------------- | -------- | ------------- |
 | ${cwd}            | CWD for task   | function | vim.fn.getcwd |
 | ${do-the-needful} | Do the needful | string   | "please"      |
-
-The value for the `default` can be a string or a function to be evaluated.
 
 ## Editing project and global configs
 
@@ -380,7 +382,7 @@ When calling the task config editing functions if the respective
       close: boolean;
       keep_current: boolean;
       open_relative: boolean;
-      relative: "before" | "after;
+      relative: "before" | "after";
     };
   }>;
 }

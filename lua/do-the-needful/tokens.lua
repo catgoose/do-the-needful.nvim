@@ -53,7 +53,7 @@ local execute_task = function(selection, task_cb)
 		window = selection.window,
 	}
 	Log.trace(string.format(
-		[[Token.ask_tokens: task generated:
+		[[Token.execute_task: task generated:
                 %s]],
 		ins(task)
 	))

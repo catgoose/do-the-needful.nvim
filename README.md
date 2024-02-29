@@ -6,6 +6,11 @@
 
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
+    - [Tmux windows](#tmux-windows)
+    - [Task metadata](#task-metadata)
+    - [Global token replacement](#global-token-replacement)
+    - [Prompting for input](#prompting-for-input)
+    - [Ask functions](#ask-functions)
   - [Screenshots](#screenshots)
   - [Lazy.nvim setup](#lazynvim-setup)
     - [Example config](#example-config)

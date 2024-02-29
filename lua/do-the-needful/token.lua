@@ -1,4 +1,3 @@
-local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
 local cfg = require("do-the-needful.config")
 local Log = require("do-the-needful").Log
@@ -7,7 +6,7 @@ local ins = vim.inspect
 Token = {}
 
 local replace_cmd_tokens = function(cmd)
-	local tokens = const.opts.tokens
+	local tokens = cfg.opts().global_tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
 			cmd = utils.escaped_replace(cmd, k, v)

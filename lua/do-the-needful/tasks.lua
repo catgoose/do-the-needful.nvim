@@ -104,9 +104,11 @@ function Tasks.task_preview(task)
 						table.insert(lines, string.format("  %s", l))
 					end
 				end
+				lines[#lines] = string.format("%s,", lines[#lines])
 			end
 		end
 	end
+	lines[#lines] = lines[#lines]:sub(1, -2)
 	table.insert(lines, "}")
 	Log.trace(
 		string.format(

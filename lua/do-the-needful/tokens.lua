@@ -1,12 +1,12 @@
 local utils = require("do-the-needful.utils")
-local cfg = require("do-the-needful.config")
+local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local ins = vim.inspect
 
 Token = {}
 
 local replace_cmd_tokens = function(cmd)
-	local tokens = cfg.opts().global_tokens
+	local tokens = get_opts().global_tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
 			cmd = utils.escaped_replace(cmd, k, v)
@@ -20,7 +20,7 @@ local replace_cmd_tokens = function(cmd)
 end
 
 local input_opts = function(token, ask)
-	local funcs = cfg.opts().ask_functions
+	local funcs = get_opts().ask_functions
 	local opts = {
 		prompt = ask.title or token,
 	}

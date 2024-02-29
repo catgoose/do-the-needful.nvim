@@ -8,6 +8,7 @@ local tokens = require("do-the-needful.tokens")
 local win = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
 local edit = require("do-the-needful.edit")
+local get_opts = require("do-the-needful.config").get_opts
 
 Telescope = {}
 
@@ -83,13 +84,20 @@ end
 
 function Telescope.action_picker(opts)
 	local selections = {
-		{ "Do the needful", task_picker, opts },
 		{ "Edit project config", edit.edit_config, "project" },
 		{ "Edit global config", edit.edit_config, "global" },
+		{ "Do the needful", task_picker, opts },
 	}
+	local ap_opts = get_opts().telescope.action_picker
 	pickers
 		.new(opts, {
 			prompt_title = "do-the-needful actions",
+			layout_strategy = ap_opts.layout_strategy,
+			layout_config = {
+				width = ap_opts.layout_config.width,
+				height = #selections + 4,
+				prompt_position = ap_opts.layout_config.prompt_position,
+			},
 			finder = finders.new_table({
 				results = selections,
 				entry_maker = function(entry)

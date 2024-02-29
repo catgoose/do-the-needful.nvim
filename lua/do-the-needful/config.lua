@@ -5,7 +5,7 @@ Config = {}
 
 local _opts = const.opts
 
-function Config.opts()
+function Config.get_opts()
 	return utils.deep_copy(_opts)
 end
 
@@ -55,7 +55,7 @@ function Config.init(opts)
 	opts = opts or {}
 	opts = set_opts_defaults(opts)
 	set_local_opts(opts)
-	return Config.opts()
+	return Config.get_opts()
 end
 
 return Config

@@ -216,7 +216,16 @@ local opts = {
     current_file = function()
       return vim.fn.expand("%")
     end
-  }
+  },
+  telescope = {
+    action_picker = {
+      layout_strategy = "center",
+      layout_config = {
+        width = 0.25,
+        prompt_position = "bottom",
+      },
+    },
+  },
 }
 
 return {
@@ -380,6 +389,4 @@ When calling the task config editing functions if the respective
 
 ## Todo
 
-- [ ] Refactor telescope module
-  - [ ] Allow for more configuration of telescope picker
 - [ ] Add ordering or priority to task config

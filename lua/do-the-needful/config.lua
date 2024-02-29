@@ -1,57 +1,61 @@
-local log = require("do-the-needful.log").log
-local ins = vim.inspect
+local const = require("do-the-needful.constants").val
+local utils = require("do-the-needful.utils")
 
-local M = {}
+Config = {}
 
-local _opts = {
-	tasks = {},
-	config = ".tasks.json",
-}
+local _opts = const.opts
 
-M.config_order = { "project", "global" }
-
-M.field_order = {
-	"name",
-	"cmd",
-	"cwd",
-	"window",
-	"tags",
-}
-
-M.task_defaults = {
-	cwd = vim.loop.cwd(),
-	tags = {},
-	window = {
-		close = true,
-		keep_current = false,
-	},
-}
-
-M.wrap_fields_at = 3
-
-M.tokens = {
-	cwd = {
-		["${cwd}"] = vim.loop.cwd(),
-	},
-}
-
-function M.opts()
-	log.trace(string.format("config.opts(): returning _opts %s", ins(_opts)))
-	return _opts
+function Config.opts()
+	return utils.deep_copy(_opts)
 end
 
-function M.init(opts)
-	opts = opts or {}
+local validate_config_order = function(config_order)
+	local valid = true
+	if not vim.tbl_islist(config_order) then
+		return not valid
+	end
+	for _, c in pairs(config_order) do
+		if c ~= "project" and c ~= "global" and c ~= "opts" then
+			valid = false
+			break
+		end
+	end
+	return valid
+end
+
+local set_opts_defaults = function(opts)
+	opts.priority = ("project" or "global") and opts.priority or "project"
+	opts.config_order = validate_config_order(opts.config_order) and opts.config_order or _opts.config_order
+	if #opts.config_order < 3 then
+		opts.config_order = vim.tbl_extend("keep", opts.config_order, _opts.config_order)
+	end
+	return opts
+end
+
+local set_local_opts = function(opts)
+	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
-	_opts = vim.tbl_extend("keep", {
-		configs = {
-			global = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config),
-			project = string.format("%s/%s", vim.loop.cwd(), _opts.config),
+	_opts.configs = {
+		global = {
+			path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
+			tasks = {},
 		},
-	}, _opts)
-
-	log.trace(string.format("config.init(): extending opts %s over _opts %s", ins(opts), ins(_opts)))
-	return M.opts()
+		project = {
+			path = string.format("%s/%s", vim.fn.getcwd(), _opts.config_file),
+			tasks = {},
+		},
+		opts = {
+			tasks = utils.deep_copy(_opts.tasks) or {},
+		},
+	}
+	_opts.tasks = nil
 end
 
-return M
+function Config.init(opts)
+	opts = opts or {}
+	opts = set_opts_defaults(opts)
+	set_local_opts(opts)
+	return Config.opts()
+end
+
+return Config

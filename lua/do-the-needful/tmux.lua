@@ -1,10 +1,10 @@
+local Log = require("do-the-needful").Log
 local extend = vim.list_extend
-local log = require("do-the-needful.log").log
 local ins = vim.inspect
 
-local M = {}
+Tmux = {}
 
-function M.build_command(s)
+function Tmux.build_command(s)
 	if not s then
 		return
 	end
@@ -29,11 +29,11 @@ function M.build_command(s)
 	else
 		extend(cmd, { "-P", "-F", "#{pane_id}" })
 	end
-	log.trace(
+	Log.trace(
 		string.format("window.window_opts(): using selected task %s, building tmux command table: %s", ins(s), ins(s))
 	)
 
 	return cmd
 end
 
-return M
+return Tmux

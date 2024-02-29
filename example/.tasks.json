@@ -1,0 +1,9 @@
+{
+  "tasks": [
+    {
+      "name": "fdfind project local",
+      "cmd": "fdfind",
+      "tags": ["fdfind", "project"]
+    }
+  ]
+}

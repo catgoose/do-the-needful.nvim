@@ -4,11 +4,12 @@ local pickers = require("telescope.pickers")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
-local tm = require("do-the-needful.window")
+local tokens = require("lua.do-the-needful.tokens")
+local win = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
-local e = require("do-the-needful.edit")
+local edit = require("do-the-needful.edit")
 
-local M = {}
+Telescope = {}
 
 local function get_tasks()
 	return tsk.collect_tasks()
@@ -49,7 +50,7 @@ local function task_previewer(opts)
 	return previewers.new_buffer_previewer({
 		title = "please",
 		define_preview = function(self, entry, _)
-			vim.api.nvim_buf_set_option(self.state.bufnr, "filetype", "lua")
+			vim.api.nvim_set_option_value("filetype", "lua", { buf = self.state.bufnr })
 			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, tsk.task_preview(entry.value))
 		end,
 	})
@@ -69,7 +70,9 @@ local function task_picker(opts)
 				actions.select_default:replace(function()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
-					tm.run_task(selection.value)
+					tokens.replace(selection.value, function(task)
+						win.run_task(task)
+					end)
 				end)
 				return true
 			end,
@@ -78,11 +81,11 @@ local function task_picker(opts)
 		:find()
 end
 
-function M.action_picker(opts)
+function Telescope.action_picker(opts)
 	local selections = {
 		{ "Do the needful", task_picker, opts },
-		{ "Edit project config", e.edit_config, "project" },
-		{ "Edit global config", e.edit_config, "global" },
+		{ "Edit project config", edit.edit_config, "project" },
+		{ "Edit global config", edit.edit_config, "global" },
 	}
 	pickers
 		.new(opts, {
@@ -111,9 +114,9 @@ function M.action_picker(opts)
 		:find()
 end
 
-function M.tasks(opts)
+function Telescope.tasks(opts)
 	opts = opts or {}
 	task_picker(opts)
 end
 
-return M
+return Telescope

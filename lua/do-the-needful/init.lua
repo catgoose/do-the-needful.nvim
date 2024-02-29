@@ -1,20 +1,20 @@
 local cfg = require("do-the-needful.config")
-local e = require("do-the-needful.edit")
 
-local M = {}
+DoTheNeedful = {}
 
-function M.setup(config)
+function DoTheNeedful.setup(config)
 	config = config or {}
 	cfg.init(config)
+	DoTheNeedful.Log = require("do-the-needful.logger").init()
 end
 
-function M.edit_config(config)
+function DoTheNeedful.edit_config(config)
 	config = ("project" or "global") and config or "project"
-	e.edit_config(config)
+	require("do-the-needful.edit").edit_config(config)
 end
 
-function M.please()
+function DoTheNeedful.please()
 	require("do-the-needful.telescope").tasks()
 end
 
-return M
+return DoTheNeedful

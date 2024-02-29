@@ -30,41 +30,6 @@ Tasks are configurable in plugin setup, project directory, or in
 `vim.fn.stdpath("data")`. Project and global configs can be opened through
 the telescope picker (`:Telescope do-the-needful`).
 
-When defining tasks only `name` and `cmd` are required to do the needful, but
-configuration is possible.
-
-### Prompting for input
-
-Tasks can be configured to prompt for input to replace token values or functions
-defined to be evaluated upon task selection:
-
-```lua
-ask = { -- Used to prompt for input to be passed into task
-  ["${dir}"] = {
-    title = "Which directory to search", -- defaults to the name of token
-    type = "function", -- function or string
-    default = "get_cwd", -- defaults to "".  If ask.type is string, the literal
-    -- value of default will be used.  If ask.type is function the named
-    -- function in the ask_functions section will be evaluated for the default
-  }
-}
-```
-
-### Ask functions
-
-Ask functions can be defined to evaluate default values for the token prompt:
-
-```lua
-ask_functions = {
-  ["get_cwd"] = function()
-    return vim.fn.cwd()
-  end,
-  ["current_file"] = function()
-    return vim.fn.expand("%")
-  end
-}
-```
-
 ### Tmux windows
 
 Tasks run in a new tmux window with the following options available:
@@ -73,7 +38,7 @@ Tasks run in a new tmux window with the following options available:
 window = {
   name = "name", -- name of tmux window
   close = false, -- close window after execution
-  keep_current = false, -- switch to window when running task
+  keep_current = false, -- keep focus on current window when running task
   open_relative = true, -- open window after/before current window
   relative = "after", -- relative direction if open_relative = true
 }
@@ -85,6 +50,55 @@ Tasks metadata can be defined to make it easier to do the needful
 
 ```lua
 tags = { "eza", "home", "files" }, -- task metadata used for searching
+```
+
+### Global token replacement
+
+Tokens can be defined to be replaced in task commands:
+
+```lua
+global_tokens = {
+  ["${cwd}"] = function()
+    vim.fn.cwd()
+  end,
+  ["${do-the-needful}"] = "please",
+  ["${projectname}"] = function()
+    vim.fn.system("basename $(git rev-parse --show-toplevel)")
+  end
+},
+```
+
+### Prompting for input
+
+Tasks can be configured to prompt for input to replace token values or functions
+defined to be evaluated upon task selection:
+
+```lua
+ask = { -- Used to prompt for input to be passed into task
+  ["${dir}"] = {
+    title = "Which directory to search", -- defaults to the name of token
+    type = "function", -- function or string
+    default = "get_cwd", --[[ defaults to "".  If ask.type is a value other than
+    "function", the literal value of default will be used.  If ask.type is
+    "function", the named function in the ask_functions section will be
+    evaluated for the default value passed into vim.ui.input ]]
+  }
+}
+```
+
+### Ask functions
+
+Ask functions can be defined to evaluate default values for the token prompt:
+
+```lua
+ask_functions = {
+  ["get_cwd"] = function()
+    return vim.fn.getcwd()
+  end,
+  ["current_file"] = function()
+    return vim.fn.expand("%")
+  end
+}
 ```
 
 ## Screenshots
@@ -130,6 +144,22 @@ local opts = {
         relative = "after", -- relative direction if open_relative = true
       },
     },
+    {
+      name = "ripgrep current directory",
+      cmd = "rg ${pattern} ${cwd}",
+      tags = { "eza", "home", "files" },
+      ask = {
+        ["${pattern}"] = {
+          title = "Pattern to use",
+          default = "error",
+        },
+      },
+      window = {
+        name = "Ripgrep",
+        close = false,
+        keep_current = true,
+      },
+    },
   },
   config = ".tasks.json", -- name of config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
@@ -138,7 +168,7 @@ local opts = {
     "global", -- .tasks.json in stdpath('data')
     "opts", -- tasks defined in setup opts
   },
-  tokens = {
+  global_tokens = {
     ["${cwd}"] = function()
       vim.fn.cwd()
     end,
@@ -181,7 +211,7 @@ return {
    "project",
    "opts",
   },
-  tokens = {
+  global_tokens = {
     ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
   },
@@ -236,9 +266,9 @@ When calling the task config editing functions if the respective
     name: string;
     cmd: string;
     tags: Array<string>;
-    tokens: {
+    ask: {
       "${token}": {
-        ask: string;
+        title: string;
         type: "string" | "function";
         default: string;
       };
@@ -248,7 +278,7 @@ When calling the task config editing functions if the respective
       close: boolean;
       keep_current: boolean;
       open_relative: boolean;
-      relative: string;
+      relative: "before" | "after;
     };
   }>;
 }
@@ -262,9 +292,9 @@ value in the token prompt dialog.
 
 ```json
 {
-  "tokens": {
+  "ask": {
     "${dir}": {
-      "ask": "Which directory?",
+      "title": "Which directory?",
       "type": "function",
       "default": "dir"
     }

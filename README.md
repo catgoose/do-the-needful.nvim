@@ -6,24 +6,29 @@
 
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
+  - [Screenshots](#screenshots)
+  - [Usage](#usage)
+    - [API](#api)
+    - [Telescope pickers](#telescope-pickers)
+  - [Features](#features)
     - [Tmux windows](#tmux-windows)
     - [Task metadata](#task-metadata)
     - [Global token replacement](#global-token-replacement)
     - [Prompting for input](#prompting-for-input)
     - [Ask functions](#ask-functions)
-  - [Screenshots](#screenshots)
-  - [Lazy.nvim setup](#lazynvim-setup)
-    - [Example config](#example-config)
+  - [Setup](#setup)
+    - [Example Lazy.nvim config](#example-lazynvim-config)
+    - [Telescope setup](#telescope-setup)
+  - [Configuration](#configuration)
     - [Default setup opts](#default-setup-opts)
-  - [Asking for input](#asking-for-input)
-  - [Global tokens defaults](#global-tokens-defaults)
+    - [Asking for input](#asking-for-input)
+      - [Ask tokens](#ask-tokens)
+    - [Global tokens defaults](#global-tokens-defaults)
   - [Editing project and global configs](#editing-project-and-global-configs)
-    - [JSON schema](#json-schema)
-    - [Ask tokens](#ask-tokens)
     - [Project config](#project-config)
     - [Global config](#global-config)
-  - [Telescope pickers](#telescope-pickers)
-  - [API](#api)
+    - [New configs](#new-configs)
+    - [.tasks.json JSON schema](#tasksjson-json-schema)
   - [Todo](#todo)
   <!--toc:end-->
 
@@ -34,6 +39,54 @@ Neovim task runner that uses tmux windows to do the needful please.
 Tasks are configurable in plugin setup, project directory, or in
 `vim.fn.stdpath("data")`. Project and global configs can be opened through
 the telescope picker (`:Telescope do-the-needful`).
+
+## Screenshots
+
+| ![Task picker](https://tinyurl.com/bdeerawy "Task picker") |
+| :--------------------------------------------------------: |
+|     _Task picker_ (`:Telescope do-the-needful please`)     |
+
+| ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
+| :----------------------------------------------------------: |
+|        _Spawned task_ and will close upon completion         |
+
+| ![Action picker](https://tinyurl.com/23uh9hv3 "Action picker") |
+| :------------------------------------------------------------: |
+|         _Action picker_ (`:Telescope do-the-needful`)          |
+
+## Usage
+
+### API
+
+```lua
+require("do-the-needful").please()
+require("do-the-needful").edit_config("project")
+require("do-the-needful").edit_config("global")
+```
+
+### Telescope pickers
+
+```lua
+:Telescope do-the-needful
+-- Displays picker to select the needful or config editing actions
+```
+
+```lua
+:Telescope do-the-needful please
+-- Do the needful please
+```
+
+```lua
+:Telescope do-the-needful project
+-- Edit project config
+```
+
+```lua
+:Telescope do-the-needful global
+-- Edit global config
+```
+
+## Features
 
 ### Tmux windows
 
@@ -102,23 +155,9 @@ ask_functions = {
 }
 ```
 
-## Screenshots
+## Setup
 
-| ![Task picker](https://tinyurl.com/bdeerawy "Task picker") |
-| :--------------------------------------------------------: |
-|     _Task picker_ (`:Telescope do-the-needful please`)     |
-
-| ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
-| :----------------------------------------------------------: |
-|        _Spawned task_ and will close upon completion         |
-
-| ![Action picker](https://tinyurl.com/23uh9hv3 "Action picker") |
-| :------------------------------------------------------------: |
-|         _Action picker_ (`:Telescope do-the-needful`)          |
-
-## Lazy.nvim setup
-
-### Example config
+### Example Lazy.nvim config
 
 ```lua
 local opts = {
@@ -198,6 +237,17 @@ return {
 }
 ```
 
+### Telescope setup
+
+In your Telescope setup load the `do-the-needful` extension
+
+```lua
+
+telescope.load_extension("do-the-needful")
+```
+
+## Configuration
+
 ### Default setup opts
 
 ```lua
@@ -218,13 +268,42 @@ return {
 }
 ```
 
-## Asking for input
+### Asking for input
 
 Tokens can be used in the `cmd` definition to prompt for input. Any number of
-tokens can be used and are defined in each task's token table. Gloal tokens
+ask_tokens can be used and are defined in each task's `ask` table. Global tokens
 can be defined in the setup opts
 
-## Global tokens defaults
+#### Ask tokens
+
+If the value of `ask.type` is `function` the corresponding `ask_function`
+defined in setup opts will be evaluated upon task selection for the default
+value in the token prompt dialog.
+
+```json
+{
+  "ask": {
+    "${dir}": {
+      "title": "Which directory?",
+      "type": "function",
+      "default": "dir"
+    }
+  }
+}
+```
+
+In this example the function `dir` defined in the setup opts will be evaluated
+with `vim.fn.getcwd()`
+
+```lua
+...
+  ask_functions = {
+    dir = vim.fn.getcwd
+  }
+...
+```
+
+### Global tokens defaults
 
 | Token             | Description    | Type     | Value         |
 | ----------------- | -------------- | -------- | ------------- |
@@ -234,6 +313,28 @@ can be defined in the setup opts
 The value for the `default` can be a string or a function to be evaluated.
 
 ## Editing project and global configs
+
+The Telescope picker will easily let you choose which config to edit
+
+```lua
+:Telescope do-the-needful
+```
+
+### Project config
+
+```lua
+require("do-the-needful").edit_config("project")
+:Telescope do-the-needful project
+```
+
+### Global config
+
+```lua
+require("do-the-needful").edit_config("global")
+:Telescope do-the-needful global
+```
+
+### New configs
 
 When calling the task config editing functions if the respective
 `.tasks.json` does not exist, an example task will be created
@@ -257,7 +358,7 @@ When calling the task config editing functions if the respective
 }
 ```
 
-### JSON schema
+### .tasks.json JSON schema
 
 ```typescript
 {
@@ -283,88 +384,8 @@ When calling the task config editing functions if the respective
 }
 ```
 
-### Ask tokens
-
-If the value of `ask.type` is `function` the corresponding `ask_function`
-defined in setup opts will be evaluated upon task selection for the default
-value in the token prompt dialog.
-
-```json
-{
-  "ask": {
-    "${dir}": {
-      "title": "Which directory?",
-      "type": "function",
-      "default": "dir"
-    }
-  }
-}
-```
-
-In this example the function `dir` defined in the setup opts will be evaluated
-
-```lua
-...
-  ask_functions = {
-    dir = function()
-      return vim.fn.getcwd()
-    end,
-  }
-...
-```
-
-### Project config
-
-Use `require("do-the-needful).edit_config("project")` to edit `.tasks.json`
-in the current directory
-
-### Global config
-
-Use `require("do-the-needful).edit_config("global")` to edit `.tasks.json`
-in `vim.fn.stdpath("data")`
-
-## Telescope pickers
-
-Load telescope extension
-
-```lua
-  telescope.load_extension("do-the-needful")
-
-```
-
-The following telescope pickers are available
-
-```lua
-:Telescope do-the-needful
--- Displays picker to select the needful or config editing actions
-```
-
-```lua
-:Telescope do-the-needful please
--- Do the needful please
-```
-
-```lua
-:Telescope do-the-needful edit_project
--- Edits project config
-```
-
-```lua
-:Telescope do-the-needful edit_global
--- Edits global config
-```
-
-## API
-
-```lua
-require("do-the-needful").please()
-require("do-the-needful").edit_config("project")
-require("do-the-needful").edit_config("global")
-```
-
 ## Todo
 
-- [ ] Implement token logic to prompt for input to be passed
 - [ ] Refactor telescope module
   - [ ] Allow for more configuration of telescope picker
 - [ ] Add ordering or priority to task config

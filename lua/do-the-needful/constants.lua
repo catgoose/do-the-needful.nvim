@@ -6,13 +6,18 @@ local default_log_level = "warn"
 
 Constants.val = {
 	plugin_name = "do-the-needful",
-	field_order = {
+	task_preview_field_order = {
 		"name",
 		"cmd",
 		"cwd",
 		"window",
 		"tags",
 		"ask",
+	},
+	token_replacement_fields = {
+		"cmd",
+		"cwd",
+		"name",
 	},
 	opts = {
 		dev = false,

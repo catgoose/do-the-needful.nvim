@@ -29,9 +29,9 @@
     - [.tasks.json JSON schema](#tasksjson-json-schema)
 <!--toc:end-->
 
-Neovim task runner that uses tmux windows to do the needful please. Task commands
-can be defined containing `${tokens}` which can be replaced by defined values or
-evaluated functions.
+Neovim task runner that uses tmux windows to do the needful please. Task command,
+cwd, and name can be defined containing `${tokens}` which can be replaced by
+defined values or evaluated functions.
 
 ## Please
 
@@ -109,8 +109,14 @@ tags = { "eza", "home", "files" }, -- task metadata used for searching
 ```
 
 ### Global token replacement
+ 
+The following task fields are parsed for tokens
 
-`${tokens}` can be defined to be replaced in task commands:
+- cmd
+- name
+- cwd
+
+`${tokens}` can be defined to be replaced in task the configuration:
 
 ```lua
 global_tokens = {

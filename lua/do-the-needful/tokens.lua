@@ -1,22 +1,23 @@
 local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
+local const = require("do-the-needful.constants").val
 local ins = vim.inspect
 
 Token = {}
 
-local replace_cmd_tokens = function(cmd)
+local replace_tokens = function(str)
 	local tokens = get_opts().global_tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
-			cmd = utils.escaped_replace(cmd, k, v)
+			str = utils.escaped_replace(str, k, v)
 		end
 		if type(v) == "function" then
-			cmd = utils.escaped_replace(cmd, k, v())
+			str = utils.escaped_replace(str, k, v())
 		end
 	end
-	Log.trace(string.format("Token.replace_cmd_tokens: %s", cmd))
-	return cmd
+	Log.trace(string.format("Token.replace_cmd_tokens: %s", str))
+	return str
 end
 
 local input_opts = function(token, ask)
@@ -96,7 +97,11 @@ Token.replace = function(selection, task_cb)
   %s]],
 		ins(selection)
 	))
-	selection.cmd = replace_cmd_tokens(selection.cmd)
+  for _, field in pairs(const.token_replacement_fields) do
+    if selection[field] then
+      selection[field] = replace_tokens(selection[field])
+    end
+  end
 	ask_tokens(selection, task_cb)
 end
 

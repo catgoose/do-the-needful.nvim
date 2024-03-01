@@ -25,4 +25,9 @@ Utils.escaped_replace = function(str, what, with)
 	return string.gsub(str, what, with)
 end
 
+Utils.split_string = function(str, del)
+	del = del or " "
+	return vim.split(str, del, { plain = true, trimempty = true })
+end
+
 return Utils

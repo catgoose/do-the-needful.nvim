@@ -2,14 +2,10 @@ local Path = require("plenary.path")
 local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
+local utils = require("do-the-needful.utils")
 local ins = vim.inspect
 
 Tasks = {}
-
-local split = function(var, str)
-	str = str or " "
-	return vim.split(var, str, { plain = true, trimempty = true })
-end
 
 local function decode_json(f_handle)
 	local contents = f_handle:read()
@@ -97,12 +93,12 @@ end
 function Tasks.task_preview(task)
 	local fields = {}
 	local lines = { "{" }
-	for _, f in pairs(const.field_order) do
+	for _, f in pairs(const.task_preview_field_order) do
 		table.insert(fields, { f, task[f] })
 	end
 	for _, f in pairs(fields) do
 		if f[2] then
-			local rows = split(ins(f[2]), "\n")
+			local rows = utils.split_string(ins(f[2]), "\n")
 			if type(f[2]) == "string" then
 				table.insert(lines, string.format('  %s = "%s",', f[1], f[2]))
 			else
@@ -122,7 +118,7 @@ function Tasks.task_preview(task)
 	Log.trace(
 		string.format(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
-			ins(const.field_order),
+			ins(const.task_preview_field_order),
 			ins(task),
 			ins(lines)
 		)

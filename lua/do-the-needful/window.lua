@@ -7,6 +7,7 @@ local ins = vim.inspect
 Window = {}
 
 local compose_job = function(cmd, cwd)
+	Log.trace(string.format("window._compose_job(): cmd %s, cwd %s", ins(cmd), cwd))
 	local command = table.remove(cmd, 1)
 	local job_tbl = {
 		command = command,
@@ -47,6 +48,7 @@ function Window.run_task(selection)
 		return nil
 	end
 	local cmd = build_command(selection)
+	Log.trace(string.format("window.run_task(): cmd %s", ins(cmd)))
 	if not cmd then
 		Log.error("window.run_tasks(): no return value from build_command()")
 		return nil

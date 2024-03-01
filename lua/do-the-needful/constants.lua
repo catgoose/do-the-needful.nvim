@@ -29,6 +29,7 @@ Constants.val = {
 			"project",
 			"opts",
 		},
+		tag_source = true,
 		global_tokens = {
 			["${cwd}"] = vim.fn.getcwd,
 			["${do-the-needful}"] = "please",

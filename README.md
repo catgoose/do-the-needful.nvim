@@ -109,7 +109,7 @@ tags = { "eza", "home", "files" }, -- task metadata used for searching
 ```
 
 ### Global token replacement
- 
+
 The following task fields are parsed for tokens
 
 - cmd
@@ -202,6 +202,7 @@ local opts = {
     "global", -- .tasks.json in stdpath('data')
     "project", -- .task.json in project directory
   },
+  tag_source = true, -- display #project, #global, or #opt after tags
   global_tokens = {
     ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
@@ -263,11 +264,21 @@ telescope.load_extension("do-the-needful")
    "project",
    "opts",
   },
+  tag_source = true,
   global_tokens = {
     ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
   },
-  ask_functions = {}
+  ask_functions = {},
+  telescope = {
+    action_picker = {
+      layout_strategy = "center",
+      layout_config = {
+        width = 0.25,
+        prompt_position = "bottom",
+      },
+    },
+  },
 }
 ```
 

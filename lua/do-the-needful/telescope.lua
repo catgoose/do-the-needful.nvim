@@ -35,10 +35,12 @@ local function entry_display(entry)
 		})
 		start = start + 1 + #tag + 1
 	end
-	vim.list_extend(items, { "#" .. entry.value.source })
-	vim.list_extend(highlights, {
-		{ { start, start + #entry.value.source + 1 }, "TelescopeResultsComment" },
-	})
+	if get_opts().tag_source then
+		vim.list_extend(items, { "#" .. entry.value.source })
+		vim.list_extend(highlights, {
+			{ { start, start + #entry.value.source + 1 }, "TelescopeResultsComment" },
+		})
+	end
 	return table.concat(items), highlights
 end
 

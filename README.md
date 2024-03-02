@@ -3,7 +3,6 @@
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -23,8 +22,14 @@
     - [Ask functions](#ask-functions)
       - [Ask tokens](#ask-tokens)
     - [Global tokens defaults](#global-tokens-defaults)
-  - [Editing project and global configs](#editing-project-and-global-configs) - [Project config](#project-config) - [Global config](#global-config) - [New configs](#new-configs) - [.tasks.json JSON schema](#tasksjson-json-schema)
-  <!--toc:end-->
+  - [Editing project and global configs](#editing-project-and-global-configs)
+    - [Project config](#project-config)
+    - [Global config](#global-config)
+    - [New configs](#new-configs)
+    - [.tasks.json JSON schema](#tasksjson-json-schema)
+      - [Alternate config format](#alternate-config-format)
+  - [Todo](#todo)
+<!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please. Task command,
 cwd, and name can be defined containing `${tokens}` which can be replaced by

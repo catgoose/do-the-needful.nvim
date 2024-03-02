@@ -8,6 +8,7 @@ local tokens = require("do-the-needful.tokens")
 local win = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
 local edit = require("do-the-needful.edit")
+local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
 
 ---@class Telescope
@@ -28,16 +29,19 @@ local function entry_ordinal(task)
 end
 
 local function entry_display(entry)
+  Log.trace("entry_display", entry)
 	local items = { entry.value.name, " " }
 	local highlights = {}
 	local start = #table.concat(items, "")
-	for _, tag in pairs(entry.value.tags) do
-		vim.list_extend(items, { "#", tag, " " })
-		vim.list_extend(highlights, {
-			{ { start, start + 1 }, "TelescopeResultsOperator" },
-			{ { start + 1, start + 1 + #tag }, "TelescopeResultsIdentifier" },
-		})
-		start = start + 1 + #tag + 1
+	if #entry.value.tags > 1 and #entry.value.tags[1] > 0 then
+		for _, tag in pairs(entry.value.tags) do
+			vim.list_extend(items, { "#", tag, " " })
+			vim.list_extend(highlights, {
+				{ { start, start + 1 }, "TelescopeResultsOperator" },
+				{ { start + 1, start + 1 + #tag }, "TelescopeResultsIdentifier" },
+			})
+			start = start + 1 + #tag + 1
+		end
 	end
 	if get_opts().tag_source then
 		vim.list_extend(items, { "#" .. entry.value.source })

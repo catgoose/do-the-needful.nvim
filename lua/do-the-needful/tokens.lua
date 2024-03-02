@@ -1,7 +1,7 @@
 local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
-local trace = require("do-the-needful").trace
+local trace = require("do-the-needful.logger").trace
 local ins = vim.inspect
 
 ---@class Token

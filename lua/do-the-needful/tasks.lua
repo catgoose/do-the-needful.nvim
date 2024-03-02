@@ -1,7 +1,8 @@
 local Path = require("plenary.path")
 local get_opts = require("do-the-needful.config").get_opts
-local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
+local trace = require("do-the-needful.logger").trace
+local warn = require("do-the-needful.logger").warn
 local utils = require("do-the-needful.utils")
 local validate = require("do-the-needful.validate")
 local ins = vim.inspect
@@ -26,12 +27,12 @@ local function decode_json(f_handle)
 	local ok, json = pcall(vim.json.decode, contents)
 	if not ok then
 		if #contents == 0 then
-			Log.warn(string.format("tasks._decode_json(): %s is an empty file", f_handle.filename))
+			warn(string.format("tasks._decode_json(): %s is an empty file", f_handle.filename))
 		else
-			Log.error(string.format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
+			error(string.format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
 		end
 	end
-	Log.trace(string.format("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
+	trace(string.format("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
 	return ok and json or nil
 end
 
@@ -40,10 +41,10 @@ local tasks_from_json = function(f_handle, tasks)
 	if f_handle:exists() then
 		local json = decode_json(f_handle)
 		if not json then
-			Log.warn("tasks._compose_task(): json returned from decode_json is nil")
+			warn("tasks._compose_task(): json returned from decode_json is nil")
 			return nil
 		end
-		Log.trace(
+		trace(
 			string.format(
 				"tasks._compose_task(): composing task for file %s and tasks %s",
 				f_handle.filename,
@@ -61,7 +62,7 @@ local add_source_to_tasks = function(tasks, source)
 	for _, t in pairs(tasks) do
 		t.source = source
 	end
-	Log.trace(string.format("tasks._add_source_to_tasks(): adding source %s to tasks %s", source, ins(tasks)))
+	trace(string.format("tasks._add_source_to_tasks(): adding source %s to tasks %s", source, ins(tasks)))
 	return tasks
 end
 
@@ -77,7 +78,7 @@ local function aggregate_tasks()
 				local with_source = add_source_to_tasks(from_json, c)
 				local validated = validate.tasks(with_source)
 				vim.list_extend(tasks, validated)
-				Log.trace(
+				trace(
 					string.format(
 						"tasks._aggregate_tasks(): composing task: %s from file %s",
 						ins(tasks),
@@ -89,7 +90,7 @@ local function aggregate_tasks()
 			vim.list_extend(tasks, add_source_to_tasks(configs[c].tasks, c))
 		end
 	end
-	Log.trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
+	trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
 	return tasks
 end
 
@@ -98,7 +99,7 @@ function Tasks.collect_tasks()
 	local tasks = {}
 	for _, t in pairs(aggregate_tasks()) do
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
-		Log.trace(
+		trace(
 			string.format(
 				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
 				ins(t),
@@ -137,7 +138,7 @@ function Tasks.task_preview(task)
 	end
 	lines[#lines] = lines[#lines]:sub(1, -2)
 	table.insert(lines, "}")
-	Log.trace(
+	trace(
 		string.format(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
 			ins(const.task_preview_field_order),

@@ -1,5 +1,5 @@
+local warn = require("do-the-needful.logger").warn
 local ins = vim.inspect
-local warn = require("do-the-needful").warn
 
 ---@class Validate
 ---@field tasks fun(tasks: TaskConfig[]): TaskConfig[]

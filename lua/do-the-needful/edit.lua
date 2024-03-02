@@ -1,7 +1,7 @@
 local Path = require("plenary.path")
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
-local trace = require("do-the-needful").trace
+local trace = require("do-the-needful.logger").trace
 
 Edit = {}
 

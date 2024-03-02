@@ -1,8 +1,8 @@
 local Job = require("plenary.job")
 local tmux = require("do-the-needful.tmux")
 local trace = require("do-the-needful").trace
-local err = require("do-the-needful").err
-local warn = require("do-the-needful").warn
+local err = require("do-the-needful.logger").err
+local warn = require("do-the-needful.logger").warn
 local extend = vim.list_extend
 local ins = vim.inspect
 
@@ -49,7 +49,6 @@ local function tmux_running()
 end
 
 function Window.open(selection)
-  vim.print(selection)
 	if not tmux_running() then
 		return nil
 	end
@@ -61,9 +60,7 @@ function Window.open(selection)
 	end
 	local pane = Job:new(cmd):sync()
 	if not pane then
-		warn(
-			string.format("window.run_task(): pane not found when running job for selected task %s", ins(selection))
-		)
+		warn(string.format("window.run_task(): pane not found when running job for selected task %s", ins(selection)))
 		return nil
 	end
 	pane = pane[1]

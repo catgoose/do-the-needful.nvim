@@ -7,7 +7,7 @@ local default_log_level = "warn"
 ---@field dev boolean
 ---@field log_level string
 ---@field tasks table
----@field config string
+---@field config_file string
 ---@field config_order table
 ---@field tag_source boolean
 ---@field global_tokens table
@@ -47,7 +47,7 @@ Constants.val = {
 		dev = false,
 		log_level = default_log_level,
 		tasks = {},
-		config = ".tasks.json",
+		config_file = ".tasks.json",
 		config_order = {
 			"global",
 			"project",

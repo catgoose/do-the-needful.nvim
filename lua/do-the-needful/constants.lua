@@ -1,6 +1,5 @@
 local t = require("do-the-needful.utils").indent_str
 
-
 local default_log_level = "warn"
 
 ---@class Opts

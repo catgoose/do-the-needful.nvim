@@ -34,12 +34,13 @@ local function decode_json(f_handle)
 	return ok and json or nil
 end
 
+---@fun tasks_from_json(f_handle: Path, tasks: Task[]): Task[]
 local tasks_from_json = function(f_handle, tasks)
 	if f_handle:exists() then
 		local json = decode_json(f_handle)
 		if not json then
 			Log.warn("tasks._compose_task(): json returned from decode_json is nil")
-			return {}
+			return nil
 		end
 		Log.trace(
 			string.format(
@@ -48,12 +49,13 @@ local tasks_from_json = function(f_handle, tasks)
 				ins(tasks)
 			)
 		)
-		return json.tasks
+		return json
 	else
-		return {}
+		return nil
 	end
 end
 
+---@fun add_source_to_tasks(tasks: Task[], source: string): Task[]
 local add_source_to_tasks = function(tasks, source)
 	for _, t in pairs(tasks) do
 		t.source = source
@@ -70,15 +72,17 @@ local function aggregate_tasks()
 		if path then
 			local f_handle = Path:new(path)
 			local from_json = tasks_from_json(f_handle, tasks)
-			local with_source = add_source_to_tasks(from_json, c)
-			vim.list_extend(tasks, with_source)
-			Log.trace(
-				string.format(
-					"tasks._aggregate_tasks(): composing task: %s from file %s",
-					ins(tasks),
-					f_handle.filename
+			if from_json then
+				local with_source = add_source_to_tasks(from_json, c)
+				vim.list_extend(tasks, with_source)
+				Log.trace(
+					string.format(
+						"tasks._aggregate_tasks(): composing task: %s from file %s",
+						ins(tasks),
+						f_handle.filename
+					)
 				)
-			)
+			end
 		else
 			vim.list_extend(tasks, add_source_to_tasks(configs[c].tasks, c))
 		end

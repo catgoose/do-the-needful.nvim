@@ -1,5 +1,5 @@
-local Log = require("do-the-needful").Log
 local ins = vim.inspect
+local warn = require("do-the-needful").warn
 
 ---@class Validate
 ---@field tasks fun(tasks: TaskConfig[]): TaskConfig[]
@@ -10,7 +10,7 @@ Validate.tasks = function(tasks)
 	local relative = { "after", "before" }
 	for ti, t in pairs(tasks) do
 		if not t.cmd or #t.cmd == 0 then
-			Log.warn(
+			warn(
 				string.format(
 					"tasks.validate_tasks(): task %s is missing a cmd. Excluding task from aggregation",
 					ins(t)
@@ -21,7 +21,7 @@ Validate.tasks = function(tasks)
 		end
 		if not t.name then
 			local unknown = "Unknown task"
-			Log.warn(
+			warn(
 				string.format(
 					"tasks.validate_tasks(): task %s is missing a name.  Setting value to %s",
 					ins(t),
@@ -34,7 +34,7 @@ Validate.tasks = function(tasks)
 			t.tags = nil
 		end
 		if t.tags and type(t.tags) ~= "table" then
-			Log.warn(
+			warn(
 				string.format(
 					"tasks.validate_tasks(): task %s has an invalid tags property: %s.  Expecting a table",
 					ins(t),
@@ -45,7 +45,7 @@ Validate.tasks = function(tasks)
 		end
 		for tgi, tag in ipairs(t.tags) do
 			if type(tag) ~= "string" then
-				Log.warn(
+				warn(
 					string.format(
 						"tasks.validate_tasks(): task %s has an invalid tag: %s.  Converting to string",
 						ins(t),
@@ -68,7 +68,7 @@ Validate.tasks = function(tasks)
 			t.window.open_relative = nil
 		end
 		if t.window and t.window.relative and not vim.tbl_contains(relative, t.window.relative) then
-			Log.warn(
+			warn(
 				string.format(
 					"tasks.validate_tasks(): task %s has an invalid window property: relative.  Expecting one of %s",
 					ins(t),

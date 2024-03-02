@@ -1,4 +1,4 @@
-local Log = require("do-the-needful").Log
+local trace = require("do-the-needful").trace
 local extend = vim.list_extend
 local ins = vim.inspect
 
@@ -16,7 +16,7 @@ Tmux = {}
 ---@enum relative "before" "after"
 
 function Tmux.build_command(task)
-	Log.trace(string.format("tmux.build_command(): using selected task %s", ins(task)))
+	trace(string.format("tmux.build_command(): using selected task %s", ins(task)))
 	if not task then
 		return
 	end
@@ -41,7 +41,7 @@ function Tmux.build_command(task)
 	else
 		extend(cmd, { "-P", "-F", "#{pane_id}" })
 	end
-	Log.trace(
+	trace(
 		string.format(
 			"window.window_opts(): using selected task %s, building tmux command table: %s",
 			ins(task),

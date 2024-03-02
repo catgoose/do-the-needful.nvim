@@ -1,7 +1,7 @@
 local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
-local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
+local trace = require("do-the-needful").trace
 local ins = vim.inspect
 
 ---@class Token
@@ -19,7 +19,7 @@ local replace_tokens = function(str)
 			str = utils.escaped_replace(str, k, v())
 		end
 	end
-	Log.trace(string.format("Token.replace_tokens: %s", str))
+	trace(string.format("Token.replace_tokens: %s", str))
 	return str
 end
 
@@ -56,7 +56,7 @@ local execute_task = function(selection, task_cb)
 		cwd = selection.cwd,
 		window = selection.window,
 	}
-	Log.trace(string.format(
+	trace(string.format(
 		[[Token.execute_task: task generated:
                 %s]],
 		ins(task)
@@ -77,7 +77,7 @@ local ask_tokens = function(selection, task_cb)
 					if input then
 						count = count + 1
 						selection.cmd = utils.escaped_replace(selection.cmd, token, input)
-						Log.trace(string.format(
+						trace(string.format(
 							[[Token.ask_tokens: token %s replaced for cmd:
                 %s]],
 							token,
@@ -96,16 +96,16 @@ local ask_tokens = function(selection, task_cb)
 end
 
 Token.replace = function(selection, task_cb)
-	Log.trace(string.format(
+	trace(string.format(
 		[[Token.replace started for selection:
   %s]],
 		ins(selection)
 	))
-  for _, field in pairs(const.token_replacement_fields) do
-    if selection[field] then
-      selection[field] = replace_tokens(selection[field])
-    end
-  end
+	for _, field in pairs(const.token_replacement_fields) do
+		if selection[field] then
+			selection[field] = replace_tokens(selection[field])
+		end
+	end
 	ask_tokens(selection, task_cb)
 end
 

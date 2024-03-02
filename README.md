@@ -402,6 +402,51 @@ When calling the task config editing functions if the respective
 }
 ```
 
+#### Alternate config format
+
+Alternatively the root `tasks` key can be omitted:
+
+```json
+[
+  {
+    "name": "",
+    "cmd": "",
+    "tags": [""],
+    "window": {
+      "name": "",
+      "close": false,
+      "keep_current": false,
+      "open_relative": true,
+      "relative": "after"
+    }
+  }
+]
+```
+
+Schema:
+
+```typescript
+Array<{
+  name: string;
+  cmd: string;
+  tags: Array<string>;
+  ask: {
+    "${token}": {
+      title: string;
+      type: "string" | "function";
+      default: string;
+    };
+  };
+  window: {
+    name: string;
+    close: boolean;
+    keep_current: boolean;
+    open_relative: boolean;
+    relative: "before" | "after";
+  };
+}>;
+```
+
 ## Todo
 
 - Tasks can execute other tasks

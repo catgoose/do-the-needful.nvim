@@ -49,7 +49,7 @@ local tasks_from_json = function(f_handle, tasks)
 				ins(tasks)
 			)
 		)
-		return json
+		return json.tasks or json or nil
 	else
 		return nil
 	end

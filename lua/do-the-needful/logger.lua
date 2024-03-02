@@ -1,7 +1,13 @@
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
 
+---@class Logger
+---@field log table
+---@field init fun()
+---@return Logger
 Logger = {}
+
+
 Logger.log = nil
 
 Logger.init = function()

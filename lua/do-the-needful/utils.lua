@@ -1,3 +1,9 @@
+---@class Utils
+---@field deep_copy fun(orig: table): table
+---@field indent_str fun(indent_n: number, str: string): string
+---@field escaped_replace fun(str: string, what: string, with: string): string
+---@field split_string fun(str: string, del: string): string[]
+---@return Utils
 Utils = {}
 
 Utils.deep_copy = function(orig)

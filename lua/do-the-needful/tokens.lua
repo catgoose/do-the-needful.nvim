@@ -4,6 +4,9 @@ local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 local ins = vim.inspect
 
+---@class Token
+---@field replace fun(selection: TaskConfig, task_cb: fun(task: TaskConfig): nil)
+---@return Token
 Token = {}
 
 local replace_tokens = function(str)
@@ -16,7 +19,7 @@ local replace_tokens = function(str)
 			str = utils.escaped_replace(str, k, v())
 		end
 	end
-	Log.trace(string.format("Token.replace_cmd_tokens: %s", str))
+	Log.trace(string.format("Token.replace_tokens: %s", str))
 	return str
 end
 
@@ -61,6 +64,7 @@ local execute_task = function(selection, task_cb)
 	task_cb(task)
 end
 
+---@fun ask_tokens(selection: Task, task_cb: fun(task: Task): nil)
 local ask_tokens = function(selection, task_cb)
 	if selection.ask then
 		local configs = get_input_configs(selection)

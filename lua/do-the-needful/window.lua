@@ -4,6 +4,9 @@ local tmux = require("do-the-needful.tmux")
 local extend = vim.list_extend
 local ins = vim.inspect
 
+---@class Window
+---@func open(selection: TaskConfig)
+---@return Window
 Window = {}
 
 local compose_job = function(cmd, cwd)
@@ -43,7 +46,8 @@ local function tmux_running()
 	return true
 end
 
-function Window.run_task(selection)
+function Window.open(selection)
+  vim.print(selection)
 	if not tmux_running() then
 		return nil
 	end

@@ -1,5 +1,11 @@
 local cfg = require("do-the-needful.config")
 
+---@class DoTheNeedful
+---@field setup fun(config: table)
+---@field Log Logger
+---@field edit_config fun(config: source)
+---@field please fun()
+---@return DoTheNeedful
 DoTheNeedful = {}
 
 function DoTheNeedful.setup(config)

@@ -1,9 +1,33 @@
 local t = require("do-the-needful.utils").indent_str
 
-Constants = {}
 
 local default_log_level = "warn"
 
+---@class Opts
+---@field dev boolean
+---@field log_level string
+---@field tasks table
+---@field config string
+---@field config_order table
+---@field tag_source boolean
+---@field global_tokens table
+---@field ask_functions table
+---@field telescope table
+
+---@class Constants
+---@field val Constants.val
+---@return Constants
+Constants = {}
+
+---@class Constants.val
+---@field plugin_name string
+---@field task_preview_field_order string[]
+---@field token_replacement_fields string[]
+---@field opts Opts
+---@field task_defaults TaskConfig
+---@field default_task_lines string[]
+---@field default_log_level string
+---@field log_levels string[]
 Constants.val = {
 	plugin_name = "do-the-needful",
 	task_preview_field_order = {

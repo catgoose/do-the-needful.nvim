@@ -5,6 +5,10 @@ local const = require("do-the-needful.constants").val
 
 Edit = {}
 
+---@class Edit
+---@func edit_config fun(config: string)
+---@return Edit
+
 local function populate_config()
 	local bufnr = vim.api.nvim_get_current_buf()
 	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, const.default_task_lines)

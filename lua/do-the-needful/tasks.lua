@@ -5,6 +5,19 @@ local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
 local ins = vim.inspect
 
+---@class TaskConfig
+---@field name? string
+---@field cmd? string
+---@field cwd? string
+---@field tags? string[]
+---@field window? TmuxWindow
+---@field source? "global" | "project" | "opts"
+---@enum source "global" | "project" | "opts"
+
+---@class Tasks
+---@func collect_tasks(): Task[]
+---@func task_preview(task: Task): string[]
+---@return Tasks
 Tasks = {}
 
 local function decode_json(f_handle)
@@ -74,6 +87,7 @@ local function aggregate_tasks()
 	return tasks
 end
 
+---@return TaskConfig[]
 function Tasks.collect_tasks()
 	local tasks = {}
 	for _, t in pairs(aggregate_tasks()) do
@@ -90,6 +104,8 @@ function Tasks.collect_tasks()
 	return tasks
 end
 
+---@param task TaskConfig
+---@return string[]
 function Tasks.task_preview(task)
 	local fields = {}
 	local lines = { "{" }

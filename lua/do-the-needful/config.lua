@@ -1,6 +1,10 @@
 local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
 
+---@class Config
+---@field get_opts fun(): Opts
+---@field init fun(opts: Opts): Opts
+---@return Config
 Config = {}
 
 local _opts = const.opts

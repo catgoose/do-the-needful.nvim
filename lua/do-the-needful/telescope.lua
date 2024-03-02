@@ -8,7 +8,7 @@ local tokens = require("do-the-needful.tokens")
 local win = require("do-the-needful.window")
 local tsk = require("do-the-needful.tasks")
 local edit = require("do-the-needful.edit")
-local trace = require("do-the-needful.logger").trace
+local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
 
 ---@class Telescope
@@ -29,7 +29,7 @@ local function entry_ordinal(task)
 end
 
 local function entry_display(entry)
-	trace("entry_display", entry)
+	Log.trace("entry_display", entry)
 	local items = { entry.value.name, " " }
 	local highlights = {}
 	local start = #table.concat(items, "")

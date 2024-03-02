@@ -3,6 +3,7 @@ local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
+local validate = require("do-the-needful.validate")
 local ins = vim.inspect
 
 ---@class TaskConfig
@@ -74,7 +75,8 @@ local function aggregate_tasks()
 			local from_json = tasks_from_json(f_handle, tasks)
 			if from_json then
 				local with_source = add_source_to_tasks(from_json, c)
-				vim.list_extend(tasks, with_source)
+				local validated = validate.tasks(with_source)
+				vim.list_extend(tasks, validated)
 				Log.trace(
 					string.format(
 						"tasks._aggregate_tasks(): composing task: %s from file %s",

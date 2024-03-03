@@ -232,7 +232,7 @@ local opts = {
 }
 
 return {
-  "catgoose/do-the-needful",
+  "catgoose/do-the-needful.nvim",
   event = "BufReadPre",
   keys = {
     { "<leader>;", [[<cmd>Telescope do-the-needful please<cr>]], "n" },

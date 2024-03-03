@@ -23,7 +23,13 @@
     - [Ask functions](#ask-functions)
       - [Ask tokens](#ask-tokens)
     - [Global tokens defaults](#global-tokens-defaults)
-  - [Editing project and global configs](#editing-project-and-global-configs) - [Project config](#project-config) - [Global config](#global-config) - [New configs](#new-configs) - [.tasks.json JSON schema](#tasksjson-json-schema)
+  - [Editing project and global configs](#editing-project-and-global-configs)
+    - [Project config](#project-config)
+    - [Global config](#global-config)
+    - [New configs](#new-configs)
+    - [.tasks.json JSON schema](#tasksjson-json-schema)
+      - [Alternate config format](#alternate-config-format)
+  - [Todo](#todo)
   <!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please. Task command,
@@ -227,7 +233,7 @@ local opts = {
 }
 
 return {
-  "catgoose/do-the-needful",
+  "catgoose/do-the-needful.nvim",
   event = "BufReadPre",
   keys = {
     { "<leader>;", [[<cmd>Telescope do-the-needful please<cr>]], "n" },

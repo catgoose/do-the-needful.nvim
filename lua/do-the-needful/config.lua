@@ -1,6 +1,6 @@
 local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
-local sf = string.format
+local sf = utils.string_format
 
 ---@class Config
 ---@field get_opts fun(): Opts

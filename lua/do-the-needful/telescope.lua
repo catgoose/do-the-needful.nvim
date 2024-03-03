@@ -10,8 +10,7 @@ local tsk = require("do-the-needful.tasks")
 local edit = require("do-the-needful.edit")
 local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
-local ins = vim.inspect
-local sf = string.format
+local sf = require("do-the-needful.utils").string_format
 
 ---@class Telescope
 ---@field action_picker fun(opts: table)
@@ -87,7 +86,8 @@ local function task_picker(opts)
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					tokens.replace(selection.value, function(task)
-						Log.debug(sf("task_picker: opening task %s", ins(task)))
+						-- Log.debug(sf("task_picker: opening task %s", ins(task)))
+						Log.debug(sf("task_picker: opening task %s", task))
 						win.open(task)
 					end)
 				end)

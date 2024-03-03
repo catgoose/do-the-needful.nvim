@@ -36,4 +36,14 @@ Utils.split_string = function(str, del)
 	return vim.split(str, del, { plain = true, trimempty = true })
 end
 
+Utils.string_format = function(msg, ...)
+	local args = { ... }
+	for i, v in ipairs(args) do
+		if type(v) == "table" then
+			args[i] = vim.inspect(v)
+		end
+	end
+	return string.format(msg, unpack(args))
+end
+
 return Utils

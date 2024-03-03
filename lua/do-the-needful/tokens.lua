@@ -2,8 +2,7 @@ local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
 local Log = require("do-the-needful").Log
-local ins = vim.inspect
-local sf = string.format
+local sf = utils.string_format
 
 ---@class Token
 ---@field replace fun(selection: TaskConfig, task_cb: fun(task: TaskConfig): nil)
@@ -60,7 +59,7 @@ local execute_task = function(selection, task_cb)
 	Log.trace(sf(
 		[[Token.execute_task: task generated:
                 %s]],
-		ins(task)
+		task
 	))
 	task_cb(task)
 end
@@ -100,7 +99,7 @@ Token.replace = function(selection, task_cb)
 	Log.trace(sf(
 		[[Token.replace started for selection:
   %s]],
-		ins(selection)
+		selection
 	))
 	for _, field in pairs(const.token_replacement_fields) do
 		if selection[field] then

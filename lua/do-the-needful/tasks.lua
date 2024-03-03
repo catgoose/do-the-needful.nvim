@@ -5,6 +5,7 @@ local Log = require("do-the-needful").Log
 local utils = require("do-the-needful.utils")
 local validate = require("do-the-needful.validate")
 local ins = vim.inspect
+local sf = string.format
 
 ---@class TaskConfig
 ---@field name? string
@@ -26,12 +27,12 @@ local function decode_json(f_handle)
 	local ok, json = pcall(vim.json.decode, contents)
 	if not ok then
 		if #contents == 0 then
-			Log.warn(string.format("tasks._decode_json(): %s is an empty file", f_handle.filename))
+			Log.warn(sf("tasks._decode_json(): %s is an empty file", f_handle.filename))
 		else
-			error(string.format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
+			error(sf("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
 		end
 	end
-	Log.trace(string.format("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
+	Log.trace(sf("tasks._decode_json(): decoding json for file %s: %s", f_handle.filename, ins(json)))
 	return ok and json or nil
 end
 
@@ -44,7 +45,7 @@ local tasks_from_json = function(f_handle, tasks)
 			return nil
 		end
 		Log.trace(
-			string.format(
+			sf(
 				"tasks._compose_task(): composing task for file %s withs tasks %s",
 				f_handle.filename,
 				ins(tasks)
@@ -61,14 +62,14 @@ local add_source_to_tasks = function(tasks, source)
 	for _, t in pairs(tasks) do
 		t.source = source
 	end
-	Log.trace(string.format("tasks._add_source_to_tasks(): adding source %s to tasks %s", source, ins(tasks)))
+	Log.trace(sf("tasks._add_source_to_tasks(): adding source %s to tasks %s", source, ins(tasks)))
 	return tasks
 end
 
 local function aggregate_tasks()
 	local tasks = {}
 	local configs = get_opts().configs
-	Log.trace(string.format("tasks._aggregate_tasks(): parsing configs: %s", configs))
+	Log.trace(sf("tasks._aggregate_tasks(): parsing configs: %s", configs))
 	for _, c in pairs(get_opts().config_order) do
 		local path = configs[c].path
 		if path then
@@ -79,7 +80,7 @@ local function aggregate_tasks()
 				local validated = validate.tasks(with_source)
 				vim.list_extend(tasks, validated)
 				Log.trace(
-					string.format(
+					sf(
 						"tasks._aggregate_tasks(): composing task: %s from file %s",
 						ins(tasks),
 						f_handle.filename
@@ -89,7 +90,7 @@ local function aggregate_tasks()
 		else
 			vim.list_extend(tasks, add_source_to_tasks(configs[c].tasks, c))
 		end
-    Log.debug(string.format("tasks._aggregate_tasks(): tasks %s", ins(tasks)))
+    Log.debug(sf("tasks._aggregate_tasks(): tasks %s", ins(tasks)))
 	end
 	return tasks
 end
@@ -100,7 +101,7 @@ function Tasks.collect_tasks()
 	for _, t in pairs(aggregate_tasks()) do
 		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
 		Log.trace(
-			string.format(
+			sf(
 				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
 				ins(t),
 				ins(tasks),
@@ -123,23 +124,23 @@ function Tasks.task_preview(task)
 		if f[2] then
 			local rows = utils.split_string(ins(f[2]), "\n")
 			if type(f[2]) == "string" then
-				table.insert(lines, string.format('  %s = "%s",', f[1], f[2]))
+				table.insert(lines, sf('  %s = "%s",', f[1], f[2]))
 			else
 				for i, l in pairs(rows) do
 					if i == 1 then
-						table.insert(lines, string.format("  %s = %s", f[1], l))
+						table.insert(lines, sf("  %s = %s", f[1], l))
 					else
-						table.insert(lines, string.format("  %s", l))
+						table.insert(lines, sf("  %s", l))
 					end
 				end
-				lines[#lines] = string.format("%s,", lines[#lines])
+				lines[#lines] = sf("%s,", lines[#lines])
 			end
 		end
 	end
 	lines[#lines] = lines[#lines]:sub(1, -2)
 	table.insert(lines, "}")
 	Log.trace(
-		string.format(
+		sf(
 			"task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
 			ins(const.task_preview_field_order),
 			ins(task),

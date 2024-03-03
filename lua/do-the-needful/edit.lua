@@ -3,6 +3,7 @@ local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").val
 local Log = require("do-the-needful").Log
 local ins = vim.inspect
+local sf = string.format
 
 Edit = {}
 
@@ -24,7 +25,7 @@ function Edit.edit_config(config)
 	if not file_h:exists() or #file_h:read() == 0 then
 		populate_config()
 	end
-	Log.trace(string.format("init.edit_config(): editing config type: %s", ins(config)))
+	Log.trace(sf("init.edit_config(): editing config type: %s", ins(config)))
 end
 
 return Edit

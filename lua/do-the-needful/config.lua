@@ -1,5 +1,6 @@
 local const = require("do-the-needful.constants").val
 local utils = require("do-the-needful.utils")
+local sf = string.format
 
 ---@class Config
 ---@field get_opts fun(): Opts
@@ -41,11 +42,11 @@ local set_local_opts = function(opts)
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts.configs = {
 		global = {
-			path = string.format("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
+			path = sf("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
 			tasks = {},
 		},
 		project = {
-			path = string.format("%s/%s", vim.fn.getcwd(), _opts.config_file),
+			path = sf("%s/%s", vim.fn.getcwd(), _opts.config_file),
 			tasks = {},
 		},
 		opts = {

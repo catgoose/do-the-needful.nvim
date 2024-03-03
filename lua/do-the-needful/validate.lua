@@ -1,5 +1,6 @@
 local Log = require("do-the-needful").Log
 local ins = vim.inspect
+local sf = string.format
 
 ---@class Validate
 ---@field tasks fun(tasks: TaskConfig[]): TaskConfig[]
@@ -7,7 +8,7 @@ Validate = {}
 
 local function validate_cmd(task, index)
 	if not task.cmd or #task.cmd == 0 then
-		Log.warn(string.format("Task %s is missing a cmd. Excluding task from aggregation: %s", index, ins(task)))
+		Log.warn(sf("Task %s is missing a cmd. Excluding task from aggregation: %s", index, ins(task)))
 		return false
 	end
 	return true
@@ -16,7 +17,7 @@ end
 local function validate_name(task)
 	if not task.name or #task.name == 0 then
 		local name = "Unknown task"
-		Log.warn(string.format("Task is missing a name. Setting value to '%s'.  task: %s", name, ins(task)))
+		Log.warn(sf("Task is missing a name. Setting value to '%s'.  task: %s", name, ins(task)))
 		task.name = name
 	end
 end
@@ -26,12 +27,12 @@ local function validate_tags(task)
 		if #task.tags == 0 or task.tags[1] == "" then
 			task.tags = nil
 		elseif type(task.tags) ~= "table" then
-			Log.warn(string.format("Task has an invalid tags property. Expecting a table. task: %s", ins(task)))
+			Log.warn(sf("Task has an invalid tags property. Expecting a table. task: %s", ins(task)))
 			task.tags = nil
 		else
 			for i, tag in ipairs(task.tags) do
 				if type(tag) ~= "string" then
-					Log.warn(string.format("Task has an invalid tag. Converting to string. task: %s", ins(task)))
+					Log.warn(sf("Task has an invalid tag. Converting to string. task: %s", ins(task)))
 					task.tags[i] = tostring(tag)
 				end
 			end
@@ -54,7 +55,9 @@ local function validate_window(task, relative)
 		end
 	end
 	if window.relative and not vim.tbl_contains(relative, window.relative) then
-		Log.warn(string.format("Task has an invalid window property: relative. Expecting one of %s. task: %s", relative, ins(task)))
+		Log.warn(
+			sf("Task has an invalid window property: relative. Expecting one of %s. task: %s", relative, ins(task))
+		)
 		window.relative = nil
 	end
 end

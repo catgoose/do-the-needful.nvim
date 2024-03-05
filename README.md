@@ -3,6 +3,7 @@
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
+
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -29,7 +30,7 @@
     - [.tasks.json JSON schema](#tasksjson-json-schema)
       - [Alternate config format](#alternate-config-format)
   - [Todo](#todo)
-<!--toc:end-->
+  <!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please. Task command,
 cwd, and name can be defined containing `${tokens}` which can be replaced by
@@ -99,6 +100,8 @@ window = {
   open_relative = true, -- open window after/before current window
   relative = "after", -- relative direction if open_relative = true
   -- after or before
+  hidden = false -- hiding tasks from picker makes sense if you are using them
+  -- to compose jobs
 }
 ```
 
@@ -196,7 +199,49 @@ local opts = {
         keep_current = true,
       },
     },
+    {
+        id = "list1", -- id is used to reference a task in a job
+        name = "List directory",
+        cwd = "${cwd}",
+        tags = { "list", "dir", "open", "pwd" },
+        close = false,
+        keep_current = false,
+        hidden = true
+    },
+    {
+        id = "list2",
+        name = "List directory",
+        cwd = "~",
+        tags = { "list", "dir", "close", "home" },
+        close = true,
+        keep_current = true,
+        hidden = true
+    }
   },
+  jobs = {
+      {
+          name = "list directories",
+          tags = {"job", "list", "directories", "ordered"},
+          tasks = { -- task.id to run in order
+              "list1",
+              "list2"
+          },
+          close = true,
+          keep_current = false,
+          open_realtive = true,
+          relative = "before"
+      },
+      { -- multiple jobs can be created from the same task ids
+          name = "list directories",
+          tags = {"job", "list", "directories", "reversed"},
+          tasks = {
+              "list2",
+              "list1"
+          },
+          close = false,
+          keep_current = true,
+      }
+  }
   config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
   -- tasks are aggregated
@@ -260,6 +305,7 @@ telescope.load_extension("do-the-needful")
 {
   log_level = "warn",
   tasks = {},
+  jobs = {},
   config = ".tasks.json",
   config_order = {
    "global",

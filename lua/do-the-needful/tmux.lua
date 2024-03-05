@@ -1,6 +1,6 @@
 local Log = require("do-the-needful").Log
 local extend = vim.list_extend
-local sf = require('do-the-needful.utils').string_format
+local sf = require("do-the-needful.utils").string_format
 
 ---@class Tmux
 ---@field build_command fun(task: TaskConfig): string[]
@@ -36,18 +36,13 @@ function Tmux.build_command(task)
 	else
 		extend(cmd, { "-n", task.name })
 	end
+	-- if not window.close compose command to open the pane and get the pane id
 	if task.window.close then
 		extend(cmd, { task.cmd })
 	else
 		extend(cmd, { "-P", "-F", "#{pane_id}" })
 	end
-	Log.debug(
-		sf(
-			"window.window_opts(): using selected task %s, building tmux command table: %s",
-			task,
-			cmd
-		)
-	)
+	Log.debug(sf("window.window_opts(): using selected task %s, building tmux command table: %s", task, cmd))
 
 	return cmd
 end

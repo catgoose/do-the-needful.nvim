@@ -21,15 +21,14 @@ local compose_job = function(cmd, cwd)
 	return job_tbl
 end
 
-local function build_command(s)
-  local cmd = tmux.build_command(s)
+local function build_job_command(selection)
+	local cmd = tmux.build_command(selection)
 	Log.debug(sf("window.build_command(): cmd %s", cmd))
 	if not cmd then
-		Log.error(
-			sf("window.build_command(): no return value from tmux.build_command(). selection: s", s))
+		Log.error(sf("window.build_command(): no return value from tmux.build_command(). selection: %s", selection))
 		return
 	end
-	return compose_job(cmd, s.cwd)
+	return compose_job(cmd, selection.cwd)
 end
 
 local send_cmd_to_pane = function(selection, pane)
@@ -52,22 +51,23 @@ function Window.open(selection)
 	if not tmux_running() then
 		return nil
 	end
-	local cmd = build_command(selection)
+	local cmd = build_job_command(selection)
 	Log.trace(sf("window.run_task(): cmd %s", cmd))
 	if not cmd then
 		Log.error("window.run_tasks(): no return value from build_command(). selection %s", selection)
 		return nil
 	end
-	local pane = Job:new(cmd):sync()
-	if not pane then
-		Log.warn(
-			sf("window.run_task(): pane not found when running job for selected task %s", selection))
-		return nil
-	end
-	pane = pane[1]
-	if not selection.window.close then
-		Log.trace(sf("window.run_task(): sending selected task %s to pane %s", selection, pane))
-		send_cmd_to_pane(selection, pane)
+	if selection.window.close then
+		Job:new(cmd):sync()
+	else
+		local pane = Job:new(cmd):sync()
+		if not pane then
+			Log.warn(sf("window.run_task(): pane not found when running job for selected task %s", selection))
+			return nil
+		end
+		pane = pane[1]
+			Log.trace(sf("window.run_task(): sending selected task %s to pane %s", selection, pane))
+			send_cmd_to_pane(selection, pane)
 	end
 end
 

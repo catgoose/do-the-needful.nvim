@@ -12,7 +12,7 @@ local sf = utils.string_format
 ---@field cwd? string
 ---@field tags? string[]
 ---@field window? TmuxWindow
----@field source? "global" | "project" | "opts"
+---@field source? source
 ---@enum source "global" | "project" | "opts"
 
 ---@class Tasks
@@ -72,9 +72,7 @@ local function aggregate_tasks()
 				local with_source = add_source_to_tasks(from_json, c)
 				local validated = validate.tasks(with_source)
 				vim.list_extend(tasks, validated)
-				Log.trace(
-					sf("tasks._aggregate_tasks(): composing task: %s from file %s", tasks, f_handle.filename)
-				)
+				Log.trace(sf("tasks._aggregate_tasks(): composing task: %s from file %s", tasks, f_handle.filename))
 			end
 		else
 			vim.list_extend(tasks, add_source_to_tasks(configs[c].tasks, c))

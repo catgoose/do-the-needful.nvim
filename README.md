@@ -501,3 +501,4 @@ Array<{
 ## Todo
 
 - Tasks can execute other tasks
+- Update example config

@@ -9,7 +9,7 @@ local sf = require("do-the-needful.utils").string_format
 TmuxCommand = {}
 
 TmuxCommand.build_cmd_args = function(task)
-	Log.trace(sf("tmuxcommand.build_command(): using selected task %s", task))
+	Log.trace(sf("tmux.command.build_command(): using selected task %s", task))
 	local cmd_args = { "tmux", "new-window" }
 	if task.window.keep_current then
 		extend(cmd_args, { "-d" })

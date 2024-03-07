@@ -200,48 +200,52 @@ local opts = {
       },
     },
     {
-        id = "list1", -- id is used to reference a task in a job
-        name = "List directory",
-        cwd = "${cwd}",
-        tags = { "list", "dir", "open", "pwd" },
-        close = false,
-        keep_current = false,
-        hidden = true
+      id = "list1", -- id is used to reference a task in a job
+      name = "List directory",
+      cwd = "${cwd}",
+      tags = { "list", "dir", "open", "pwd" },
+      close = false,
+      keep_current = false,
+      hidden = true
     },
     {
-        id = "list2",
-        name = "List directory",
-        cwd = "~",
-        tags = { "list", "dir", "close", "home" },
-        close = true,
-        keep_current = true,
-        hidden = true
+      id = "list2",
+      name = "List directory",
+      cwd = "~",
+      tags = { "list", "dir", "close", "home" },
+      close = true,
+      keep_current = true,
+      hidden = true
     }
   },
   jobs = {
-      {
-          name = "list directories",
-          tags = {"job", "list", "directories", "ordered"},
-          tasks = { -- task.id to run in order
-              "list1",
-              "list2"
-          },
-          close = true,
-          keep_current = false,
-          open_realtive = true,
-          relative = "before"
+    {
+      name = "list directories",
+      tags = {"job", "list", "directories", "ordered"},
+      tasks = { -- task.id to run in order
+        "list1",
+        "list2"
       },
-      { -- multiple jobs can be created from the same task ids
-          name = "list directories",
-          tags = {"job", "list", "directories", "reversed"},
-          tasks = {
-              "list2",
-              "list1"
-          },
-          close = false,
-          keep_current = true,
+      window = {
+        close = true,
+        keep_current = false,
+        open_realtive = true,
+        relative = "before"
       }
-  }
+    },
+    { -- multiple jobs can be created from the same task ids
+      name = "list directories",
+      tags = {"job", "list", "directories", "reversed"},
+      tasks = {
+        "list2",
+        "list1"
+      },
+      window = {
+        close = false,
+        keep_current = true,
+      }
+    }
+  },
   config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
   -- tasks are aggregated

@@ -78,6 +78,13 @@ Constants.val = {
 			keep_current = false,
 		},
 	},
+	job_defaults = {
+		tags = {},
+		window = {
+			close = true,
+			keep_current = false,
+		},
+  },
 	default_task_lines = {
 		"{",
 		t(1, '"tasks": ['),

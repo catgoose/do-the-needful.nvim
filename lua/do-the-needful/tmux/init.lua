@@ -6,14 +6,6 @@ local window = require("do-the-needful.tmux.window")
 ---@return Tmux
 Tmux = {}
 
----@class TmuxWindow
----@field name? string
----@field close? boolean
----@field keep_current? boolean
----@field open_relative? boolean
----@field relative? relative
----@enum relative "before" "after"
-
 local function tmux_running()
 	if not vim.env.TMUX then
 		Log.error("checking $TMUX env...tmux is not running")

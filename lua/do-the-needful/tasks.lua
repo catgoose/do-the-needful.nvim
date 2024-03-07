@@ -15,6 +15,14 @@ local sf = utils.string_format
 ---@field source? source
 ---@enum source "global" | "project" | "opts"
 
+---@class TmuxWindow
+---@field name? string
+---@field close? boolean
+---@field keep_current? boolean
+---@field open_relative? boolean
+---@field relative? relative
+---@enum relative "before" "after"
+
 ---@class Tasks
 ---@func collect_tasks(): Task[]
 ---@func task_preview(task: Task): string[]

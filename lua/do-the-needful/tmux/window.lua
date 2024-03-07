@@ -26,19 +26,10 @@ local compose_job = function(cmd, cwd)
 end
 
 local function build_commands(task, pane)
-	local cmd
-	if pane then
-		cmd = command.build_send_to_pane(task, pane)
-		if not cmd then
-			Log.error(sf("window.build_commands(): no return value from tmux.build_send_to_pane(). task: %s", task))
-			return nil
-		end
-	else
-		cmd = command.build_cmd_args(task)
-		if not cmd then
-			Log.error(sf("window.build_commands(): no return value from tmux.build_cmd_args(). task: %s", task))
-			return nil
-		end
+  local cmd = pane and command.build_send_to_pane(task, pane) or command.build_cmd_args(task)
+	if not cmd then
+		Log.error(sf("window.build_commands(): no return value from tmux.%s(). task: %s", pane and 'build_send_to_pane' or 'build_cmd_args', task))
+		return nil
 	end
 	Log.debug(sf("window.build_commands(): cmd %s", cmd))
 	return compose_job(cmd, task.cwd)
@@ -46,32 +37,32 @@ end
 
 function TmuxWindow.open(task)
 	local cmd = build_commands(task)
-	Log.trace(sf("window.run_task(): cmd %s", cmd))
+	Log.trace(sf("window.open(): cmd %s", cmd))
 	if not cmd then
-		Log.error("window.run_tasks(): no return value from build_command(). selection %s", task)
+		Log.error("window.open(): no return value from build_command(). selection %s", task)
 		return nil
 	end
 	local pane = Job:new(cmd):sync()
 	if not task.window.close then
 		if not pane or not pane[1] then
-			Log.warn(sf("window.run_task(): pane not found when running job for selected task %s", task))
+			Log.error(sf("window.open(): pane not found when running job for selected task %s", task))
 			return nil
 		end
 		pane = pane[1]
 		Log.trace(sf(
-			[[window.run_task(): sending selected task to pane.
+			[[window.open(): sending selected task to pane.
     task: %s
     pane: %s
     ]],
 			task,
 			pane
 		))
-		cmd = build_commands(task, pane)
-		if not cmd then
+		local pane_cmd = build_commands(task, pane)
+		if not pane_cmd then
 			Log.error("window.run_tasks(): no return value from build_send_to_pane(). selection %s", task)
 			return nil
 		end
-		Job:new(cmd):sync()
+		return Job:new(pane_cmd):sync()
 	end
 end
 

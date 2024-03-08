@@ -17,9 +17,24 @@ local function populate_config()
 	Log.trace("edit._populate_config(): populating buffer for nonexisting file")
 end
 
+local edit_file = function(file)
+	local mode = get_opts().edit_mode
+	if mode == "buffer" then
+		vim.cmd.e(file)
+	elseif mode == "vsplit" then
+		vim.cmd.vsplit(file)
+	elseif mode == "split" then
+		vim.cmd.split(file)
+	elseif mode == "tab" then
+		vim.cmd.tabnew(file)
+	else
+		Log.error(sf("edit.edit_file(): unknown edit mode: %s", mode))
+	end
+end
+
 function Edit.edit_config(config)
 	local file = get_opts().configs[config].path
-	vim.cmd.e(file)
+	edit_file(file)
 	local file_h = Path:new(file)
 	if not file_h:exists() or #file_h:read() == 0 then
 		populate_config()

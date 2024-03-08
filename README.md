@@ -252,6 +252,7 @@ local opts = {
       }
     }
   },
+  edit_mode = "buffer", -- buffer, tab, split, vsplit
   config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = {-- default: {project, global, opts}.  Order in which
   -- tasks are aggregated
@@ -316,6 +317,7 @@ telescope.load_extension("do-the-needful")
   log_level = "warn",
   tasks = {},
   jobs = {},
+  edit_mode = "buffer",
   config = ".tasks.json",
   config_order = {
    "global",

@@ -9,6 +9,7 @@ local default_log_level = "warn"
 ---@field jobs table
 ---@field config_file string
 ---@field config_order table
+---@field edit_mode string
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
@@ -23,6 +24,7 @@ Constants = {}
 ---@field plugin_name string
 ---@field task_preview_field_order string[]
 ---@field token_replacement_fields string[]
+---@field lists table
 ---@field opts Opts
 ---@field task_defaults TaskConfig
 ---@field default_task_lines string[]
@@ -43,11 +45,16 @@ Constants.val = {
 		"cwd",
 		"name",
 	},
+	lists = {
+		edit_modes = { "buffer", "tab", "split", "vsplit" },
+		config_order = { "global", "project", "opts" },
+	},
 	opts = {
 		dev = false,
 		log_level = default_log_level,
 		tasks = {},
 		jobs = {},
+		edit_mode = "buffer",
 		config_file = ".tasks.json",
 		config_order = {
 			"global",
@@ -84,7 +91,7 @@ Constants.val = {
 			close = true,
 			keep_current = false,
 		},
-  },
+	},
 	default_task_lines = {
 		"{",
 		t(1, '"tasks": ['),

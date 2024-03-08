@@ -202,19 +202,25 @@ local opts = {
     {
       id = "list1", -- id is used to reference a task in a job
       name = "List directory",
+      cmd = 'ls -al',
       cwd = "${cwd}",
       tags = { "list", "dir", "open", "pwd" },
-      close = false,
-      keep_current = false,
+      window = {
+        close = false,
+        keep_current = false,
+      },
       hidden = true
     },
     {
       id = "list2",
       name = "List directory",
+      cmd = 'ls -al',
       cwd = "~",
       tags = { "list", "dir", "close", "home" },
-      close = true,
-      keep_current = true,
+      window = {
+        close = true,
+        keep_current = true,
+      },
       hidden = true
     }
   },

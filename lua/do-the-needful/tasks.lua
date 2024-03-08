@@ -67,23 +67,30 @@ local add_source_to_tasks = function(tasks, source)
 	return tasks
 end
 
+local function validate_tasks_and_add_source(tasks, config_tasks, source)
+	if not config_tasks then
+		return
+	end
+	local with_source = add_source_to_tasks(config_tasks, source)
+	local validated = validate.tasks(with_source)
+	vim.list_extend(tasks, validated)
+end
+
 local function aggregate_tasks()
 	local tasks = {}
 	local configs = get_opts().configs
 	Log.trace(sf("tasks._aggregate_tasks(): parsing configs: %s", configs))
-	for _, c in pairs(get_opts().config_order) do
-		local path = configs[c].path
+	for _, source in pairs(get_opts().config_order) do
+		local path = configs[source].path
 		if path then
 			local f_handle = Path:new(path)
 			local from_json = tasks_from_json(f_handle, tasks)
+			validate_tasks_and_add_source(tasks, from_json, source)
 			if from_json then
-				local with_source = add_source_to_tasks(from_json, c)
-				local validated = validate.tasks(with_source)
-				vim.list_extend(tasks, validated)
 				Log.trace(sf("tasks._aggregate_tasks(): composing task: %s from file %s", tasks, f_handle.filename))
 			end
 		else
-			vim.list_extend(tasks, add_source_to_tasks(configs[c].tasks, c))
+			validate_tasks_and_add_source(tasks, configs[source].tasks, source)
 		end
 	end
 	Log.debug(sf("tasks._aggregate_tasks(): tasks %s", tasks))

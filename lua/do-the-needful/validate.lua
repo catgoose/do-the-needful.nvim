@@ -3,6 +3,7 @@ local sf = require("do-the-needful.utils").string_format
 
 ---@class Validate
 ---@field tasks fun(tasks: TaskConfig[]): TaskConfig[]
+---@return Validate
 Validate = {}
 
 local function validate_cmd(task, index)
@@ -54,9 +55,7 @@ local function validate_window(task, relative)
 		end
 	end
 	if window.relative and not vim.tbl_contains(relative, window.relative) then
-		Log.warn(
-			sf("Task has an invalid window property: relative. Expecting one of %s. task: %s", relative, task)
-		)
+		Log.warn(sf("Task has an invalid window property: relative. Expecting one of %s. task: %s", relative, task))
 		window.relative = nil
 	end
 end
@@ -66,9 +65,9 @@ Validate.tasks = function(tasks)
 	local relative = { "after", "before" }
 	local remove = {}
 
-	for index, task in pairs(tasks) do
-		if not validate_cmd(task, index) then
-			remove[#remove + 1] = index
+	for i, task in pairs(tasks) do
+		if not validate_cmd(task, i) then
+			remove[#remove + 1] = i
 		else
 			validate_name(task)
 			validate_tags(task)

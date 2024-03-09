@@ -1,9 +1,8 @@
 local has_telescope, telescope = pcall(require, "telescope")
 local pickers = require("do-the-needful.telescope")
-local err = require("do-the-needful").err
 
 if not has_telescope then
-	err("unable to load telescope")
+	error("unable to load telescope")
 	return
 end
 

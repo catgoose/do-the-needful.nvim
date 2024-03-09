@@ -6,7 +6,8 @@ local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
 local tokens = require("do-the-needful.tokens")
 local tmux = require("do-the-needful.tmux")
-local tsk = require("do-the-needful.tasks")
+local preview = require("do-the-needful.telescope.preview")
+local collect = require("do-the-needful.collect")
 local edit = require("do-the-needful.edit")
 local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
@@ -19,7 +20,7 @@ local sf = require("do-the-needful.utils").string_format
 Telescope = {}
 
 local function get_tasks()
-	return tsk.collect_tasks()
+	return collect.collect_tasks()
 end
 
 local function entry_ordinal(task)
@@ -66,7 +67,7 @@ local function task_previewer()
 		title = "please",
 		define_preview = function(self, entry, _)
 			vim.api.nvim_set_option_value("filetype", "lua", { buf = self.state.bufnr })
-			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, tsk.task_preview(entry.value))
+			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, preview.render(entry.value))
 		end,
 	})
 end

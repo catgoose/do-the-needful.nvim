@@ -6,13 +6,18 @@ local validate = require("do-the-needful.validate")
 local sf = utils.string_format
 
 ---@class TaskConfig
+---@field id? string
 ---@field name? string
 ---@field cmd? string
 ---@field cwd? string
 ---@field tags? string[]
+---@field ask? table
+---@field hidden? boolean
 ---@field window? TmuxWindow
 ---@field source? source
+---@field type collection_type
 ---@enum source "global" | "project" | "opts"
+---@enum collection_type "task" | "job"
 
 ---@class TmuxWindow
 ---@field name? string
@@ -22,64 +27,76 @@ local sf = utils.string_format
 ---@field relative? relative
 ---@enum relative "before" "after"
 
+---@class JobConfig
+---@field name? string
+---@field tags? string[]
+---@field tasks? string[]
+---@field source? source
+---@field type collection_type
+---@field window? TmuxWindow
+
+---@class CollectionConfig
+---@field tasks? TaskConfig[]
+---@field jobs? JobConfig[]
+
 ---@class Collect
----@func collect_tasks(): Task[]
+---@func configs(): CollectionConfig[]
 ---@return Collect
 Collect = {}
 
----@fun add_source_to_tasks(tasks: TaskConfig[], source: string): TaskConfig[]
-local add_source_to_tasks = function(tasks, source)
-	for _, t in pairs(tasks) do
-		t.source = source
-	end
-	Log.trace(sf("tasks._add_source_to_tasks(): adding source %s to tasks %s", source, tasks))
-	return tasks
-end
-
-local function validate_tasks_and_add_source(tasks, config_tasks, source)
-	if not config_tasks then
+local function add_metadata(collection, config, source)
+	if not config then
 		return
 	end
-	local with_source = add_source_to_tasks(config_tasks, source)
-	local validated = validate.tasks(with_source)
-	vim.list_extend(tasks, validated)
+	for type, c in pairs(config) do
+		for _, t in pairs(c) do
+			t.source = source
+			t.type = string.gsub(type, "(s)$", "")
+			Log.trace(sf("collect._add_metadata(): adding source '%s' and type '%s' to config %s", source, type, c))
+		end
+		collection[type] = collection[type] or {}
+		vim.list_extend(collection[type], c)
+	end
 end
 
-local function aggregate_tasks()
-	local tasks = {}
-	local configs = get_opts().configs
-	Log.trace(sf("tasks._aggregate_tasks(): parsing configs: %s", configs))
+local function aggregate_configs()
+	local collection = {}
+	local sources = get_opts().configs
+	Log.trace(sf("collect._aggregate(): parsing configs: %s", sources))
 	for _, source in pairs(get_opts().config_order) do
-		local path = configs[source].path
+		local path = sources[source].path
 		if path then
 			local from_json = utils.json_from_path(path)
 			if from_json then
-				Log.trace(sf("tasks._aggregate_tasks(): composing task: %s from path %s", from_json, path))
-				validate_tasks_and_add_source(tasks, from_json.tasks, source)
+				Log.trace(sf("collect._aggregate(): composing task: %s from path %s", from_json, path))
+				add_metadata(collection, from_json, source)
 			end
 		else
-			validate_tasks_and_add_source(tasks, configs[source].tasks, source)
+			add_metadata(collection, sources[source], source)
 		end
 	end
-	Log.debug(sf("tasks._aggregate_tasks(): tasks %s", tasks))
-	return tasks
+	validate.collection(collection)
+	Log.debug(sf("collect._aggregate(): collection %s", collection))
+	return collection
 end
 
 ---@return TaskConfig[]
-function Collect.collect_tasks()
-	local tasks = {}
-	for _, t in pairs(aggregate_tasks()) do
-		table.insert(tasks, vim.tbl_deep_extend("keep", t, const.task_defaults))
+function Collect.configs()
+	local collection = {}
+	local aggregate = aggregate_configs()
+	for _, t in pairs(aggregate) do
+		--  TODO: 2024-03-09 - This should only be defaults for task
+		table.insert(collection, vim.tbl_deep_extend("keep", t, const.task_defaults))
 		Log.trace(
 			sf(
-				"tasks.collect_tasks(): inserting aggregated tasks %s into %s with defaults %s",
+				"collect.configs(): inserting aggregated configs %s into %s with defaults %s",
 				t,
-				tasks,
+				collection,
 				const.task_defaults
 			)
 		)
 	end
-	return tasks
+	return collection
 end
 
 return Collect

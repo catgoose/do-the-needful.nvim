@@ -27,8 +27,7 @@
     - [Project config](#project-config)
     - [Global config](#global-config)
     - [New configs](#new-configs)
-    - [.tasks.json JSON schema](#tasksjson-json-schema)
-      - [Alternate config format](#alternate-config-format)
+    - [tasks JSON schema](#tasks-json-schema)
   - [Todo](#todo)
   <!--toc:end-->
 

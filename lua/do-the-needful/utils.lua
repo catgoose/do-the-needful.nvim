@@ -55,12 +55,11 @@ Utils.json_from_path = function(path)
 		local ok, json = pcall(vim.json.decode, contents)
 		if not ok then
 			error(Utils.sf("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
-			return nil
+		else
+			return json
 		end
-		return json
-	else
-		return nil
 	end
+	return nil
 end
 
 return Utils

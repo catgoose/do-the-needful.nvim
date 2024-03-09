@@ -53,13 +53,16 @@ local set_local_opts = function(opts)
 		global = {
 			path = sf("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
 			tasks = {},
+			jobs = {},
 		},
 		project = {
 			path = sf("%s/%s", vim.fn.getcwd(), _opts.config_file),
 			tasks = {},
+			jobs = {},
 		},
 		opts = {
 			tasks = utils.deep_copy(_opts.tasks) or {},
+			jobs = utils.deep_copy(_opts.jobs) or {},
 		},
 	}
 	_opts.tasks = nil

@@ -19,10 +19,6 @@ local sf = require("do-the-needful.utils").string_format
 ---@return Telescope
 Telescope = {}
 
-local function get_tasks()
-	return collect.collect_tasks()
-end
-
 local function entry_ordinal(task)
 	local tags = vim.tbl_map(function(tag)
 		return "#" .. tag
@@ -73,29 +69,30 @@ local function task_previewer()
 end
 
 local function task_picker(opts)
-	local tasks = get_tasks()
-	pickers
-		.new(opts, {
-			prompt_title = "Do the needful",
-			finder = finders.new_table({
-				results = tasks,
-				entry_maker = entry_maker,
-			}),
-			sorter = conf.generic_sorter(),
-			attach_mappings = function(prompt_bufnr, _)
-				actions.select_default:replace(function()
-					actions.close(prompt_bufnr)
-					local selection = action_state.get_selected_entry()
-					tokens.replace(selection.value, function(task)
-						Log.debug(sf("task_picker: opening task %s", task))
-						tmux.run(task)
-					end)
-				end)
-				return true
-			end,
-			previewer = task_previewer(),
-		})
-		:find()
+	local tasks = collect.configs()
+	Log.debug("task_picker: tasks", tasks)
+	-- pickers
+	-- 	.new(opts, {
+	-- 		prompt_title = "Do the needful",
+	-- 		finder = finders.new_table({
+	-- 			results = tasks,
+	-- 			entry_maker = entry_maker,
+	-- 		}),
+	-- 		sorter = conf.generic_sorter(),
+	-- 		attach_mappings = function(prompt_bufnr, _)
+	-- 			actions.select_default:replace(function()
+	-- 				actions.close(prompt_bufnr)
+	-- 				local selection = action_state.get_selected_entry()
+	-- 				tokens.replace(selection.value, function(task)
+	-- 					Log.debug(sf("task_picker: opening task %s", task))
+	-- 					tmux.run(task)
+	-- 				end)
+	-- 			end)
+	-- 			return true
+	-- 		end,
+	-- 		previewer = task_previewer(),
+	-- 	})
+	-- 	:find()
 end
 
 function Telescope.action_picker(opts)

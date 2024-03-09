@@ -439,14 +439,16 @@ When calling the task config editing functions if the respective
 }
 ```
 
-### .tasks.json JSON schema
+### tasks JSON schema
 
 ```typescript
 {
   tasks: Array<{
+    id?: string;
     name: string;
     cmd: string;
-    tags: Array<string>;
+    tags: string[];
+    hidden?: booelan;
     ask: {
       "${token}": {
         title: string;
@@ -462,52 +464,19 @@ When calling the task config editing functions if the respective
       relative: "before" | "after";
     };
   }>;
-}
-```
-
-#### Alternate config format
-
-Alternatively the root `tasks` key can be omitted:
-
-```json
-[
-  {
-    "name": "",
-    "cmd": "",
-    "tags": [""],
-    "window": {
-      "name": "",
-      "close": false,
-      "keep_current": false,
-      "open_relative": true,
-      "relative": "after"
-    }
-  }
-]
-```
-
-Schema:
-
-```typescript
-Array<{
-  name: string;
-  cmd: string;
-  tags: Array<string>;
-  ask: {
-    "${token}": {
-      title: string;
-      type: "string" | "function";
-      default: string;
-    };
-  };
-  window: {
+  jobs: Array<{
     name: string;
-    close: boolean;
-    keep_current: boolean;
-    open_relative: boolean;
-    relative: "before" | "after";
+    tags: string[];
+    tasks: string[];
+    window: {
+      name: string;
+      close: boolean;
+      keep_current: boolean;
+      open_relative: boolean;
+      relative: "before" | "after";
+    }
   };
-}>;
+}
 ```
 
 ## Todo

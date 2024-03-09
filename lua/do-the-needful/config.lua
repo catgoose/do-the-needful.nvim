@@ -39,7 +39,6 @@ end
 
 local set_opts_defaults = function(opts)
 	opts.config_order = validate_config_order(opts.config_order) and opts.config_order or _opts.config_order
-	-- opts.config_order = _opts.config_order
 	opts.edit_mode = vim.tbl_contains(const.lists.edit_modes, opts.edit_mode) and opts.edit_mode or _opts.edit_mode
 	if #opts.config_order < 3 then
 		opts.config_order = vim.tbl_extend("keep", opts.config_order, _opts.config_order)
@@ -63,7 +62,6 @@ local set_local_opts = function(opts)
 			tasks = utils.deep_copy(_opts.tasks) or {},
 		},
 	}
-	vim.print(_opts.config_order)
 	_opts.tasks = nil
 end
 

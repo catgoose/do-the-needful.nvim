@@ -1,3 +1,5 @@
+local Path = require("plenary.path")
+
 ---@class Utils
 ---@field deep_copy fun(orig: table): table
 ---@field indent_str fun(indent_n: number, str: string): string
@@ -44,6 +46,21 @@ Utils.string_format = function(msg, ...)
 		end
 	end
 	return string.format(msg, unpack(args))
+end
+
+Utils.json_from_path = function(path)
+	local f_handle = Path:new(path)
+	if f_handle:exists() then
+		local contents = f_handle:read()
+		local ok, json = pcall(vim.json.decode, contents)
+		if not ok then
+			error(Utils.sf("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
+			return nil
+		end
+		return json
+	else
+		return nil
+	end
 end
 
 return Utils

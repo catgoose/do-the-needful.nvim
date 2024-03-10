@@ -69,8 +69,8 @@ local function task_previewer()
 end
 
 local function task_picker(opts)
-	local tasks = collect.configs()
-	Log.debug("task_picker: tasks", tasks)
+	local configs = collect.configs()
+	Log.warn(sf("task_picker: configs: %s", configs))
 	-- pickers
 	-- 	.new(opts, {
 	-- 		prompt_title = "Do the needful",

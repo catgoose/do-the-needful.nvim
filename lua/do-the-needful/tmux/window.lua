@@ -8,7 +8,7 @@ local sf = require("do-the-needful.utils").string_format
 ---@return TmuxWindow
 TmuxWindow = {}
 
-local compose_job = function(cmd, cwd)
+local function compose_job(cmd, cwd)
 	Log.trace(sf("window._compose_job(): cmd %s, cwd %s", cmd, cwd))
 	local job_command = table.remove(cmd, 1)
 	if not job_command then

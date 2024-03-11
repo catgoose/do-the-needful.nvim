@@ -17,7 +17,7 @@ local function populate_config()
 	Log.trace("edit._populate_config(): populating buffer for nonexisting file")
 end
 
-local edit_file = function(file)
+local function edit_file(file)
 	local mode = get_opts().edit_mode
 	if mode == "buffer" then
 		vim.cmd.e(file)

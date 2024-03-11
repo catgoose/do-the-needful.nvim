@@ -102,7 +102,7 @@ local function validate_window(task, relative)
 	end
 end
 
-local validate_cmd_for_type = function(type)
+local function validate_cmd_for_type(type)
 	return type == "tasks" and validate_task_cmd
 		or type == "jobs" and validate_job_tasks
 		or function()
@@ -111,7 +111,7 @@ local validate_cmd_for_type = function(type)
 		end
 end
 
-local merge_defaults = function(config)
+local function merge_defaults(config)
 	local defaults = config.type == "task" and const.task_defaults or config.type == "job" and const.job_defaults or nil
 	if not defaults then
 		return

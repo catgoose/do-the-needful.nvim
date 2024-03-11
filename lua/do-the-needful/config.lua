@@ -14,7 +14,7 @@ function Config.get_opts()
 	return utils.deep_copy(_opts)
 end
 
-local validate_config_order = function(config_order)
+local function validate_config_order(config_order)
 	local valid = true
 	if not vim.tbl_islist(config_order) then
 		return not valid
@@ -37,7 +37,7 @@ local validate_config_order = function(config_order)
 	return valid
 end
 
-local set_opts_defaults = function(opts)
+local function set_opts_defaults(opts)
 	opts.config_order = validate_config_order(opts.config_order) and opts.config_order or _opts.config_order
 	opts.edit_mode = vim.tbl_contains(const.lists.edit_modes, opts.edit_mode) and opts.edit_mode or _opts.edit_mode
 	if #opts.config_order < 3 then
@@ -46,7 +46,7 @@ local set_opts_defaults = function(opts)
 	return opts
 end
 
-local set_local_opts = function(opts)
+local function set_local_opts(opts)
 	_opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level or const.default_log_level
 	_opts = vim.tbl_deep_extend("keep", opts, _opts)
 	_opts.configs = {

@@ -1,5 +1,7 @@
 local Log = require("do-the-needful").Log
+local const = require("do-the-needful.constants").val
 local sf = require("do-the-needful.utils").string_format
+local deep_copy = require("do-the-needful.utils").deep_copy
 
 ---@class Validate
 ---@field collection fun(configs: CollectionConfig[]): CollectionConfig[]
@@ -36,7 +38,7 @@ end
 
 local function validate_name(config)
 	if not config.name or #config.name == 0 then
-		local name = string.format("Unknown %s", config.type)
+		local name = string.format("Unnamed %s", config.type)
 		config.name = name
 		Log.warn(
 			sf(
@@ -100,13 +102,24 @@ local function validate_window(task, relative)
 	end
 end
 
-local get_validation_func = function(type)
+local validate_cmd_for_type = function(type)
 	return type == "tasks" and validate_task_cmd
 		or type == "jobs" and validate_job_tasks
 		or function()
 			Log.warn(sf("validate.get_validation_func: No validation function found for type: %s", type))
 			return false
 		end
+end
+
+local merge_defaults = function(config)
+	local defaults = config.type == "task" and const.task_defaults or config.type == "job" and const.job_defaults or nil
+	if not defaults then
+		return
+	end
+	Log.trace(sf("validate._merge_defaults: Merging default config for %s: %s", config.type, config))
+	local merged_defaults = vim.tbl_deep_extend("keep", config, defaults)
+	merged_defaults.window.name = merged_defaults.window.name or merged_defaults.name
+	return merged_defaults
 end
 
 Validate.collection = function(collection)
@@ -117,12 +130,13 @@ Validate.collection = function(collection)
 		local remove = {}
 
 		for i, cfg in pairs(config) do
-			if not get_validation_func(type)(cfg, i) then
+			if not validate_cmd_for_type(type)(cfg, i) then
 				remove[#remove + 1] = i
 			else
 				validate_name(cfg)
 				validate_tags(cfg)
 				validate_window(cfg, relative)
+				collection[type][i] = merge_defaults(cfg)
 			end
 		end
 
@@ -130,6 +144,8 @@ Validate.collection = function(collection)
 			config[index] = nil
 		end
 	end
+
+	return deep_copy(collection)
 end
 
 return Validate

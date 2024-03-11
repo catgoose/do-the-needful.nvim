@@ -70,7 +70,8 @@ end
 
 local function task_picker(opts)
 	local configs = collect.configs()
-	Log.warn(sf("task_picker: configs: %s", configs))
+	vim.print(configs)
+	-- Log.warn(sf("task_picker: configs: %s", configs))
 	-- pickers
 	-- 	.new(opts, {
 	-- 		prompt_title = "Do the needful",

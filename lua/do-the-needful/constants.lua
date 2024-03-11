@@ -27,6 +27,7 @@ Constants = {}
 ---@field lists table
 ---@field opts Opts
 ---@field task_defaults TaskConfig
+---@field job_defaults JobConfig
 ---@field default_task_lines string[]
 ---@field default_log_level string
 ---@field log_levels string[]

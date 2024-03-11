@@ -1,5 +1,4 @@
 local get_opts = require("do-the-needful.config").get_opts
-local const = require("do-the-needful.constants").val
 local Log = require("do-the-needful").Log
 local utils = require("do-the-needful.utils")
 local validate = require("do-the-needful.validate")
@@ -15,7 +14,7 @@ local sf = utils.string_format
 ---@field hidden? boolean
 ---@field window? TmuxWindow
 ---@field source? source
----@field type collection_type
+---@field type? collection_type
 ---@enum source "global" | "project" | "opts"
 ---@enum collection_type "task" | "job"
 
@@ -32,7 +31,7 @@ local sf = utils.string_format
 ---@field tags? string[]
 ---@field tasks? string[]
 ---@field source? source
----@field type collection_type
+---@field type? collection_type
 ---@field window? TmuxWindow
 
 ---@class CollectionConfig
@@ -59,43 +58,25 @@ local function add_metadata(collection, config, source)
 	end
 end
 
-local function aggregate_configs()
+---@return TaskConfig[]
+function Collect.configs()
 	local collection = {}
 	local sources = get_opts().configs
-	Log.trace(sf("collect._aggregate(): parsing configs: %s", sources))
+	Log.trace(sf("collect.configs(): parsing configs: %s", sources))
 	for _, source in pairs(get_opts().config_order) do
 		local path = sources[source].path
 		if path then
 			local from_json = utils.json_from_path(path)
 			if from_json then
-				Log.trace(sf("collect._aggregate(): composing task: %s from path %s", from_json, path))
+				Log.trace(sf("collect.configs(): composing task: %s from path %s", from_json, path))
 				add_metadata(collection, from_json, source)
 			end
 		else
 			add_metadata(collection, sources[source], source)
 		end
 	end
-	validate.collection(collection)
-	Log.debug(sf("collect._aggregate(): collection %s", collection))
-	return collection
-end
-
----@return TaskConfig[]
-function Collect.configs()
-	local collection = {}
-	local aggregate = aggregate_configs()
-	for _, t in pairs(aggregate) do
-		--  TODO: 2024-03-09 - This should only be defaults for task
-		table.insert(collection, vim.tbl_deep_extend("keep", t, const.task_defaults))
-		Log.trace(
-			sf(
-				"collect.configs(): inserting aggregated configs %s into %s with defaults %s",
-				t,
-				collection,
-				const.task_defaults
-			)
-		)
-	end
+	collection = validate.collection(collection)
+	Log.debug(sf("collect.configs(): collection %s", collection))
 	return collection
 end
 

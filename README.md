@@ -234,7 +234,7 @@ local opts = {
       window = {
         close = true,
         keep_current = false,
-        open_realtive = true,
+        open_relative = true,
         relative = "before"
       }
     },

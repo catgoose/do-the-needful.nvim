@@ -5,7 +5,7 @@ local utils = require("do-the-needful.utils")
 ---@field get_opts fun(): Opts
 ---@field init fun(opts: Opts): Opts
 ---@return Config
-Config = {}
+local Config = {}
 
 local _opts = const.opts
 

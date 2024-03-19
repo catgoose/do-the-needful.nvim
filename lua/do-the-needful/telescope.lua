@@ -15,7 +15,7 @@ local get_opts = require("do-the-needful.config").get_opts
 ---@field action_picker fun(opts: table)
 ---@field tasks fun(opts: table)
 ---@return Telescope
-Telescope = {}
+local Telescope = {}
 
 local function get_tasks()
 	return tsk.collect_tasks()
@@ -29,7 +29,7 @@ local function entry_ordinal(task)
 end
 
 local function entry_display(entry)
-  Log.trace("entry_display", entry)
+	Log.trace("entry_display", entry)
 	local items = { entry.value.name, " " }
 	local highlights = {}
 	local start = #table.concat(items, "")

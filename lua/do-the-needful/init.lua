@@ -6,7 +6,7 @@ local cfg = require("do-the-needful.config")
 ---@field edit_config fun(config: source)
 ---@field please fun()
 ---@return DoTheNeedful
-DoTheNeedful = {}
+local DoTheNeedful = {}
 
 function DoTheNeedful.setup(config)
 	config = config or {}

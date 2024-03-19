@@ -4,7 +4,7 @@
 ---@field escaped_replace fun(str: string, what: string, with: string): string
 ---@field split_string fun(str: string, del: string): string[]
 ---@return Utils
-Utils = {}
+local Utils = {}
 
 Utils.deep_copy = function(orig)
 	local t = type(orig)

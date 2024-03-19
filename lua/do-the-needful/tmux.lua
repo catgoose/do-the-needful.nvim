@@ -5,7 +5,7 @@ local ins = vim.inspect
 ---@class Tmux
 ---@field build_command fun(task: TaskConfig): string[]
 ---@return Tmux
-Tmux = {}
+local Tmux = {}
 
 ---@class TmuxWindow
 ---@field name? string

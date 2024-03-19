@@ -3,7 +3,7 @@ local get_opts = require("do-the-needful.config").get_opts
 local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
 
-Edit = {}
+local Edit = {}
 
 ---@class Edit
 ---@func edit_config fun(config: string)

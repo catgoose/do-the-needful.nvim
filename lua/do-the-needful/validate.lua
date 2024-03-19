@@ -3,7 +3,7 @@ local ins = vim.inspect
 
 ---@class Validate
 ---@field tasks fun(tasks: TaskConfig[]): TaskConfig[]
-Validate = {}
+local Validate = {}
 
 Validate.tasks = function(tasks)
 	---@type relative

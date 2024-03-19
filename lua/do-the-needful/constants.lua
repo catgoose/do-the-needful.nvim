@@ -16,7 +16,7 @@ local default_log_level = "warn"
 ---@class Constants
 ---@field val Constants.val
 ---@return Constants
-Constants = {}
+local Constants = {}
 
 ---@class Constants.val
 ---@field plugin_name string

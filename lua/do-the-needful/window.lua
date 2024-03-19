@@ -7,7 +7,7 @@ local ins = vim.inspect
 ---@class Window
 ---@func open(selection: TaskConfig)
 ---@return Window
-Window = {}
+local Window = {}
 
 local compose_job = function(cmd, cwd)
 	Log.trace(string.format("window._compose_job(): cmd %s, cwd %s", ins(cmd), cwd))
@@ -47,7 +47,7 @@ local function tmux_running()
 end
 
 function Window.open(selection)
-  vim.print(selection)
+	vim.print(selection)
 	if not tmux_running() then
 		return nil
 	end

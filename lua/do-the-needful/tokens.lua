@@ -7,7 +7,7 @@ local ins = vim.inspect
 ---@class Token
 ---@field replace fun(selection: TaskConfig, task_cb: fun(task: TaskConfig): nil)
 ---@return Token
-Token = {}
+local Token = {}
 
 local replace_tokens = function(str)
 	local tokens = get_opts().global_tokens
@@ -101,11 +101,11 @@ Token.replace = function(selection, task_cb)
   %s]],
 		ins(selection)
 	))
-  for _, field in pairs(const.token_replacement_fields) do
-    if selection[field] then
-      selection[field] = replace_tokens(selection[field])
-    end
-  end
+	for _, field in pairs(const.token_replacement_fields) do
+		if selection[field] then
+			selection[field] = replace_tokens(selection[field])
+		end
+	end
 	ask_tokens(selection, task_cb)
 end
 

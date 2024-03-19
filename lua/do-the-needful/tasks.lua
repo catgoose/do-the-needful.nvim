@@ -19,7 +19,7 @@ local ins = vim.inspect
 ---@func collect_tasks(): Task[]
 ---@func task_preview(task: Task): string[]
 ---@return Tasks
-Tasks = {}
+local Tasks = {}
 
 local function decode_json(f_handle)
 	local contents = f_handle:read()

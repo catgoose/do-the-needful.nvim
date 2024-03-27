@@ -29,6 +29,7 @@
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
   - [Todo](#todo)
+  - [Extra](#extra)
   <!--toc:end-->
 
 Neovim task runner that uses tmux windows to do the needful please. Task command,
@@ -388,11 +389,9 @@ When calling the task config editing functions if the respective
 ```typescript
 {
   tasks: Array<{
-    id?: string;
     name: string;
     cmd: string;
     tags: string[];
-    hidden?: booelan;
     ask: {
       "${token}": {
         title: string;
@@ -414,3 +413,10 @@ When calling the task config editing functions if the respective
 ## Todo
 
 - Update example config
+
+## Extra
+
+My other neovim projects
+
+- [neovim config](https://github.com/catgoose/nvim)
+  [telescope-helpgrep.nvim](https://github.com/catgoose/telescope-helpgrep.nvim)

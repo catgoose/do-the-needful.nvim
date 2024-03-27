@@ -6,12 +6,12 @@ local sf = require("do-the-needful.utils").string_format
 ---@field log table
 ---@field init fun()
 ---@return Logger
-Logger = {}
+local M = {}
 
-Logger.log = nil
+M.log = nil
 
-Logger.init = function()
-	Logger.log = require("plenary.log").new({
+function M.init()
+	M.log = require("plenary.log").new({
 		plugin = const.plugin_name,
 		level = get_opts().log_level,
 		fmt_msg = function(_, mode_name, src_path, src_line, msg)
@@ -21,7 +21,7 @@ Logger.init = function()
 			return log_message
 		end,
 	})
-	return Logger.log
+	return M.log
 end
 
-return Logger
+return M

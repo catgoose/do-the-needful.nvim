@@ -4,11 +4,10 @@ local const = require("do-the-needful.constants").val
 local Log = require("do-the-needful").Log
 local sf = require("do-the-needful.utils").string_format
 
-Edit = {}
-
 ---@class Edit
----@func edit_config fun(config: string)
+---@field edit_config fun(config: string)
 ---@return Edit
+local M = {}
 
 local function populate_config()
 	local bufnr = vim.api.nvim_get_current_buf()
@@ -32,7 +31,7 @@ local function edit_file(file)
 	end
 end
 
-function Edit.edit_config(config)
+function M.edit_config(config)
 	local file = get_opts().configs[config].path
 	edit_file(file)
 	local file_h = Path:new(file)
@@ -42,4 +41,4 @@ function Edit.edit_config(config)
 	Log.trace(sf("init.edit_config(): editing config type: %s", config))
 end
 
-return Edit
+return M

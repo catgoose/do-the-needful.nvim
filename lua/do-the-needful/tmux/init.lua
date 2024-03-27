@@ -4,7 +4,7 @@ local window = require("do-the-needful.tmux.window")
 ---@class Tmux
 ---@field run fun(task: TaskConfig)
 ---@return Tmux
-Tmux = {}
+local M = {}
 
 local function tmux_running()
 	if not vim.env.TMUX then
@@ -14,11 +14,11 @@ local function tmux_running()
 	return true
 end
 
-function Tmux.run(task)
+function M.run(task)
 	if not tmux_running() then
 		return nil
 	end
 	window.open(task)
 end
 
-return Tmux
+return M

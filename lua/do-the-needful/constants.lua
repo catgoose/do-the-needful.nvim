@@ -6,7 +6,6 @@ local default_log_level = "warn"
 ---@field dev boolean
 ---@field log_level string
 ---@field tasks table
----@field jobs table
 ---@field config_file string
 ---@field config_order table
 ---@field edit_mode string
@@ -18,7 +17,7 @@ local default_log_level = "warn"
 ---@class Constants
 ---@field val Constants.val
 ---@return Constants
-Constants = {}
+local M = {}
 
 ---@class Constants.val
 ---@field plugin_name string
@@ -27,11 +26,10 @@ Constants = {}
 ---@field lists table
 ---@field opts Opts
 ---@field task_defaults TaskConfig
----@field job_defaults JobConfig
 ---@field default_task_lines string[]
 ---@field default_log_level string
 ---@field log_levels string[]
-Constants.val = {
+M.val = {
 	plugin_name = "do-the-needful",
 	task_preview_field_order = {
 		"name",
@@ -54,7 +52,6 @@ Constants.val = {
 		dev = false,
 		log_level = default_log_level,
 		tasks = {},
-		jobs = {},
 		edit_mode = "buffer",
 		config_file = ".tasks.json",
 		config_order = {
@@ -86,13 +83,6 @@ Constants.val = {
 			keep_current = false,
 		},
 	},
-	job_defaults = {
-		tags = {},
-		window = {
-			close = true,
-			keep_current = false,
-		},
-	},
 	default_task_lines = {
 		"{",
 		t(1, '"tasks": ['),
@@ -115,4 +105,4 @@ Constants.val = {
 	log_levels = { "trace", "debug", "info", "warn", "error", "fatal" },
 }
 
-return Constants
+return M

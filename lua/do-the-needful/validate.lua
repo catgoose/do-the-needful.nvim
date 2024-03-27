@@ -6,7 +6,7 @@ local deep_copy = require("do-the-needful.utils").deep_copy
 ---@class Validate
 ---@field collection fun(configs: CollectionConfig[]): CollectionConfig[]
 ---@return Validate
-Validate = {}
+local M = {}
 
 local function validate_task_cmd(task, index)
 	if not task.cmd or #task.cmd == 0 or type(task.cmd) ~= "string" then
@@ -15,20 +15,6 @@ local function validate_task_cmd(task, index)
 				"validate._validate_task_cmd: Task %s is missing a cmd. Excluding task from aggregation: %s",
 				index,
 				task
-			)
-		)
-		return false
-	end
-	return true
-end
-
-local function validate_job_tasks(job, index)
-	if not job.tasks or #job.tasks == 0 or type(job.tasks) ~= "table" then
-		Log.warn(
-			sf(
-				"validate._validate_job_tasks: Job %s is missing a task list. Excluding job from aggregation: %s",
-				index,
-				job
 			)
 		)
 		return false
@@ -102,50 +88,34 @@ local function validate_window(task, relative)
 	end
 end
 
-local function validate_cmd_for_type(type)
-	return type == "tasks" and validate_task_cmd
-		or type == "jobs" and validate_job_tasks
-		or function()
-			Log.warn(sf("validate.get_validation_func: No validation function found for type: %s", type))
-			return false
-		end
-end
-
 local function merge_defaults(config)
-	local defaults = config.type == "task" and const.task_defaults or config.type == "job" and const.job_defaults or nil
-	if not defaults then
-		return
-	end
+	local defaults = const.task_defaults
 	Log.trace(sf("validate._merge_defaults: Merging default config for %s: %s", config.type, config))
 	local merged_defaults = vim.tbl_deep_extend("keep", config, defaults)
 	merged_defaults.window.name = merged_defaults.window.name or merged_defaults.name
 	return merged_defaults
 end
 
-Validate.collection = function(collection)
+function M.collection(collection)
 	---@type relative
 	local relative = { "after", "before" }
 
-	for type, config in pairs(collection) do
-		local remove = {}
-
-		for i, cfg in pairs(config) do
-			if not validate_cmd_for_type(type)(cfg, i) then
-				remove[#remove + 1] = i
-			else
-				validate_name(cfg)
-				validate_tags(cfg)
-				validate_window(cfg, relative)
-				collection[type][i] = merge_defaults(cfg)
-			end
+	local remove = {}
+	for i, task in pairs(collection) do
+		if not validate_task_cmd(task, i) then
+			remove[#remove + 1] = i
+		else
+			validate_name(task)
+			validate_tags(task)
+			validate_window(task, relative)
+			collection[i] = merge_defaults(task)
 		end
-
-		for _, index in ipairs(remove) do
-			config[index] = nil
-		end
+	end
+	for _, index in ipairs(remove) do
+		collection[index] = nil
 	end
 
 	return deep_copy(collection)
 end
 
-return Validate
+return M

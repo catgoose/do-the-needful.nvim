@@ -17,7 +17,7 @@ local sf = require("do-the-needful.utils").string_format
 ---@field action_picker fun(opts: table)
 ---@field tasks fun(opts: table)
 ---@return Telescope
-Telescope = {}
+local M = {}
 
 local function entry_ordinal(task)
 	local tags = vim.tbl_map(function(tag)
@@ -69,34 +69,32 @@ local function task_previewer()
 end
 
 local function task_picker(opts)
-	local configs = collect.configs()
-	vim.print(configs)
-	-- Log.warn(sf("task_picker: configs: %s", configs))
-	-- pickers
-	-- 	.new(opts, {
-	-- 		prompt_title = "Do the needful",
-	-- 		finder = finders.new_table({
-	-- 			results = tasks,
-	-- 			entry_maker = entry_maker,
-	-- 		}),
-	-- 		sorter = conf.generic_sorter(),
-	-- 		attach_mappings = function(prompt_bufnr, _)
-	-- 			actions.select_default:replace(function()
-	-- 				actions.close(prompt_bufnr)
-	-- 				local selection = action_state.get_selected_entry()
-	-- 				tokens.replace(selection.value, function(task)
-	-- 					Log.debug(sf("task_picker: opening task %s", task))
-	-- 					tmux.run(task)
-	-- 				end)
-	-- 			end)
-	-- 			return true
-	-- 		end,
-	-- 		previewer = task_previewer(),
-	-- 	})
-	-- 	:find()
+	local tasks = collect.tasks()
+	pickers
+		.new(opts, {
+			prompt_title = "Do the needful",
+			finder = finders.new_table({
+				results = tasks,
+				entry_maker = entry_maker,
+			}),
+			sorter = conf.generic_sorter(),
+			attach_mappings = function(prompt_bufnr, _)
+				actions.select_default:replace(function()
+					actions.close(prompt_bufnr)
+					local selection = action_state.get_selected_entry()
+					tokens.replace(selection.value, function(task)
+						Log.debug(sf("task_picker: opening task %s", task))
+						tmux.run(task)
+					end)
+				end)
+				return true
+			end,
+			previewer = task_previewer(),
+		})
+		:find()
 end
 
-function Telescope.action_picker(opts)
+function M.action_picker(opts)
 	local selections = {
 		{ "Edit project config", edit.edit_config, "project" },
 		{ "Edit global config", edit.edit_config, "global" },
@@ -136,9 +134,9 @@ function Telescope.action_picker(opts)
 		:find()
 end
 
-function Telescope.tasks(opts)
+function M.tasks(opts)
 	opts = opts or {}
 	task_picker(opts)
 end
 
-return Telescope
+return M

@@ -5,18 +5,14 @@ local validate = require("do-the-needful.validate")
 local sf = utils.string_format
 
 ---@class TaskConfig
----@field id? string
 ---@field name? string
 ---@field cmd? string
 ---@field cwd? string
 ---@field tags? string[]
 ---@field ask? table
----@field hidden? boolean
 ---@field window? TmuxWindow
 ---@field source? source
----@field type? collection_type
 ---@enum source "global" | "project" | "opts"
----@enum collection_type "task" | "job"
 
 ---@class TmuxWindow
 ---@field name? string
@@ -26,40 +22,25 @@ local sf = utils.string_format
 ---@field relative? relative
 ---@enum relative "before" "after"
 
----@class JobConfig
----@field name? string
----@field tags? string[]
----@field tasks? string[]
----@field source? source
----@field type? collection_type
----@field window? TmuxWindow
-
----@class CollectionConfig
----@field tasks? TaskConfig[]
----@field jobs? JobConfig[]
-
 ---@class Collect
----@func configs(): CollectionConfig[]
+---@field tasks fun(): TaskConfig[]
 ---@return Collect
-Collect = {}
+local M = {}
 
 local function add_metadata(collection, config, source)
-	if not config then
+	if not config or not config.tasks then
+		Log.warn(sf("collect._add_metadata(): no tasks found in config %s", config))
 		return
 	end
-	for type, c in pairs(config) do
-		for _, t in pairs(c) do
-			t.source = source
-			t.type = string.gsub(type, "(s)$", "")
-			Log.trace(sf("collect._add_metadata(): adding source '%s' and type '%s' to config %s", source, type, c))
-		end
-		collection[type] = collection[type] or {}
-		vim.list_extend(collection[type], c)
+	for _, task in pairs(config.tasks) do
+		task.source = source
+		Log.trace(sf("collect._add_metadata(): adding source '%s' to task %s", source, task))
+		table.insert(collection, task)
 	end
 end
 
 ---@return TaskConfig[]
-function Collect.configs()
+function M.tasks()
 	local collection = {}
 	local sources = get_opts().configs
 	Log.trace(sf("collect.configs(): parsing configs: %s", sources))
@@ -80,4 +61,4 @@ function Collect.configs()
 	return collection
 end
 
-return Collect
+return M

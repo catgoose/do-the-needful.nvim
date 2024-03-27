@@ -7,7 +7,7 @@ local sf = utils.string_format
 ---@class Token
 ---@field replace fun(selection: TaskConfig, task_cb: fun(task: TaskConfig): nil)
 ---@return Token
-Token = {}
+local M = {}
 
 local function replace_tokens(str)
 	local tokens = get_opts().global_tokens
@@ -95,7 +95,7 @@ local function ask_tokens(selection, task_cb)
 	end
 end
 
-Token.replace = function(selection, task_cb)
+M.replace = function(selection, task_cb)
 	Log.trace(sf(
 		[[Token.replace started for selection:
   %s]],
@@ -109,4 +109,4 @@ Token.replace = function(selection, task_cb)
 	ask_tokens(selection, task_cb)
 end
 
-return Token
+return M

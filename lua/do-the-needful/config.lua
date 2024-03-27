@@ -6,11 +6,11 @@ local sf = utils.string_format
 ---@field get_opts fun(): Opts
 ---@field init fun(opts: Opts): Opts
 ---@return Config
-Config = {}
+local M = {}
 
 local _opts = const.opts
 
-function Config.get_opts()
+function M.get_opts()
 	return utils.deep_copy(_opts)
 end
 
@@ -53,26 +53,23 @@ local function set_local_opts(opts)
 		global = {
 			path = sf("%s/%s", vim.fn.stdpath("data"), _opts.config_file),
 			tasks = {},
-			jobs = {},
 		},
 		project = {
 			path = sf("%s/%s", vim.fn.getcwd(), _opts.config_file),
 			tasks = {},
-			jobs = {},
 		},
 		opts = {
 			tasks = utils.deep_copy(_opts.tasks) or {},
-			jobs = utils.deep_copy(_opts.jobs) or {},
 		},
 	}
 	_opts.tasks = nil
 end
 
-function Config.init(opts)
+function M.init(opts)
 	opts = opts or {}
 	opts = set_opts_defaults(opts)
 	set_local_opts(opts)
-	return Config.get_opts()
+	return M.get_opts()
 end
 
-return Config
+return M

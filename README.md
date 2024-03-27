@@ -99,8 +99,6 @@ window = {
   open_relative = true, -- open window after/before current window
   relative = "after", -- relative direction if open_relative = true
   -- after or before
-  hidden = false -- hiding tasks from picker makes sense if you are using them
-  -- to compose jobs
 }
 ```
 
@@ -198,58 +196,6 @@ local opts = {
         keep_current = true,
       },
     },
-    {
-      id = "list1", -- id is used to reference a task in a job
-      name = "List directory",
-      cmd = 'ls -al',
-      cwd = "${cwd}",
-      tags = { "list", "dir", "open", "pwd" },
-      window = {
-        close = false,
-        keep_current = false,
-      },
-      hidden = true
-    },
-    {
-      id = "list2",
-      name = "List directory",
-      cmd = 'ls -al',
-      cwd = "~",
-      tags = { "list", "dir", "close", "home" },
-      window = {
-        close = true,
-        keep_current = true,
-      },
-      hidden = true
-    }
-  },
-  jobs = {
-    {
-      name = "list directories",
-      tags = {"job", "list", "directories", "ordered"},
-      tasks = { -- task.id to run in order
-        "list1",
-        "list2"
-      },
-      window = {
-        close = true,
-        keep_current = false,
-        open_relative = true,
-        relative = "before"
-      }
-    },
-    { -- multiple jobs can be created from the same task ids
-      name = "list directories",
-      tags = {"job", "list", "directories", "reversed"},
-      tasks = {
-        "list2",
-        "list1"
-      },
-      window = {
-        close = false,
-        keep_current = true,
-      }
-    }
   },
   edit_mode = "buffer", -- buffer, tab, split, vsplit
   config_file = ".tasks.json", -- name of json config file for project/global config
@@ -315,7 +261,6 @@ telescope.load_extension("do-the-needful")
 {
   log_level = "warn",
   tasks = {},
-  jobs = {},
   edit_mode = "buffer",
   config = ".tasks.json",
   config_order = {
@@ -421,20 +366,20 @@ When calling the task config editing functions if the respective
 
 ```JSON
 {
- "tasks": [
-  {
-   "name": "",
-   "cmd": "",
-   "tags": [""],
-   "window": {
-    "name": "",
-    "close": false,
-    "keep_current": false,
-    "open_relative": true,
-    "relative": "after"
-   }
-  }
- ]
+  "tasks": [
+    {
+      "name": "",
+      "cmd": "",
+      "tags": [""],
+      "window": {
+        "name": "",
+        "close": false,
+        "keep_current": false,
+        "open_relative": true,
+        "relative": "after"
+      }
+    }
+  ]
 }
 ```
 
@@ -463,22 +408,9 @@ When calling the task config editing functions if the respective
       relative: "before" | "after";
     };
   }>;
-  jobs: Array<{
-    name: string;
-    tags: string[];
-    tasks: string[];
-    window: {
-      name: string;
-      close: boolean;
-      keep_current: boolean;
-      open_relative: boolean;
-      relative: "before" | "after";
-    }
-  };
 }
 ```
 
 ## Todo
 
-- Tasks can execute other tasks
 - Update example config

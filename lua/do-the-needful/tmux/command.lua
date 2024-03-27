@@ -6,9 +6,9 @@ local sf = require("do-the-needful.utils").string_format
 ---@field build fun(task: TaskConfig): string[]
 ---@field build_send_to_pane fun(task: TaskConfig, pane: string): string[]
 ---@return TmuxCommand
-TmuxCommand = {}
+local M = {}
 
-TmuxCommand.build_cmd_args = function(task)
+function M.build_cmd_args(task)
 	Log.trace(sf("tmux.command.build_command(): using selected task %s", task))
 	local cmd_args = { "tmux", "new-window" }
 	if task.window.keep_current then
@@ -38,11 +38,11 @@ TmuxCommand.build_cmd_args = function(task)
 	return cmd_args
 end
 
-TmuxCommand.build_send_to_pane = function(task, pane)
+function M.build_send_to_pane(task, pane)
 	local cmd = { "tmux", "send", "-R", "-t", pane }
 	extend(cmd, { task.cmd })
 	extend(cmd, { "Enter" })
 	return cmd
 end
 
-return TmuxCommand
+return M

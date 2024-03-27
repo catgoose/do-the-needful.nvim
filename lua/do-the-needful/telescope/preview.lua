@@ -6,9 +6,9 @@ local Log = require("do-the-needful").Log
 ---@class Preview
 ---@field render fun(task: table)
 ---@return Preview
-Preview = {}
+local M = {}
 
-function Preview.render(task)
+function M.render(task)
 	local fields = {}
 	local lines = { "{" }
 	for _, f in pairs(const.task_preview_field_order) do
@@ -44,4 +44,4 @@ function Preview.render(task)
 	return lines
 end
 
-return Preview
+return M

@@ -3,11 +3,11 @@ local t = require("do-the-needful.utils").indent_str
 local default_log_level = "warn"
 
 ---@class Opts
----@field dev boolean
 ---@field log_level string
 ---@field tasks table
 ---@field config_file string
 ---@field config_order table
+---@field edit_mode string
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
@@ -16,18 +16,19 @@ local default_log_level = "warn"
 ---@class Constants
 ---@field val Constants.val
 ---@return Constants
-local Constants = {}
+local M = {}
 
 ---@class Constants.val
 ---@field plugin_name string
 ---@field task_preview_field_order string[]
 ---@field token_replacement_fields string[]
+---@field lists table
 ---@field opts Opts
 ---@field task_defaults TaskConfig
 ---@field default_task_lines string[]
 ---@field default_log_level string
 ---@field log_levels string[]
-Constants.val = {
+M.val = {
 	plugin_name = "do-the-needful",
 	task_preview_field_order = {
 		"name",
@@ -42,16 +43,20 @@ Constants.val = {
 		"cwd",
 		"name",
 	},
+	lists = {
+		edit_modes = { "buffer", "tab", "split", "vsplit" },
+		config_order = { "global", "project", "opts" },
+	},
 	opts = {
-		dev = false,
 		log_level = default_log_level,
 		tasks = {},
 		config_file = ".tasks.json",
 		config_order = {
-			"global",
 			"project",
+			"global",
 			"opts",
 		},
+		edit_mode = "buffer",
 		tag_source = true,
 		global_tokens = {
 			["${cwd}"] = vim.fn.getcwd,
@@ -98,4 +103,4 @@ Constants.val = {
 	log_levels = { "trace", "debug", "info", "warn", "error", "fatal" },
 }
 
-return Constants
+return M

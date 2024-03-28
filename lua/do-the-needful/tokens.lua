@@ -1,15 +1,15 @@
 local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
-local Log = require("do-the-needful").Log
 local const = require("do-the-needful.constants").val
-local ins = vim.inspect
+local Log = require("do-the-needful").Log
+local sf = utils.string_format
 
 ---@class Token
 ---@field replace fun(selection: TaskConfig, task_cb: fun(task: TaskConfig): nil)
 ---@return Token
-local Token = {}
+local M = {}
 
-local replace_tokens = function(str)
+local function replace_tokens(str)
 	local tokens = get_opts().global_tokens
 	for k, v in pairs(tokens) do
 		if type(v) == "string" then
@@ -19,11 +19,11 @@ local replace_tokens = function(str)
 			str = utils.escaped_replace(str, k, v())
 		end
 	end
-	Log.trace(string.format("Token.replace_tokens: %s", str))
+	Log.trace(sf("Token.replace_tokens: %s", str))
 	return str
 end
 
-local input_opts = function(token, ask)
+local function input_opts(token, ask)
 	local funcs = get_opts().ask_functions
 	local opts = {
 		prompt = (ask.title or token) .. ": ",
@@ -37,7 +37,7 @@ local input_opts = function(token, ask)
 	return opts
 end
 
-local get_input_configs = function(selection)
+local function get_input_configs(selection)
 	local configs = {}
 	for token, opts in pairs(selection.ask) do
 		if selection.cmd:find(token) then
@@ -49,23 +49,23 @@ local get_input_configs = function(selection)
 	return configs
 end
 
-local execute_task = function(selection, task_cb)
+local function execute_task(selection, task_cb)
 	local task = {
 		cmd = selection.cmd,
 		name = selection.name,
 		cwd = selection.cwd,
 		window = selection.window,
 	}
-	Log.trace(string.format(
+	Log.trace(sf(
 		[[Token.execute_task: task generated:
                 %s]],
-		ins(task)
+		task
 	))
 	task_cb(task)
 end
 
 ---@fun ask_tokens(selection: Task, task_cb: fun(task: Task): nil)
-local ask_tokens = function(selection, task_cb)
+local function ask_tokens(selection, task_cb)
 	if selection.ask then
 		local configs = get_input_configs(selection)
 		local count = 0
@@ -77,7 +77,7 @@ local ask_tokens = function(selection, task_cb)
 					if input then
 						count = count + 1
 						selection.cmd = utils.escaped_replace(selection.cmd, token, input)
-						Log.trace(string.format(
+						Log.trace(sf(
 							[[Token.ask_tokens: token %s replaced for cmd:
                 %s]],
 							token,
@@ -95,11 +95,11 @@ local ask_tokens = function(selection, task_cb)
 	end
 end
 
-Token.replace = function(selection, task_cb)
-	Log.trace(string.format(
+M.replace = function(selection, task_cb)
+	Log.trace(sf(
 		[[Token.replace started for selection:
   %s]],
-		ins(selection)
+		selection
 	))
 	for _, field in pairs(const.token_replacement_fields) do
 		if selection[field] then
@@ -109,4 +109,4 @@ Token.replace = function(selection, task_cb)
 	ask_tokens(selection, task_cb)
 end
 
-return Token
+return M

@@ -5,21 +5,19 @@ local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
 local tokens = require("do-the-needful.tokens")
-local win = require("do-the-needful.window")
-local tsk = require("do-the-needful.tasks")
+local tmux = require("do-the-needful.tmux")
+local preview = require("do-the-needful.telescope.preview")
+local collect = require("do-the-needful.collect")
 local edit = require("do-the-needful.edit")
 local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
+local sf = require("do-the-needful.utils").string_format
 
 ---@class Telescope
 ---@field action_picker fun(opts: table)
 ---@field tasks fun(opts: table)
 ---@return Telescope
-local Telescope = {}
-
-local function get_tasks()
-	return tsk.collect_tasks()
-end
+local M = {}
 
 local function entry_ordinal(task)
 	local tags = vim.tbl_map(function(tag)
@@ -65,13 +63,13 @@ local function task_previewer()
 		title = "please",
 		define_preview = function(self, entry, _)
 			vim.api.nvim_set_option_value("filetype", "lua", { buf = self.state.bufnr })
-			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, tsk.task_preview(entry.value))
+			vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, preview.render(entry.value))
 		end,
 	})
 end
 
 local function task_picker(opts)
-	local tasks = get_tasks()
+	local tasks = collect.tasks()
 	pickers
 		.new(opts, {
 			prompt_title = "Do the needful",
@@ -85,7 +83,8 @@ local function task_picker(opts)
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
 					tokens.replace(selection.value, function(task)
-						win.open(task)
+						Log.debug(sf("task_picker: opening task %s", task))
+						tmux.run(task)
 					end)
 				end)
 				return true
@@ -95,7 +94,7 @@ local function task_picker(opts)
 		:find()
 end
 
-function Telescope.action_picker(opts)
+function M.action_picker(opts)
 	local selections = {
 		{ "Edit project config", edit.edit_config, "project" },
 		{ "Edit global config", edit.edit_config, "global" },
@@ -135,9 +134,9 @@ function Telescope.action_picker(opts)
 		:find()
 end
 
-function Telescope.tasks(opts)
+function M.tasks(opts)
 	opts = opts or {}
 	task_picker(opts)
 end
 
-return Telescope
+return M

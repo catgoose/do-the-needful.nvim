@@ -3,7 +3,6 @@
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -27,14 +26,14 @@
     - [Project config](#project-config)
     - [Global config](#global-config)
     - [New configs](#new-configs)
-    - [.tasks.json JSON schema](#tasksjson-json-schema)
-      - [Alternate config format](#alternate-config-format)
-  - [Todo](#todo)
-  <!--toc:end-->
+    - [tasks JSON schema](#tasks-json-schema)
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
-Neovim task runner that uses tmux windows to do the needful please. Task command,
-cwd, and name can be defined containing `${tokens}` which can be replaced by
-defined values or evaluated functions.
+Task runner that uses tmux windows to do the needful please. Tasks can be configured
+using `${tokens}` which can be replaced by a defined value or user input
 
 ## Please
 
@@ -66,6 +65,7 @@ Tasks are selected using a Telescope picker
 
 ```lua
 require("do-the-needful").please()
+require("do-the-needful").please(opts) -- Telescope opts can be passed in
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```
@@ -90,7 +90,7 @@ require("do-the-needful").edit_config("global")
 
 ### Tmux windows
 
-Tasks run in a new tmux window with the following options available:
+Tasks run in a new tmux window with the following default options:
 
 ```lua
 window = {
@@ -134,7 +134,7 @@ global_tokens = {
 ### Prompting for input
 
 Tasks can be configured to prompt for input. Token values are replaced by
-`global_tokens` values or evaluated `ask_functions` upon task selection:
+`global_tokens` values or evaluated `ask_functions`:
 
 Ask tokens are defined in each task's `ask` table (opt) or json object (project
 and global)
@@ -198,12 +198,13 @@ local opts = {
       },
     },
   },
+  edit_mode = "buffer", -- buffer, tab, split, vsplit
   config_file = ".tasks.json", -- name of json config file for project/global config
-  config_order = {-- default: {project, global, opts}.  Order in which
+  config_order = {-- default: { project, global, opts }.  Order in which
   -- tasks are aggregated
-    "opts", -- tasks defined in setup opts
-    "global", -- .tasks.json in stdpath('data')
     "project", -- .task.json in project directory
+    "global", -- .tasks.json in stdpath('data')
+    "opts", -- tasks defined in setup opts
   },
   tag_source = true, -- display #project, #global, or #opt after tags
   global_tokens = {
@@ -261,10 +262,11 @@ telescope.load_extension("do-the-needful")
 {
   log_level = "warn",
   tasks = {},
+  edit_mode = "buffer",
   config = ".tasks.json",
   config_order = {
-   "global",
    "project",
+   "global",
    "opts",
   },
   tag_source = true,
@@ -300,7 +302,7 @@ ask_functions = {
 
 #### Ask tokens
 
-The value for the `default` can refer to a literal value or a defined `ask_function`.
+The value for `default` can refer to a literal value or a defined `ask_function`.
 
 If the value of `ask.type` is "`function`" the corresponding `ask_function`
 defined in setup opts will be evaluated upon task selection. This value will
@@ -365,31 +367,31 @@ When calling the task config editing functions if the respective
 
 ```JSON
 {
- "tasks": [
-  {
-   "name": "",
-   "cmd": "",
-   "tags": [""],
-   "window": {
-    "name": "",
-    "close": false,
-    "keep_current": false,
-    "open_relative": true,
-    "relative": "after"
-   }
-  }
- ]
+  "tasks": [
+    {
+      "name": "",
+      "cmd": "",
+      "tags": [""],
+      "window": {
+        "name": "",
+        "close": false,
+        "keep_current": false,
+        "open_relative": true,
+        "relative": "after"
+      }
+    }
+  ]
 }
 ```
 
-### .tasks.json JSON schema
+### tasks JSON schema
 
 ```typescript
 {
   tasks: Array<{
     name: string;
     cmd: string;
-    tags: Array<string>;
+    tags: string[];
     ask: {
       "${token}": {
         title: string;
@@ -408,51 +410,17 @@ When calling the task config editing functions if the respective
 }
 ```
 
-#### Alternate config format
+## Extra
 
-Alternatively the root `tasks` key can be omitted:
+### Neovim
 
-```json
-[
-  {
-    "name": "",
-    "cmd": "",
-    "tags": [""],
-    "window": {
-      "name": "",
-      "close": false,
-      "keep_current": false,
-      "open_relative": true,
-      "relative": "after"
-    }
-  }
-]
-```
+My other neovim projects
 
-Schema:
+- [neovim config](https://github.com/catgoose/nvim)
+- [telescope-helpgrep.nvim](https://github.com/catgoose/telescope-helpgrep.nvim)
 
-```typescript
-Array<{
-  name: string;
-  cmd: string;
-  tags: Array<string>;
-  ask: {
-    "${token}": {
-      title: string;
-      type: "string" | "function";
-      default: string;
-    };
-  };
-  window: {
-    name: string;
-    close: boolean;
-    keep_current: boolean;
-    open_relative: boolean;
-    relative: "before" | "after";
-  };
-}>;
-```
+### Tmux
 
-## Todo
+Tmux theme:
 
-- Tasks can execute other tasks
+[kanagawa-tmux](https://github.com/catgoose/kanagawa-tmux)

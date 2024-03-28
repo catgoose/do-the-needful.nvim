@@ -1,9 +1,40 @@
 {
   "tasks": [
     {
-      "name": "fdfind project local",
-      "cmd": "fdfind",
-      "tags": ["fdfind", "project"]
+      "name": "eza",
+      "cmd": "eza ${dir}",
+      "cwd": "~",
+      "tags": ["eza", "home", "files"],
+      "ask": {
+        "${dir}": {
+          "title": "Which directory to search",
+          "type": "function",
+          "default": "get_cwd"
+        }
+      },
+      "window": {
+        "name": "Eza ~",
+        "close": false,
+        "keep_current": false,
+        "open_relative": true,
+        "relative": "after"
+      }
+    },
+    {
+      "name": "ripgrep current directory",
+      "cmd": "rg ${pattern} ${cwd}",
+      "tags": ["ripgrep", "cwd", "search", "pattern"],
+      "ask": {
+        "${pattern}": {
+          "title": "Pattern to use",
+          "default": "error"
+        }
+      },
+      "window": {
+        "name": "Ripgrep",
+        "close": false,
+        "keep_current": true
+      }
     }
   ]
 }

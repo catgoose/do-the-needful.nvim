@@ -3,7 +3,6 @@ local t = require("do-the-needful.utils").indent_str
 local default_log_level = "warn"
 
 ---@class Opts
----@field dev boolean
 ---@field log_level string
 ---@field tasks table
 ---@field config_file string
@@ -49,16 +48,15 @@ M.val = {
 		config_order = { "global", "project", "opts" },
 	},
 	opts = {
-		dev = false,
 		log_level = default_log_level,
 		tasks = {},
-		edit_mode = "buffer",
 		config_file = ".tasks.json",
 		config_order = {
-			"global",
 			"project",
+			"global",
 			"opts",
 		},
+		edit_mode = "buffer",
 		tag_source = true,
 		global_tokens = {
 			["${cwd}"] = vim.fn.getcwd,

@@ -4,7 +4,7 @@ local sf = require("do-the-needful.utils").string_format
 local deep_copy = require("do-the-needful.utils").deep_copy
 
 ---@class Validate
----@field collection fun(configs: CollectionConfig[]): CollectionConfig[]
+---@field collection fun(configs: TaskConfig[]): TaskConfig[]
 ---@return Validate
 local M = {}
 
@@ -96,26 +96,26 @@ local function merge_defaults(config)
 	return merged_defaults
 end
 
-function M.collection(collection)
+function M.tasks(tasks)
 	---@type relative
 	local relative = { "after", "before" }
 
 	local remove = {}
-	for i, task in pairs(collection) do
+	for i, task in pairs(tasks) do
 		if not validate_task_cmd(task, i) then
 			remove[#remove + 1] = i
 		else
 			validate_name(task)
 			validate_tags(task)
 			validate_window(task, relative)
-			collection[i] = merge_defaults(task)
+			tasks[i] = merge_defaults(task)
 		end
 	end
 	for _, index in ipairs(remove) do
-		collection[index] = nil
+		tasks[index] = nil
 	end
 
-	return deep_copy(collection)
+	return deep_copy(tasks)
 end
 
 return M

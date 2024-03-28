@@ -27,21 +27,20 @@ local sf = utils.string_format
 ---@return Collect
 local M = {}
 
-local function add_metadata(collection, config, source)
-	if not config or not config.tasks then
-		Log.warn(sf("collect._add_metadata(): no tasks found in config %s", config))
+local function add_metadata(tasks, task_config, source)
+	if not task_config or not task_config.tasks then
+		Log.warn(sf("collect._add_metadata(): no tasks found in config %s", task_config))
 		return
 	end
-	for _, task in pairs(config.tasks) do
+	for _, task in pairs(task_config.tasks) do
 		task.source = source
 		Log.trace(sf("collect._add_metadata(): adding source '%s' to task %s", source, task))
-		table.insert(collection, task)
+		table.insert(tasks, task)
 	end
 end
 
----@return TaskConfig[]
 function M.tasks()
-	local collection = {}
+	local tasks = {}
 	local sources = get_opts().configs
 	Log.trace(sf("collect.configs(): parsing configs: %s", sources))
 	for _, source in pairs(get_opts().config_order) do
@@ -50,15 +49,15 @@ function M.tasks()
 			local from_json = utils.json_from_path(path)
 			if from_json then
 				Log.trace(sf("collect.configs(): composing task: %s from path %s", from_json, path))
-				add_metadata(collection, from_json, source)
+				add_metadata(tasks, from_json, source)
 			end
 		else
-			add_metadata(collection, sources[source], source)
+			add_metadata(tasks, sources[source], source)
 		end
 	end
-	collection = validate.collection(collection)
-	Log.debug(sf("collect.configs(): collection %s", collection))
-	return collection
+	tasks = validate.tasks(tasks)
+	Log.debug(sf("collect.configs(): collection %s", tasks))
+	return tasks
 end
 
 return M

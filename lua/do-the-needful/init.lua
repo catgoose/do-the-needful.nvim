@@ -1,22 +1,23 @@
 local cfg = require("do-the-needful.config")
 
 ---@class DoTheNeedful
----@field setup fun(config: table)
+---@field setup fun(opts: table)
+---@field telescope_setup fun(opts: table)
 ---@field Log Logger
----@field edit_config fun(config: source)
+---@field edit_config fun(opts: source)
 ---@field please fun()
 ---@return DoTheNeedful
 local M = {}
 
-function M.setup(config)
-	config = config or {}
-	cfg.init(config)
+function M.setup(opts)
+	opts = opts or {}
+	cfg.init(opts)
 	M.Log = require("do-the-needful.logger").init()
 end
 
-function M.edit_config(config)
-	config = ("project" or "global") and config or "project"
-	require("do-the-needful.edit").edit_config(config)
+function M.edit_config(opts)
+	opts = ("project" or "global") and opts or "project"
+	require("do-the-needful.edit").edit_config(opts)
 end
 
 function M.please(opts)

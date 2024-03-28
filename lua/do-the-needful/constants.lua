@@ -2,6 +2,8 @@ local t = require("do-the-needful.utils").indent_str
 
 local default_log_level = "warn"
 
+---@class TelescopeOpts table
+
 ---@class Opts
 ---@field log_level string
 ---@field tasks table
@@ -11,7 +13,7 @@ local default_log_level = "warn"
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
----@field telescope table
+---@field telescope TelescopeOpts
 
 ---@class Constants
 ---@field val Constants.val
@@ -28,6 +30,7 @@ local M = {}
 ---@field default_task_lines string[]
 ---@field default_log_level string
 ---@field log_levels string[]
+---@field telescope_setup table
 M.val = {
 	plugin_name = "do-the-needful",
 	task_preview_field_order = {
@@ -72,6 +75,7 @@ M.val = {
 				},
 			},
 		},
+		telescope_setup = {},
 	},
 	task_defaults = {
 		cwd = vim.fn.getcwd(),

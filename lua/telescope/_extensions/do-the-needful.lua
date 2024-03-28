@@ -7,6 +7,7 @@ if not has_telescope then
 end
 
 return telescope.register_extension({
+	setup = require("do-the-needful.config").telescope_setup,
 	exports = {
 		please = function(opts)
 			pickers.tasks(opts)

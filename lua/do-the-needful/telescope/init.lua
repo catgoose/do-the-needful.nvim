@@ -135,7 +135,12 @@ function M.action_picker(opts)
 end
 
 function M.tasks(opts)
-	opts = opts or {}
+	local telescope_opts = require("do-the-needful.config").get_telescope_opts()
+	if opts and next(opts) ~= nil then
+		vim.tbl_extend("keep", telescope_opts, opts)
+	else
+		opts = telescope_opts
+	end
 	task_picker(opts)
 end
 

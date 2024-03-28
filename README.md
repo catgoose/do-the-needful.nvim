@@ -1,8 +1,12 @@
 # do-the-needful
 
+Task runner that uses tmux windows to do the needful please. Tasks can be configured
+using `${tokens}` which can be replaced by a defined value or user input
+
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
+
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -27,13 +31,8 @@
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra)
-    - [Neovim](#neovim)
-    - [Tmux](#tmux)
-<!--toc:end-->
-
-Task runner that uses tmux windows to do the needful please. Tasks can be configured
-using `${tokens}` which can be replaced by a defined value or user input
+  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
+  <!--toc:end-->
 
 ## Please
 
@@ -252,6 +251,25 @@ In your Telescope setup load the `do-the-needful` extension
 ```lua
 
 telescope.load_extension("do-the-needful")
+```
+
+Telescope defaults can be set in Telescope setup:
+
+```lua
+require("telescope").setup({
+  ...
+  extensions = {
+    ["do-the-needful"] = {
+      winblend = 10,
+    },
+  }
+})
+```
+
+Telescope options can also be passed into `please` to override the above set defaults:
+
+```lua
+require("do-the-needful").please({winblend = 5})
 ```
 
 ## Configuration

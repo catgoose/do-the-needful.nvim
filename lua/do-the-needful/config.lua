@@ -5,13 +5,19 @@ local sf = utils.string_format
 ---@class Config
 ---@field get_opts fun(): Opts
 ---@field init fun(opts: Opts): Opts
+---@field telescope_setup fun(opts: TelescopeOpts): TelescopeOpts
 ---@return Config
 local M = {}
 
 local _opts = const.opts
+local _telescope_opts = const.telescope_setup
 
 function M.get_opts()
 	return utils.deep_copy(_opts)
+end
+
+function M.get_telescope_opts()
+	return utils.deep_copy(_telescope_opts)
 end
 
 local function validate_config_order(config_order)
@@ -70,6 +76,12 @@ function M.init(opts)
 	opts = set_opts_defaults(opts)
 	set_local_opts(opts)
 	return M.get_opts()
+end
+
+function M.telescope_setup(opts)
+	opts = opts or {}
+	_telescope_opts = opts
+	return _telescope_opts
 end
 
 return M

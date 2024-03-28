@@ -19,8 +19,8 @@ function M.edit_config(config)
 	require("do-the-needful.edit").edit_config(config)
 end
 
-function M.please()
-	require("do-the-needful.telescope").tasks()
+function M.please(opts)
+	require("do-the-needful.telescope").tasks(opts)
 end
 
 return M

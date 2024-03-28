@@ -54,7 +54,9 @@ function M.json_from_path(path)
 		local contents = f_handle:read()
 		local ok, json = pcall(vim.json.decode, contents)
 		if not ok then
-			error(M.sf("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename))
+			local warning_message =
+				M.string_format("tasks._decode_json(): invalid json decoded from file: %s", f_handle.filename)
+			vim.api.nvim_echo({ { "Warning: ", "WarningMsg" }, { warning_message } }, false, {})
 		else
 			return json
 		end

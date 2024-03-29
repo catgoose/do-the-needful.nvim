@@ -21,9 +21,11 @@ local M = {}
 function M.tasks(opts)
 	opts = util.get_telescope_opts(opts)
 	local tasks = collect.tasks()
+	local tasks_opts = const.telescope_opts.tasks
 	pickers
 		.new(opts, {
 			prompt_title = "Do the needful",
+			layout_config = tasks_opts.layout_config,
 			finder = finders.new_table({
 				results = tasks,
 				entry_maker = util.entry_maker,
@@ -53,15 +55,12 @@ function M.actions(opts)
 		{ "Do the needful", M.tasks, opts },
 	}
 	local actions_opts = const.telescope_opts.actions
+	actions_opts.layout_config.height = #selections + 4
 	pickers
 		.new(opts, {
 			prompt_title = "do-the-needful actions",
 			layout_strategy = actions_opts.layout_strategy,
-			layout_config = {
-				width = actions_opts.layout_config.width,
-				height = #selections + 4,
-				prompt_position = actions_opts.layout_config.prompt_position,
-			},
+			layout_config = actions_opts.layout_config,
 			finder = finders.new_table({
 				results = selections,
 				entry_maker = function(entry)

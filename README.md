@@ -6,7 +6,6 @@ using `${tokens}` which can be replaced by a defined value or user input
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -31,8 +30,10 @@ using `${tokens}` which can be replaced by a defined value or user input
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
-  <!--toc:end-->
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
 ## Please
 
@@ -63,11 +64,13 @@ Tasks are selected using a Telescope picker
 ### API
 
 ```lua
-require("do-the-needful").please()
-require("do-the-needful").please(opts) -- Telescope opts can be passed in
+require("do-the-needful").please() -- Opens task picker
+require("do-the-needful").action() -- Opens picker to do the needful or edit configs
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```
+
+Telescope opts can be passed into `.please()` and `.action()` functions
 
 ### Telescope pickers
 
@@ -221,15 +224,6 @@ local opts = {
       return vim.fn.expand("%")
     end
   },
-  telescope = {
-    action_picker = {
-      layout_strategy = "center",
-      layout_config = {
-        width = 0.25,
-        prompt_position = "bottom",
-      },
-    },
-  },
 }
 
 return {
@@ -293,15 +287,6 @@ require("do-the-needful").please({winblend = 5})
     ["${do-the-needful}"] = "please",
   },
   ask_functions = {},
-  telescope = {
-    action_picker = {
-      layout_strategy = "center",
-      layout_config = {
-        width = 0.25,
-        prompt_position = "bottom",
-      },
-    },
-  },
 }
 ```
 

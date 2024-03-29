@@ -6,6 +6,7 @@ using `${tokens}` which can be replaced by a defined value or user input
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
+
 - [do-the-needful](#do-the-needful)
   - [Please](#please)
   - [Screenshots](#screenshots)
@@ -30,10 +31,8 @@ using `${tokens}` which can be replaced by a defined value or user input
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra)
-    - [Neovim](#neovim)
-    - [Tmux](#tmux)
-<!--toc:end-->
+  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
+  <!--toc:end-->
 
 ## Please
 
@@ -65,12 +64,12 @@ Tasks are selected using a Telescope picker
 
 ```lua
 require("do-the-needful").please() -- Opens task picker
-require("do-the-needful").action() -- Opens picker to do the needful or edit configs
+require("do-the-needful").actions() -- Opens picker to do the needful or edit configs
 require("do-the-needful").edit_config("project")
 require("do-the-needful").edit_config("global")
 ```
 
-Telescope opts can be passed into `.please()` and `.action()` functions
+Telescope opts can be passed into `.please()` and `.actions()` functions
 
 ### Telescope pickers
 

@@ -13,7 +13,7 @@ return telescope.register_extension({
 			pickers.tasks(opts)
 		end,
 		["do-the-needful"] = function(opts)
-			pickers.action_picker(opts)
+			pickers.actions(opts)
 		end,
 		project = function()
 			require("do-the-needful").Edit.edit_config("project")

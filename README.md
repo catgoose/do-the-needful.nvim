@@ -1,7 +1,7 @@
 # do-the-needful
 
 Task runner that uses tmux windows to do the needful please. Tasks can be configured
-using `${tokens}` which can be replaced by a defined value or user input
+to replace `${tokens}` by function evaluation or user input.
 
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
@@ -259,10 +259,12 @@ require("telescope").setup({
 })
 ```
 
-Telescope options can also be passed into `please` to override the above set defaults:
+Telescope options can also be passed into `please` or `actions` to override the
+above set defaults:
 
 ```lua
 require("do-the-needful").please({winblend = 5})
+require("do-the-needful").actions({prompt_title = "Actions"})
 ```
 
 ## Configuration

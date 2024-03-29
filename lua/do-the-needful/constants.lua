@@ -80,7 +80,8 @@ M.val = {
 		},
 		tasks = {
 			layout_config = {
-				width = 0.5,
+				width = 0.85,
+				height = 0.75,
 			},
 		},
 	},

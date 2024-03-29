@@ -9,6 +9,7 @@ local tmux = require("do-the-needful.tmux")
 local preview = require("do-the-needful.telescope.preview")
 local collect = require("do-the-needful.collect")
 local edit = require("do-the-needful.edit")
+local const = require("do-the-needful.constants").val
 local Log = require("do-the-needful").Log
 local get_opts = require("do-the-needful.config").get_opts
 local sf = require("do-the-needful.utils").string_format
@@ -18,6 +19,16 @@ local sf = require("do-the-needful.utils").string_format
 ---@field tasks fun(opts: table)
 ---@return Telescope
 local M = {}
+
+local function get_telescope_opts(opts)
+	local telescope_opts = require("do-the-needful.config").get_telescope_opts()
+	if opts and next(opts) ~= nil then
+		vim.tbl_extend("keep", telescope_opts, opts)
+	else
+		opts = telescope_opts
+	end
+	return opts
+end
 
 local function entry_ordinal(task)
 	local tags = vim.tbl_map(function(tag)
@@ -69,6 +80,7 @@ local function task_previewer()
 end
 
 local function task_picker(opts)
+	opts = get_telescope_opts(opts)
 	local tasks = collect.tasks()
 	pickers
 		.new(opts, {
@@ -95,12 +107,13 @@ local function task_picker(opts)
 end
 
 function M.action_picker(opts)
+	opts = get_telescope_opts(opts)
 	local selections = {
 		{ "Edit project config", edit.edit_config, "project" },
 		{ "Edit global config", edit.edit_config, "global" },
 		{ "Do the needful", task_picker, opts },
 	}
-	local ap_opts = get_opts().telescope.action_picker
+	local ap_opts = const.telescope_opts.action_picker
 	pickers
 		.new(opts, {
 			prompt_title = "do-the-needful actions",
@@ -135,12 +148,7 @@ function M.action_picker(opts)
 end
 
 function M.tasks(opts)
-	local telescope_opts = require("do-the-needful.config").get_telescope_opts()
-	if opts and next(opts) ~= nil then
-		vim.tbl_extend("keep", telescope_opts, opts)
-	else
-		opts = telescope_opts
-	end
+	opts = get_telescope_opts(opts)
 	task_picker(opts)
 end
 

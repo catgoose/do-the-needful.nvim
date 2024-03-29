@@ -3,7 +3,8 @@ local t = require("do-the-needful.utils").indent_str
 local default_log_level = "warn"
 
 ---@class TelescopeOpts
----@field action_picker table
+---@field actions table
+---@field tasks table
 
 ---@class Opts
 ---@field log_level string
@@ -70,11 +71,16 @@ M.val = {
 	},
 	telescope_setup = {},
 	telescope_opts = {
-		action_picker = {
+		actions = {
 			layout_strategy = "center",
 			layout_config = {
 				width = 0.25,
 				prompt_position = "bottom",
+			},
+		},
+		tasks = {
+			layout_config = {
+				width = 0.5,
 			},
 		},
 	},

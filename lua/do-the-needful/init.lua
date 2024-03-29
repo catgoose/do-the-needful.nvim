@@ -24,8 +24,8 @@ function M.please(opts)
 	require("do-the-needful.telescope").tasks(opts)
 end
 
-function M.action(opts)
-	require("do-the-needful.telescope").action_picker(opts)
+function M.actions(opts)
+	require("do-the-needful.telescope").actions(opts)
 end
 
 return M

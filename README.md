@@ -7,7 +7,6 @@ are parsed at execution time.
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [About](#about)
   - [Usage](#usage)
@@ -32,16 +31,21 @@ are parsed at execution time.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
-  <!--toc:end-->
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
 ## About
 
 - Tasks can be defined in in setup opts, project or global config
-- Tasks run in tmux windows that can close automatically
-- Task tags make it easy to filter with a Telescope picker
-- Tokens are parsed by an evaluated function or user input
-- Tokens can be defined globally or scoped to a task
+- Tasks run in tmux windows with configurable options such as to close
+  automatically or to keep current window's focus
+- Task tags make it easy to filter with Telescope picker
+- Tokens can be defined globally or scoped to a task are parsed by an evaluated
+  function or user input
+- When editing a new project or global tasks, a default config will be created
+  if one doesn't exist
 
 ## Usage
 
@@ -101,10 +105,10 @@ window = {
 
 ### Task metadata
 
-Tasks metadata can be defined to make it easier to do the needful
+Tasks metadata can be defined to make it easier to filter with Telescope picker
 
 ```lua
-tags = { "eza", "home", "files" }, -- task metadata used for searching
+tags = { "eza", "home", "files" },
 ```
 
 ### Global token replacement

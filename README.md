@@ -9,6 +9,7 @@ are parsed at execution time.
 <!--toc:start-->
 - [do-the-needful](#do-the-needful)
   - [About](#about)
+  - [Screenshots](#screenshots)
   - [Usage](#usage)
     - [API](#api)
     - [Telescope pickers](#telescope-pickers)
@@ -47,6 +48,24 @@ are parsed at execution time.
 - When editing a new project or global tasks, a default config will be created
   if one doesn't exist
 
+## Screenshots
+
+| ![Actions picker](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/action-picker.png "Actions picker") |
+| :--------------------------------------------------------------------------------------------------------------------: |
+|                                     _Actions picker_ (`:Telescope do-the-needful`)                                     |
+
+| ![Task selection picker](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/task-selection.png "Task picker") |
+| :-------------------------------------------------------------------------------------------------------------------------: |
+|                                _Task selection picker_ (`:Telescope do-the-needful please`)                                 |
+
+| ![Prompting for input](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/ask-input.png "Prompting for input") |
+| :--------------------------------------------------------------------------------------------------------------------------: |
+|                                          _Prompting for input using `ask` function_                                          |
+
+| ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
+| :----------------------------------------------------------: |
+|        _Spawned task will close upon completion_         |
+
 ## Usage
 
 ### API
@@ -67,7 +86,7 @@ Telescope opts can be passed into `.please()` and `.actions()` functions
 -- Displays picker to do the needful please or to edit task configs
 
 :Telescope do-the-needful please
--- Do the needful please
+-- Displays task picker
 
 :Telescope do-the-needful project
 -- Edit project config

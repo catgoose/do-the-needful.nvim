@@ -1,19 +1,20 @@
 # do-the-needful
 
-Task runner that uses tmux windows to do the needful please. Tasks can be configured
-to replace `${tokens}` by function evaluation or user input.
+Task runner that uses tmux windows to do the needful please. A Telescope
+picker makes selecting tasks simple. Task commands can use tokens that
+are parsed at execution time.
 
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
-  - [Please](#please)
+  - [About](#about)
   - [Screenshots](#screenshots)
   - [Usage](#usage)
     - [API](#api)
     - [Telescope pickers](#telescope-pickers)
   - [Features](#features)
+    - [Tasks](#tasks)
     - [Tmux windows](#tmux-windows)
     - [Task metadata](#task-metadata)
     - [Global token replacement](#global-token-replacement)
@@ -31,32 +32,39 @@ to replace `${tokens}` by function evaluation or user input.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
-  <!--toc:end-->
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
-## Please
+## About
 
-Tasks can be defined in 3 places:
-
-- Setup opts
-- Global config: `.tasks.json` located in `vim.fn.stdpath("data")`
-- Project config: `.tasks.json` in the project directory
-
-Tasks are selected using a Telescope picker
+- Tasks can be defined in in setup opts, project or global config
+- Tasks run in tmux windows with configurable options such as to close
+  automatically or to keep current window's focus
+- Task tags make it easy to filter with Telescope picker
+- Tokens can be defined globally or scoped to a task are parsed by an evaluated
+  function or user input
+- When editing a new project or global tasks, a default config will be created
+  if one doesn't exist
 
 ## Screenshots
 
-| ![Task picker](https://tinyurl.com/bdeerawy "Task picker") |
-| :--------------------------------------------------------: |
-|     _Task picker_ (`:Telescope do-the-needful please`)     |
+| ![Actions picker](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/action-picker.png "Actions picker") |
+| :--------------------------------------------------------------------------------------------------------------------: |
+|                                     _Actions picker_ (`:Telescope do-the-needful`)                                     |
+
+| ![Task selection picker](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/task-selection.png "Task picker") |
+| :-------------------------------------------------------------------------------------------------------------------------: |
+|                                _Task selection picker_ (`:Telescope do-the-needful please`)                                 |
+
+| ![Prompting for input](https://github.com/catgoose/do-the-needful.nvim/blob/screenshots/ask-input.png "Prompting for input") |
+| :--------------------------------------------------------------------------------------------------------------------------: |
+|                                          _Prompting for input using `ask` function_                                          |
 
 | ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
 | :----------------------------------------------------------: |
-|        _Spawned task_ and will close upon completion         |
-
-| ![Action picker](https://tinyurl.com/23uh9hv3 "Action picker") |
-| :------------------------------------------------------------: |
-|         _Action picker_ (`:Telescope do-the-needful`)          |
+|        _Spawned task will close upon completion_         |
 
 ## Usage
 
@@ -75,10 +83,10 @@ Telescope opts can be passed into `.please()` and `.actions()` functions
 
 ```lua
 :Telescope do-the-needful
--- Displays picker to select the needful or config editing actions
+-- Displays picker to do the needful please or to edit task configs
 
 :Telescope do-the-needful please
--- Do the needful please
+-- Displays task picker
 
 :Telescope do-the-needful project
 -- Edit project config
@@ -88,6 +96,16 @@ Telescope opts can be passed into `.please()` and `.actions()` functions
 ```
 
 ## Features
+
+### Tasks
+
+Tasks can be defined in 3 places:
+
+- Setup opts
+- Global config: `.tasks.json` located in `vim.fn.stdpath("data")`
+- Project config: `.tasks.json` in the project directory
+
+Tasks are selected using a Telescope picker
 
 ### Tmux windows
 
@@ -106,10 +124,10 @@ window = {
 
 ### Task metadata
 
-Tasks metadata can be defined to make it easier to do the needful
+Tasks metadata can be defined to make it easier to filter with Telescope picker
 
 ```lua
-tags = { "eza", "home", "files" }, -- task metadata used for searching
+tags = { "eza", "home", "files" },
 ```
 
 ### Global token replacement

@@ -5,6 +5,8 @@ local Path = require("plenary.path")
 ---@field indent_str fun(indent_n: number, str: string): string
 ---@field escaped_replace fun(str: string, what: string, with: string): string
 ---@field split_string fun(str: string, del: string): string[]
+---@field string_format fun(msg: string, ...): string
+---@field json_from_path fun(path: string): table
 ---@return Utils
 local M = {}
 

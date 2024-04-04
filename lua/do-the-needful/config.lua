@@ -1,4 +1,4 @@
-local const = require("do-the-needful.constants").val
+local const = require("do-the-needful.constants").get()
 local utils = require("do-the-needful.utils")
 local sf = utils.string_format
 

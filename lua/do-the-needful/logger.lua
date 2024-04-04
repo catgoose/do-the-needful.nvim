@@ -1,5 +1,5 @@
 local get_opts = require("do-the-needful.config").get_opts
-local const = require("do-the-needful.constants").val
+local const = require("do-the-needful.constants").get()
 local sf = require("do-the-needful.utils").string_format
 
 ---@class Logger

@@ -1,4 +1,5 @@
 local t = require("do-the-needful.utils").indent_str
+local deep_copy = require("do-the-needful.utils").deep_copy
 
 local default_log_level = "warn"
 
@@ -17,11 +18,11 @@ local default_log_level = "warn"
 ---@field ask_functions table
 
 ---@class Constants
----@field val Constants.val
+---@field get_val fun(): Constants._val
 ---@return Constants
 local M = {}
 
----@class Constants.val
+---@class Constants._val
 ---@field plugin_name string
 ---@field task_preview_field_order string[]
 ---@field token_replacement_fields string[]
@@ -33,7 +34,7 @@ local M = {}
 ---@field default_task_lines string[]
 ---@field default_log_level string
 ---@field log_levels string[]
-M.val = {
+local _val = {
 	plugin_name = "do-the-needful",
 	task_preview_field_order = {
 		"name",
@@ -114,5 +115,9 @@ M.val = {
 	default_log_level = default_log_level,
 	log_levels = { "trace", "debug", "info", "warn", "error", "fatal" },
 }
+
+M.get = function()
+	return deep_copy(_val)
+end
 
 return M

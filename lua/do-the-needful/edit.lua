@@ -1,6 +1,6 @@
 local Path = require("plenary.path")
 local get_opts = require("do-the-needful.config").get_opts
-local const = require("do-the-needful.constants").val
+local const = require("do-the-needful.constants").get()
 local Log = require("do-the-needful").Log
 local sf = require("do-the-needful.utils").string_format
 

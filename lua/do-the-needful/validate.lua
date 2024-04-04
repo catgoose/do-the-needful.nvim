@@ -1,5 +1,5 @@
 local Log = require("do-the-needful").Log
-local const = require("do-the-needful.constants").val
+local const = require("do-the-needful.constants").get()
 local sf = require("do-the-needful.utils").string_format
 local deep_copy = require("do-the-needful.utils").deep_copy
 
@@ -90,8 +90,27 @@ end
 
 local function merge_defaults(config)
 	local defaults = const.task_defaults
-	Log.trace(sf("validate._merge_defaults: Merging default config for %s: %s", config.type, config))
-	local merged_defaults = vim.tbl_deep_extend("keep", config, defaults)
+	Log.debug(sf(
+		[[validate._merge_defaults:
+Merging:
+
+config:%s
+
+with defaults: %s]],
+		config,
+		defaults
+	))
+	local merged_defaults = vim.tbl_deep_extend("keep", config, deep_copy(defaults))
+	Log.debug(sf(
+		[[validate._merge_defaults:
+Merged:
+
+config: %s
+
+merged_defaults: %s]],
+		config,
+		merged_defaults
+	))
 	merged_defaults.window.name = merged_defaults.window.name or merged_defaults.name
 	return merged_defaults
 end

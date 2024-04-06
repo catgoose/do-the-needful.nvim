@@ -7,6 +7,7 @@ are parsed at execution time.
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
+
 - [do-the-needful](#do-the-needful)
   - [About](#about)
   - [Screenshots](#screenshots)
@@ -32,10 +33,8 @@ are parsed at execution time.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra)
-    - [Neovim](#neovim)
-    - [Tmux](#tmux)
-<!--toc:end-->
+  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
+  <!--toc:end-->
 
 ## About
 
@@ -64,7 +63,7 @@ are parsed at execution time.
 
 | ![Task spawned](https://tinyurl.com/3sftpu67 "Task spawned") |
 | :----------------------------------------------------------: |
-|        _Spawned task will close upon completion_         |
+|          _Spawned task will close upon completion_           |
 
 ## Usage
 
@@ -440,6 +439,7 @@ My other neovim projects
 
 - [neovim config](https://github.com/catgoose/nvim)
 - [telescope-helpgrep.nvim](https://github.com/catgoose/telescope-helpgrep.nvim)
+- [vue-goto-definition](https://github.com/catgoose/vue-goto-definition.nvim)
 
 ### Tmux
 

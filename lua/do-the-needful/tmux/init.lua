@@ -7,18 +7,16 @@ local window = require("do-the-needful.tmux.window")
 local M = {}
 
 local function tmux_running()
-	if not vim.env.TMUX then
-		Log.error("checking $TMUX env...tmux is not running")
-		return nil
-	end
-	return true
+  if not vim.env.TMUX then
+    Log.error("checking $TMUX env...tmux is not running")
+    return nil
+  end
+  return true
 end
 
 function M.run(task)
-	if not tmux_running() then
-		return nil
-	end
-	window.open(task)
+  if not tmux_running() then return nil end
+  window.open(task)
 end
 
 return M

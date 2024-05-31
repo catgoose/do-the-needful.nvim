@@ -166,7 +166,7 @@ ask = { -- Used to prompt for input to be passed into task
     other than "function", the literal value of default will be used.  If
     ask.type is "function", the named function in the ask_functions table will
     be evaluated for the default value passed into vim.ui.input ]]
-  }
+  },
 }
 ```
 
@@ -189,7 +189,7 @@ local opts = {
           default = "get_cwd", -- defaults to "".  If ask.type is string, the literal
           -- value of default will be used.  If ask.type is function the named
           -- function in the ask_functions section will be evaluated for the default
-        }
+        },
       },
       window = { -- all window options are optional
         name = "Eza ~", -- name of tmux window
@@ -218,8 +218,8 @@ local opts = {
   },
   edit_mode = "buffer", -- buffer, tab, split, vsplit
   config_file = ".tasks.json", -- name of json config file for project/global config
-  config_order = {-- default: { project, global, opts }.  Order in which
-  -- tasks are aggregated
+  config_order = { -- default: { project, global, opts }.  Order in which
+    -- tasks are aggregated
     "project", -- .task.json in project directory
     "global", -- .tasks.json in stdpath('data')
     "opts", -- tasks defined in setup opts
@@ -230,7 +230,7 @@ local opts = {
     ["${do-the-needful}"] = "please",
     ["${projectname}"] = function()
       return vim.fn.system("basename $(git rev-parse --show-toplevel)")
-    end
+    end,
   },
   ask_functions = {
     get_cwd = function()
@@ -238,7 +238,7 @@ local opts = {
     end,
     current_file = function()
       return vim.fn.expand("%")
-    end
+    end,
   },
 }
 
@@ -259,7 +259,6 @@ return {
 In your Telescope setup load the `do-the-needful` extension
 
 ```lua
-
 telescope.load_extension("do-the-needful")
 ```
 
@@ -280,8 +279,8 @@ Telescope options can also be passed into `please` or `actions` to override the
 above set defaults:
 
 ```lua
-require("do-the-needful").please({winblend = 5})
-require("do-the-needful").actions({prompt_title = "Actions"})
+require("do-the-needful").please({ winblend = 5 })
+require("do-the-needful").actions({ prompt_title = "Actions" })
 ```
 
 ## Configuration
@@ -317,7 +316,7 @@ ask_functions = {
   ["get_cwd"] = vim.fn.getcwd,
   ["current_file"] = function()
     return vim.fn.expand("%")
-  end
+  end,
 }
 ```
 
@@ -430,6 +429,13 @@ When calling the task config editing functions if the respective
   }>;
 }
 ```
+
+## Todo
+
+- Add api to add new task to a config
+- Zellij and terminal support
+- Support split in config
+- Support sending to task window on autocmd
 
 ## Extra
 

@@ -140,6 +140,8 @@ local _val = {
   log_levels = { "trace", "debug", "info", "warn", "error", "fatal" },
 }
 
-M.get = function() return deep_copy(_val) end
+M.get = function()
+  return deep_copy(_val)
+end
 
 return M

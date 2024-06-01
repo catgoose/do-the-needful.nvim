@@ -12,14 +12,22 @@ local M = {}
 local _opts = const.opts
 local _telescope_opts = const.telescope_setup
 
-function M.get_opts() return utils.deep_copy(_opts) end
+function M.get_opts()
+  return utils.deep_copy(_opts)
+end
 
-function M.get_telescope_opts() return utils.deep_copy(_telescope_opts) end
+function M.get_telescope_opts()
+  return utils.deep_copy(_telescope_opts)
+end
 
 local function validate_config_order(config_order)
   local valid = true
-  if not vim.tbl_islist(config_order) then return not valid end
-  if #config_order ~= #const.lists.config_order then return not valid end
+  if not vim.islist(config_order) then
+    return not valid
+  end
+  if #config_order ~= #const.lists.config_order then
+    return not valid
+  end
   local found = {}
   local Source = const.enum.Source
   for _, c in pairs(config_order) do

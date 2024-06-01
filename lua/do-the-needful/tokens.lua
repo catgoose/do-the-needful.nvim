@@ -12,8 +12,12 @@ local M = {}
 local function replace_tokens(str)
   local tokens = get_opts().global_tokens
   for k, v in pairs(tokens) do
-    if type(v) == "string" then str = utils.escaped_replace(str, k, v) end
-    if type(v) == "function" then str = utils.escaped_replace(str, k, v()) end
+    if type(v) == "string" then
+      str = utils.escaped_replace(str, k, v)
+    end
+    if type(v) == "function" then
+      str = utils.escaped_replace(str, k, v())
+    end
   end
   Log.trace(sf("Token.replace_tokens: %s", str))
   return str
@@ -79,7 +83,9 @@ local function ask_tokens(selection, task_cb)
               token,
               selection.cmd
             ))
-            if count == #configs then execute_task(selection, task_cb) end
+            if count == #configs then
+              execute_task(selection, task_cb)
+            end
           end
         end)
       end
@@ -96,7 +102,9 @@ M.replace = function(selection, task_cb)
     selection
   ))
   for _, field in pairs(const.token_replacement_fields) do
-    if selection[field] then selection[field] = replace_tokens(selection[field]) end
+    if selection[field] then
+      selection[field] = replace_tokens(selection[field])
+    end
   end
   ask_tokens(selection, task_cb)
 end

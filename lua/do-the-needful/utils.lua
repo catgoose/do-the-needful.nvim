@@ -24,7 +24,9 @@ function M.deep_copy(orig)
   return copy
 end
 
-M.indent_str = function(indent_n, str) return ("\t"):rep(indent_n) .. str end
+M.indent_str = function(indent_n, str)
+  return ("\t"):rep(indent_n) .. str
+end
 
 -- https://stackoverflow.com/questions/29072601/lua-string-gsub-with-a-hyphen
 function M.escaped_replace(str, what, with)
@@ -41,7 +43,9 @@ end
 function M.string_format(msg, ...)
   local args = { ... }
   for i, v in ipairs(args) do
-    if type(v) == "table" then args[i] = vim.inspect(v) end
+    if type(v) == "table" then
+      args[i] = vim.inspect(v)
+    end
   end
   return string.format(msg, unpack(args))
 end

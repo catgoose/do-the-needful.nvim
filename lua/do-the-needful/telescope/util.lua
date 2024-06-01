@@ -21,7 +21,9 @@ function M.get_telescope_opts(opts)
 end
 
 function M.entry_ordinal(task)
-  local tags = vim.tbl_map(function(tag) return "#" .. tag end, task.tags)
+  local tags = vim.tbl_map(function(tag)
+    return "#" .. tag
+  end, task.tags)
   return table.concat(tags, " ") .. " " .. task.name
 end
 

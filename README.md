@@ -33,6 +33,7 @@ are parsed at execution time.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
+  - [Todo](#todo)
   - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
   <!--toc:end-->
 
@@ -216,6 +217,7 @@ local opts = {
       },
     },
   },
+  adapter = "tmux", -- tmux, zellij, terminal
   edit_mode = "buffer", -- buffer, tab, split, vsplit
   config_file = ".tasks.json", -- name of json config file for project/global config
   config_order = { -- default: { project, global, opts }.  Order in which
@@ -262,7 +264,7 @@ In your Telescope setup load the `do-the-needful` extension
 telescope.load_extension("do-the-needful")
 ```
 
-Telescope defaults can be set in Telescope setup:
+Telescope defaults:
 
 ```lua
 require("telescope").setup({
@@ -275,8 +277,7 @@ require("telescope").setup({
 })
 ```
 
-Telescope options can also be passed into `please` or `actions` to override the
-above set defaults:
+Pass in Telescope options to `please` or `actions` to override the above set defaults:
 
 ```lua
 require("do-the-needful").please({ winblend = 5 })
@@ -360,7 +361,7 @@ the token `${dir}` in the task command.
 
 ## Editing project and global configs
 
-The Telescope picker will easily let you choose which config to edit
+The Telescope picker will let you choose which config to edit
 
 ```lua
 :Telescope do-the-needful
@@ -419,6 +420,7 @@ When calling the task config editing functions if the respective
         default: string;
       };
     };
+    adapter: "tmux" | "zellij" | "terminal";
     window: {
       name: string;
       close: boolean;
@@ -432,7 +434,7 @@ When calling the task config editing functions if the respective
 
 ## Todo
 
-- Add api to add new task to a config
+- Add api to add new task to a .task.json
 - Zellij and terminal support
 - Support split in config
 - Support sending to task window on autocmd

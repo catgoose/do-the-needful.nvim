@@ -21,8 +21,9 @@ local function validate_config_order(config_order)
   if not vim.tbl_islist(config_order) then return not valid end
   if #config_order ~= #const.lists.config_order then return not valid end
   local found = {}
+  local Source = const.enum.Source
   for _, c in pairs(config_order) do
-    if c ~= "project" and c ~= "global" and c ~= "opts" then
+    if c ~= Source.project and c ~= Source.global and c ~= Source.opts then
       valid = false
       break
     end

@@ -68,13 +68,24 @@ local function validate_tags(config)
   end
 end
 
-local function validate_window(task, relative)
+local function validate_window(task)
+  local Relative = const.enum.Relative
+  local relative = {}
+  for _, rel in pairs(Relative) do
+    relative[#relative + 1] = rel
+  end
   local window = task.window
-  if not window then return end
-  if window.name and #window.name == 0 then window.name = nil end
+  if not window then
+    return
+  end
+  if window.name and #window.name == 0 then
+    window.name = nil
+  end
   local properties = { "close", "keep_current", "open_relative" }
   for _, prop in ipairs(properties) do
-    if window[prop] and type(window[prop]) ~= "boolean" then window[prop] = nil end
+    if window[prop] and type(window[prop]) ~= "boolean" then
+      window[prop] = nil
+    end
   end
   if window.relative and not vim.tbl_contains(relative, window.relative) then
     Log.warn(
@@ -116,9 +127,6 @@ merged_defaults: %s]],
 end
 
 function M.tasks(tasks)
-  ---@type relative
-  local relative = { "after", "before" }
-
   local remove = {}
   for i, task in pairs(tasks) do
     if not validate_task_cmd(task, i) then
@@ -126,7 +134,7 @@ function M.tasks(tasks)
     else
       validate_name(task)
       validate_tags(task)
-      validate_window(task, relative)
+      validate_window(task)
       tasks[i] = merge_defaults(task)
     end
   end

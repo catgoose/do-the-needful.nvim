@@ -1,4 +1,5 @@
 local Log = require("do-the-needful").Log
+local const = require("do-the-needful.constants").get()
 local extend = vim.list_extend
 local sf = require("do-the-needful.utils").string_format
 
@@ -13,7 +14,7 @@ function M.build_cmd_args(task)
   local cmd_args = { "tmux", "new-window" }
   if task.window.keep_current then extend(cmd_args, { "-d" }) end
   if task.window.open_relative then
-    if task.window.relative == "before" then
+    if task.window.relative == const.enum.Relative.before then
       extend(cmd_args, { "-b" })
     else
       extend(cmd_args, { "-a" })

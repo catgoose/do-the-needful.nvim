@@ -11,16 +11,21 @@ local sf = utils.string_format
 ---@field tags? string[]
 ---@field ask? table
 ---@field window? TmuxWindow
----@field source? source
----@enum source "global" | "project" | "opts"
+---@field source? Source
+---@enum Source
+---| "global"
+---| "project"
+---| "opts"
 
 ---@class TmuxWindow
 ---@field name? string
 ---@field close? boolean
 ---@field keep_current? boolean
 ---@field open_relative? boolean
----@field relative? relative
----@enum relative "before" "after"
+---@field relative? Relative
+---@enum Relative
+---| "before"
+---| "after"
 
 ---@class Collect
 ---@field tasks fun(): TaskConfig[]

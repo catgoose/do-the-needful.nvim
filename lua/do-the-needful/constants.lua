@@ -16,6 +16,17 @@ local default_log_level = "warn"
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
+---@field adapter Adapter
+
+---@enum Adapter
+---| "tmux" # Tmux adapter
+---| "zellij" # Zellij adapter
+---| "terminal" # Terminal adapter
+local Adapter = {
+  tmux = "tmux",
+  zellij = "zellij",
+  terminal = "terminal",
+}
 
 ---@class Constants
 ---@field get_val fun(): Constants._val
@@ -35,6 +46,18 @@ local M = {}
 ---@field default_log_level string
 ---@field log_levels string[]
 local _val = {
+  enum = {
+    Relative = {
+      after = "after",
+      before = "before",
+    },
+    Source = {
+      global = "global",
+      project = "project",
+      opts = "opts",
+    },
+    Adapter = Adapter,
+  },
   plugin_name = "do-the-needful",
   task_preview_field_order = {
     "name",
@@ -62,6 +85,7 @@ local _val = {
       "global",
       "opts",
     },
+    adapter = Adapter.tmux,
     edit_mode = "buffer",
     tag_source = true,
     global_tokens = {

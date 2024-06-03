@@ -35,6 +35,9 @@ function M.tasks(opts)
         actions.select_default:replace(function()
           actions.close(prompt_bufnr)
           local selection = action_state.get_selected_entry()
+          if not selection then
+            return
+          end
           tokens.replace(selection.value, function(task)
             Log.trace(sf("task_picker: opening task %s", task))
             tmux.run(task)

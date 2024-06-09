@@ -16,13 +16,12 @@ local default_log_level = "warn"
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
----@field adapter Adapter
 
----@enum Adapter
----| "tmux" # Tmux adapter
----| "zellij" # Zellij adapter
----| "terminal" # Terminal adapter
-local Adapter = {
+---@enum RunAdapter
+---| "tmux"
+---| "zellij"
+---| "terminal"
+local RunAdapter = {
   tmux = "tmux",
   zellij = "zellij",
   terminal = "terminal",
@@ -34,6 +33,7 @@ local Adapter = {
 local M = {}
 
 ---@class Constants._val
+---@field enum table
 ---@field plugin_name string
 ---@field task_preview_field_order string[]
 ---@field token_replacement_fields string[]
@@ -56,8 +56,11 @@ local _val = {
       project = "project",
       opts = "opts",
     },
-    Adapter = Adapter,
+    RunAdapter = RunAdapter,
   },
+  run_adapter = vim.env.TMUX and RunAdapter.tmux
+    or vim.env.ZELLIJ and RunAdapter.zellij
+    or RunAdapter.terminal,
   plugin_name = "do-the-needful",
   task_preview_field_order = {
     "name",
@@ -85,7 +88,6 @@ local _val = {
       "global",
       "opts",
     },
-    adapter = Adapter.tmux,
     edit_mode = "buffer",
     tag_source = true,
     global_tokens = {

@@ -10,14 +10,14 @@ local sf = utils.string_format
 ---@field cwd? string
 ---@field tags? string[]
 ---@field ask? table
----@field window? TmuxWindow
+---@field window? MultiplexWindow
 ---@field source? Source
 ---@enum Source
 ---| "global"
 ---| "project"
 ---| "opts"
 
----@class TmuxWindow
+---@class MultiplexWindow
 ---@field name? string
 ---@field close? boolean
 ---@field keep_current? boolean

@@ -2,11 +2,11 @@ local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local action_state = require("telescope.actions.state")
 local actions = require("telescope.actions")
+local adapter = require("do-the-needful.adapter")
 local collect = require("do-the-needful.collect")
 local const = require("do-the-needful.constants").get()
 local edit = require("do-the-needful.edit")
 local pickers = require("telescope.pickers")
-local tmux = require("do-the-needful.tmux")
 local tokens = require("do-the-needful.tokens")
 local Log = require("do-the-needful").Log
 local sf = require("do-the-needful.utils").string_format
@@ -40,7 +40,7 @@ function M.tasks(opts)
           end
           tokens.replace(selection.value, function(task)
             Log.trace(sf("task_picker: opening task %s", task))
-            tmux.run(task)
+            adapter.run(task)
           end)
         end)
         return true

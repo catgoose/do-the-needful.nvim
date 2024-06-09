@@ -65,7 +65,7 @@ function M.json_from_path(path)
       return json
     end
   end
-  return nil
+  return
 end
 
 return M

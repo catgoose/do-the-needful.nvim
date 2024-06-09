@@ -4,7 +4,7 @@ local cfg = require("do-the-needful.config")
 ---@field setup fun(opts: table)
 ---@field telescope_setup fun(opts: table)
 ---@field Log Logger
----@field edit_config fun(opts: source)
+---@field edit_config fun(opts: Source)
 ---@field please fun()
 ---@return DoTheNeedful
 local M = {}

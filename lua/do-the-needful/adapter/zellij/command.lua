@@ -3,13 +3,13 @@ local const = require("do-the-needful.constants").get()
 local extend = vim.list_extend
 local sf = require("do-the-needful.utils").string_format
 
----@class MultiplexZellijCommand
+---@class ZellijCommand
 ---@field build fun(task: TaskConfig): string[]
----@return MultiplexZellijCommand
+---@return ZellijCommand
 local M = {}
 
 function M.build(task, pane)
-  Log.warn("zellij.build: not implemented")
+  Log.warn("zellij.command.build: not implemented")
 end
 
 return M

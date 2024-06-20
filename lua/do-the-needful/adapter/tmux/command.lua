@@ -3,14 +3,14 @@ local const = require("do-the-needful.constants").get()
 local extend = vim.list_extend
 local sf = require("do-the-needful.utils").string_format
 
----@class MultiplexTmuxCommand
+---@class TmuxCommand
 ---@field build fun(task: TaskConfig): string[]
----@return MultiplexTmuxCommand
+---@return TmuxCommand
 local M = {}
 
 local function window_cmd(task)
   Log.trace(sf(
-    [[command.tmux.build_cmd(): using selected task:
+    [[tmux.command.build_cmd(): using selected task:
   %s]],
     task
   ))

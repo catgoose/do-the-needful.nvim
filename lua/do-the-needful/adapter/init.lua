@@ -16,16 +16,8 @@ function M.run(task)
     return
   end
 
-  local adapter_ok, adapter
-  if const.run_adapter == const.enum.RunAdapter.terminal then
-    adapter_ok, adapter = pcall(require, "do-the-needful.adapter.terminal")
-  elseif
-    const.run_adapter == const.enum.RunAdapter.tmux
-    or const.run_adapter == const.enum.RunAdapter.zellij
-  then
-    adapter_ok, adapter = pcall(require, "do-the-needful.adapter.multiplexer")
-  end
-  if not adapter_ok or not adapter then
+  local ok, adapter = pcall(require, string.format("do-the-needful.adapter.%s", const.run_adapter))
+  if not ok or not adapter then
     return
   end
   if not adapter.run then
@@ -45,7 +37,7 @@ function M.run(task)
     adapter: %s
     ]],
     const.run_adapter,
-    adapter_ok,
+    ok,
     adapter
   ))
   adapter.run(task)

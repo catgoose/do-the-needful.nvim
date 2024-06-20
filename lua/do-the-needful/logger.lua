@@ -16,7 +16,7 @@ function M.init()
     level = get_opts().log_level,
     fmt_msg = function(_, mode_name, src_path, src_line, msg)
       local nameupper = mode_name:upper()
-      local lineinfo = vim.fn.fnamemodify(src_path, ":t") .. ":" .. src_line
+      local lineinfo = string.format("%s:%s", vim.fn.fnamemodify(src_path, ":t"), src_line)
       local log_message = sf("[%s %s] %s: %s", nameupper, os.date("%H:%M:%S"), lineinfo, msg)
       return log_message
     end,

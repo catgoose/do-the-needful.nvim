@@ -26,7 +26,7 @@ end
 local function input_opts(token, ask)
   local funcs = get_opts().ask_functions
   local opts = {
-    prompt = (ask.title or token) .. ": ",
+    prompt = string.format("%s: ", ask.title or token),
   }
   if ask.type == "function" and funcs[ask.default] then
     local ok, default = pcall(funcs[ask.default])

@@ -22,9 +22,9 @@ end
 
 function M.entry_ordinal(task)
   local tags = vim.tbl_map(function(tag)
-    return "#" .. tag
+    return string.format("#%s", tag)
   end, task.tags)
-  return table.concat(tags, " ") .. " " .. task.name
+  return string.format("%s %s", task.name, table.concat(tags, " "))
 end
 
 function M.entry_display(entry)
@@ -43,7 +43,7 @@ function M.entry_display(entry)
     end
   end
   if get_opts().tag_source then
-    vim.list_extend(items, { "#" .. entry.value.source })
+    vim.list_extend(items, { string.format("#%s", entry.value.source) })
     vim.list_extend(highlights, {
       { { start, start + #entry.value.source + 1 }, "TelescopeResultsComment" },
     })

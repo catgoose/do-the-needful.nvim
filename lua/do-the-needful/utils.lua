@@ -25,7 +25,7 @@ function M.deep_copy(orig)
 end
 
 M.indent_str = function(indent_n, str)
-  return ("\t"):rep(indent_n) .. str
+  return string.format("%s%s", ("\t"):rep(indent_n), str)
 end
 
 -- https://stackoverflow.com/questions/29072601/lua-string-gsub-with-a-hyphen

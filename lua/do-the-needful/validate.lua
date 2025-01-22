@@ -70,11 +70,17 @@ end
 
 local function validate_window(task, relative)
   local window = task.window
-  if not window then return end
-  if window.name and #window.name == 0 then window.name = nil end
+  if not window then
+    return
+  end
+  if window.name and #window.name == 0 then
+    window.name = nil
+  end
   local properties = { "close", "keep_current", "open_relative" }
   for _, prop in ipairs(properties) do
-    if window[prop] and type(window[prop]) ~= "boolean" then window[prop] = nil end
+    if window[prop] and type(window[prop]) ~= "boolean" then
+      window[prop] = nil
+    end
   end
   if window.relative and not vim.tbl_contains(relative, window.relative) then
     Log.warn(

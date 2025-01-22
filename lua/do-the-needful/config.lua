@@ -23,6 +23,8 @@ local function validate_config_order(config_order)
   local valid = true
   if not vim.tbl_islist(config_order) then return not valid end
   if #config_order ~= #const.lists.config_order then return not valid end
+  local is_list = vim.fn.has("nvim-0.10") == 1 and vim.islist or vim.tbl_islist
+  if not is_list(config_order) then
   local found = {}
   for _, c in pairs(config_order) do
     if c ~= "project" and c ~= "global" and c ~= "opts" then

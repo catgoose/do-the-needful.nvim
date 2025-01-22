@@ -9,9 +9,17 @@ end
 return telescope.register_extension({
   setup = require("do-the-needful.config").telescope_setup,
   exports = {
-    please = function(opts) pickers.tasks(opts) end,
-    ["do-the-needful"] = function(opts) pickers.actions(opts) end,
-    project = function() require("do-the-needful").Edit.edit_config("project") end,
-    global = function() require("do-the-needful").Edit.edit_config("global") end,
+    please = function(opts)
+      pickers.tasks(opts)
+    end,
+    ["do-the-needful"] = function(opts)
+      pickers.actions(opts)
+    end,
+    project = function()
+      require("do-the-needful").Edit.edit_config("project")
+    end,
+    global = function()
+      require("do-the-needful").Edit.edit_config("global")
+    end,
   },
 })

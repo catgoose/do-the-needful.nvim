@@ -12,7 +12,9 @@ function M.build_cmd_args(task)
   Log.trace(sf("tmux.command.build_command(): using selected task %s", task))
   local cmd_args = { "tmux", "new-window" }
   extend(cmd_args, { "-c", vim.fn.getcwd() })
-  if task.window.keep_current then extend(cmd_args, { "-d" }) end
+  if task.window.keep_current then
+    extend(cmd_args, { "-d" })
+  end
   if task.window.open_relative then
     if task.window.relative == "before" then
       extend(cmd_args, { "-b" })

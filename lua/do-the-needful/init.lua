@@ -20,8 +20,12 @@ function M.edit_config(opts)
   require("do-the-needful.edit").edit_config(opts)
 end
 
-function M.please(opts) require("do-the-needful.telescope").tasks(opts) end
+function M.please(opts)
+  require("do-the-needful.telescope").tasks(opts)
+end
 
-function M.actions(opts) require("do-the-needful.telescope").actions(opts) end
+function M.actions(opts)
+  require("do-the-needful.telescope").actions(opts)
+end
 
 return M

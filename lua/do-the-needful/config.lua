@@ -17,14 +17,19 @@ function M.get_opts()
   return utils.deep_copy(_opts)
 end
 
-function M.get_telescope_opts() return utils.deep_copy(_telescope_opts) end
+function M.get_telescope_opts()
+  return utils.deep_copy(_telescope_opts)
+end
 
 local function validate_config_order(config_order)
   local valid = true
-  if not vim.tbl_islist(config_order) then return not valid end
-  if #config_order ~= #const.lists.config_order then return not valid end
   local is_list = vim.fn.has("nvim-0.10") == 1 and vim.islist or vim.tbl_islist
   if not is_list(config_order) then
+    return not valid
+  end
+  if #config_order ~= #const.lists.config_order then
+    return not valid
+  end
   local found = {}
   for _, c in pairs(config_order) do
     if c ~= "project" and c ~= "global" and c ~= "opts" then
@@ -42,9 +47,9 @@ end
 
 local function set_opts_defaults(opts)
   opts.config_order = validate_config_order(opts.config_order) and opts.config_order
-      or _opts.config_order
+    or _opts.config_order
   opts.edit_mode = vim.tbl_contains(const.lists.edit_modes, opts.edit_mode) and opts.edit_mode
-      or _opts.edit_mode
+    or _opts.edit_mode
   if #opts.config_order < 3 then
     opts.config_order = vim.tbl_extend("keep", opts.config_order, _opts.config_order)
   end
@@ -53,7 +58,7 @@ end
 
 local function set_local_opts(opts)
   _opts.log_level = vim.tbl_contains(const.log_levels, opts.log_level) and opts.log_level
-      or const.default_log_level
+    or const.default_log_level
   _opts = vim.tbl_deep_extend("keep", opts, _opts)
   _opts.configs = {
     global = {

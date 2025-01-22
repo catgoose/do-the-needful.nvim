@@ -15,7 +15,9 @@ local function tmux_running()
 end
 
 function M.run(task)
-  if not tmux_running() then return nil end
+  if not tmux_running() then
+    return nil
+  end
   window.open(task)
 end
 

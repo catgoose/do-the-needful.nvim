@@ -35,7 +35,9 @@ function M.edit_config(config)
   local file = get_opts().configs[config].path
   edit_file(file)
   local file_h = Path:new(file)
-  if not file_h:exists() or #file_h:read() == 0 then populate_config() end
+  if not file_h:exists() or #file_h:read() == 0 then
+    populate_config()
+  end
   Log.trace(sf("init.edit_config(): editing config type: %s", config))
 end
 

@@ -1,3 +1,40 @@
+---@mod do-the-needful Do The Needful
+---@tag do-the-needful.nvim
+---@brief [[
+---Task runner with multiple picker and runner backends.
+---Pick a task, run it anywhere.
+---
+---Requires Neovim >= 0.10
+---
+---Usage:
+---
+--->lua
+---  require("do-the-needful").setup({
+---    tasks = {
+---      { name = "build", cmd = "make build", tags = { "build" } },
+---    },
+---  })
+---<
+---
+---COMMANDS ~
+---
+---  `:Needful [tags...]`       Open task picker, optionally filter by tags
+---  `:NeedfulRerun`            Re-run the last executed task
+---  `:NeedfulRun <name>`       Run a task by name (tab completion supported)
+---  `:NeedfulEdit [scope]`     Edit project or global config
+---
+---LUA API ~
+---
+--->lua
+---  require("do-the-needful").please()                    -- open picker
+---  require("do-the-needful").please({ tags = {"build"} }) -- filter by tags
+---  require("do-the-needful").actions()                   -- actions picker
+---  require("do-the-needful").rerun()                     -- re-run last task
+---  require("do-the-needful").run_by_name("tests")        -- run by name
+---  require("do-the-needful").edit_config("project")      -- edit config
+---<
+---@brief ]]
+
 local cfg = require("do-the-needful.config")
 
 ---@class DoTheNeedful
@@ -39,6 +76,8 @@ local function collect_tasks(opts)
   return tasks
 end
 
+--- Setup do-the-needful with user options.
+---@param opts? Opts User configuration, merged with defaults
 function M.setup(opts)
   opts = opts or {}
   cfg.init(opts)
@@ -46,11 +85,15 @@ function M.setup(opts)
   require("do-the-needful.commands").register()
 end
 
+--- Edit a task config file.
+---@param opts? string Config scope: "project" (default) or "global"
 function M.edit_config(opts)
   opts = opts or "project"
   require("do-the-needful.edit").edit_config(opts)
 end
 
+--- Open the task picker. Optionally filter by tags.
+---@param opts? table Options table, supports `tags` key for filtering
 function M.please(opts)
   local tokens = require("do-the-needful.tokens")
   local picker = require("do-the-needful.picker")
@@ -65,6 +108,8 @@ function M.please(opts)
   end, opts)
 end
 
+--- Open the actions picker (edit config, run tasks, etc).
+---@param opts? table Picker options
 function M.actions(opts)
   local edit = require("do-the-needful.edit")
   local picker = require("do-the-needful.picker")
@@ -78,6 +123,7 @@ function M.actions(opts)
   end, opts)
 end
 
+--- Re-run the last executed task.
 function M.rerun()
   local state = require("do-the-needful.state")
   local last = state.get_last_task()
@@ -88,6 +134,8 @@ function M.rerun()
   run_task(last)
 end
 
+--- Run a task by its name directly, without opening a picker.
+---@param name string The task name to match
 function M.run_by_name(name)
   local tokens = require("do-the-needful.tokens")
   local tasks = collect_tasks()

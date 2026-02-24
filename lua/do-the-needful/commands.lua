@@ -1,3 +1,14 @@
+---@mod do-the-needful.commands User Commands
+---@brief [[
+---Registers Neovim user commands for do-the-needful.
+---
+---Commands:
+---  `:Needful [tags...]`         Open task picker, optionally filter by tags
+---  `:NeedfulRerun`              Re-run the last executed task
+---  `:NeedfulRun <name>`         Run a task by name (tab completion supported)
+---  `:NeedfulEdit [scope]`       Edit project or global config
+---@brief ]]
+
 local M = {}
 
 local function get_task_names()
@@ -31,6 +42,7 @@ local function get_all_tags()
   return tags
 end
 
+--- Register all do-the-needful user commands.
 function M.register()
   vim.api.nvim_create_user_command("Needful", function(cmd_opts)
     local dtn = require("do-the-needful")

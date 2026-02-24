@@ -6,7 +6,6 @@ anywhere. Task commands can use tokens that are parsed at execution time.
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [About](#about)
   - [Screenshots](#screenshots)
@@ -39,8 +38,10 @@ anywhere. Task commands can use tokens that are parsed at execution time.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
-  <!--toc:end-->
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
 ## About
 
@@ -104,13 +105,13 @@ All commands support tab completion.
 ### API
 
 ```lua
-require("do-the-needful").please()                -- Open task picker
-require("do-the-needful").please({ tags = {"build"} }) -- Filter by tags
-require("do-the-needful").actions()               -- Open actions picker
-require("do-the-needful").rerun()                 -- Re-run last task
-require("do-the-needful").run_by_name("tests")    -- Run task by name
-require("do-the-needful").edit_config("project")  -- Edit project config
-require("do-the-needful").edit_config("global")   -- Edit global config
+require("do-the-needful").please() -- Open task picker
+require("do-the-needful").please({ tags = { "build" } }) -- Filter by tags
+require("do-the-needful").actions() -- Open actions picker
+require("do-the-needful").rerun() -- Re-run last task
+require("do-the-needful").run_by_name("tests") -- Run task by name
+require("do-the-needful").edit_config("project") -- Edit project config
+require("do-the-needful").edit_config("global") -- Edit global config
 ```
 
 ### Telescope pickers
@@ -190,11 +191,11 @@ Runner backends read the `window` table from each task:
 
 ```lua
 window = {
-  name = "name",          -- window/pane name
-  close = false,          -- close after execution
-  keep_current = false,   -- keep focus on current window
-  open_relative = true,   -- open after/before current window (tmux)
-  relative = "after",     -- "after" or "before" (tmux)
+  name = "name", -- window/pane name
+  close = false, -- close after execution
+  keep_current = false, -- keep focus on current window
+  open_relative = true, -- open after/before current window (tmux)
+  relative = "after", -- "after" or "before" (tmux)
 }
 ```
 
@@ -298,8 +299,8 @@ ask = { -- Used to prompt for input to be passed into task
 
 ```lua
 local opts = {
-  picker = "auto",    -- "auto", "telescope", "fzf_lua", "snacks", "ui_select"
-  runner = "auto",    -- "auto", "tmux", "zellij", "neovim", "toggleterm"
+  picker = "auto", -- "auto", "telescope", "fzf_lua", "snacks", "ui_select"
+  runner = "auto", -- "auto", "tmux", "zellij", "neovim", "toggleterm"
   tasks = {
     {
       name = "eza", -- name of task

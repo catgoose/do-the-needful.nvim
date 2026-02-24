@@ -19,13 +19,22 @@ function M.run(task)
   local close = not task.window or task.window.close ~= false
   local keep_current = task.window and task.window.keep_current
 
+  local opts = task.toggleterm or {}
+
   local prev_win = vim.api.nvim_get_current_win()
-  local term = Terminal:new({
+  local term_opts = {
     cmd = task.cmd,
     dir = cwd,
     display_name = win_name,
     close_on_exit = close,
-  })
+  }
+  if opts.direction then
+    term_opts.direction = opts.direction
+  end
+  if opts.size then
+    term_opts.size = opts.size
+  end
+  local term = Terminal:new(term_opts)
   term:toggle()
   if keep_current then
     vim.api.nvim_set_current_win(prev_win)

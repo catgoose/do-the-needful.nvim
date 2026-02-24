@@ -199,6 +199,76 @@ window = {
 }
 ```
 
+### Provider-specific options
+
+Each runner backend supports its own options via a provider key on the task.
+These are optional and complement the shared `window` table.
+
+#### tmux
+
+```lua
+tmux = {
+  split = true,            -- use split-window instead of new-window
+  direction = "horizontal", -- "horizontal" or "vertical" (split only)
+  size = "30%",            -- pane size, e.g. "30%" or 20 (split only)
+  full_span = true,        -- full-width/height split (split only)
+  reuse = true,            -- reuse window with same name (new-window only)
+  environment = {          -- environment variables passed with -e
+    MY_VAR = "value",
+  },
+}
+```
+
+#### zellij
+
+```lua
+zellij = {
+  direction = "down",      -- "up", "down", "left", "right"
+  floating = true,         -- open as floating pane
+  in_place = true,         -- open in place of current pane
+  start_suspended = true,  -- start pane suspended
+  width = "80%",           -- pane width
+  height = "50%",          -- pane height
+  x = 10,                  -- pane x position
+  y = 5,                   -- pane y position
+}
+```
+
+> **Note:** `window.keep_current` no longer maps to `--floating` in zellij.
+> Use `zellij = { floating = true }` instead.
+
+#### neovim
+
+```lua
+neovim = {
+  split = "vsplit",        -- vim split command (default: "botright split")
+  size = 40,               -- size prefix for split command (e.g. 40vsplit)
+}
+```
+
+#### toggleterm
+
+```lua
+toggleterm = {
+  direction = "float",     -- "horizontal", "vertical", "float", "tab"
+  size = 20,               -- terminal size
+}
+```
+
+JSON example:
+
+```json
+{
+  "name": "tests",
+  "cmd": "make test",
+  "tmux": {
+    "split": true,
+    "direction": "vertical",
+    "size": "40%"
+  }
+}
+```
+
 ### Per-task runner override
 
 Individual tasks can specify which runner to use regardless of the global
@@ -557,6 +627,32 @@ When calling the task config editing functions if the respective
       keep_current: boolean;
       open_relative: boolean;
       relative: "before" | "after";
+    };
+    tmux?: {
+      split: boolean;
+      direction: "horizontal" | "vertical";
+      size: string | number;
+      full_span: boolean;
+      reuse: boolean;
+      environment: Record<string, string>;
+    };
+    zellij?: {
+      direction: "up" | "down" | "left" | "right";
+      floating: boolean;
+      in_place: boolean;
+      start_suspended: boolean;
+      width: string | number;
+      height: string | number;
+      x: string | number;
+      y: string | number;
+    };
+    neovim?: {
+      split: string;
+      size: number;
+    };
+    toggleterm?: {
+      direction: "horizontal" | "vertical" | "float" | "tab";
+      size: number;
     };
   }>;
 }

@@ -10,17 +10,48 @@ local sf = utils.string_format
 ---@field cwd? string
 ---@field tags? string[]
 ---@field ask? table
----@field window? TmuxWindow
+---@field window? WindowConfig
+---@field runner? string
+---@field tmux? TmuxOpts
+---@field zellij? ZellijOpts
+---@field neovim? NeovimOpts
+---@field toggleterm? ToggletirmOpts
 ---@field source? source
 ---@enum source "global" | "project" | "opts"
 
----@class TmuxWindow
+---@class WindowConfig
 ---@field name? string
 ---@field close? boolean
 ---@field keep_current? boolean
 ---@field open_relative? boolean
 ---@field relative? relative
 ---@enum relative "before" "after"
+
+---@class TmuxOpts
+---@field split? boolean
+---@field direction? "horizontal"|"vertical"
+---@field size? string|number
+---@field full_span? boolean
+---@field reuse? boolean
+---@field environment? table<string, string>
+
+---@class ZellijOpts
+---@field direction? "up"|"down"|"left"|"right"
+---@field floating? boolean
+---@field in_place? boolean
+---@field start_suspended? boolean
+---@field width? string|number
+---@field height? string|number
+---@field x? string|number
+---@field y? string|number
+
+---@class NeovimOpts
+---@field split? string
+---@field size? number
+
+---@class ToggletirmOpts
+---@field direction? "horizontal"|"vertical"|"float"|"tab"
+---@field size? number|function
 
 ---@class Collect
 ---@field tasks fun(): TaskConfig[]

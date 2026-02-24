@@ -94,6 +94,23 @@ local function validate_window(task, relative)
   end
 end
 
+local provider_keys = { "tmux", "zellij", "neovim", "toggleterm" }
+
+local function validate_provider_opts(task)
+  for _, key in ipairs(provider_keys) do
+    if task[key] ~= nil and type(task[key]) ~= "table" then
+      dtn.Log.warn(
+        sf(
+          "validate.validate_provider_opts: task has invalid %s property. Expecting a table. Setting to nil. task: %s",
+          key,
+          task
+        )
+      )
+      task[key] = nil
+    end
+  end
+end
+
 local function merge_defaults(config)
   local defaults = const.task_defaults
   dtn.Log.debug(sf(
@@ -133,6 +150,7 @@ function M.tasks(tasks)
       validate_name(task)
       validate_tags(task)
       validate_window(task, relative)
+      validate_provider_opts(task)
       tasks[i] = merge_defaults(task)
     end
   end

@@ -16,6 +16,10 @@ local default_log_level = "warn"
 ---@field tag_source boolean
 ---@field global_tokens table
 ---@field ask_functions table
+---@field picker string
+---@field runner string
+---@field picker_priority string[]
+---@field runner_priority string[]
 
 ---@class Constants
 ---@field get_val fun(): Constants._val
@@ -40,6 +44,7 @@ local _val = {
     "name",
     "cmd",
     "cwd",
+    "runner",
     "window",
     "tags",
     "ask",
@@ -69,6 +74,10 @@ local _val = {
       ["${do-the-needful}"] = "please",
     },
     ask_functions = {},
+    picker = "auto",
+    runner = "auto",
+    picker_priority = { "telescope", "fzf_lua", "snacks", "ui_select" },
+    runner_priority = { "tmux", "zellij", "toggleterm", "neovim" },
   },
   telescope_setup = {},
   telescope_opts = {

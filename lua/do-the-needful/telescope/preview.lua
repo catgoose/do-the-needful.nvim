@@ -1,7 +1,7 @@
 local const = require("do-the-needful.constants").get()
 local utils = require("do-the-needful.utils")
 local sf = utils.string_format
-local Log = require("do-the-needful").Log
+local dtn = require("do-the-needful")
 
 ---@class Preview
 ---@field render fun(task: table)
@@ -33,7 +33,7 @@ function M.render(task)
   end
   lines[#lines] = lines[#lines]:sub(1, -2)
   table.insert(lines, "}")
-  Log.trace(
+  dtn.Log.trace(
     sf(
       "task.task_preview(): using field order: %s for task %s to create lines %s to be used for preview",
       const.task_preview_field_order,

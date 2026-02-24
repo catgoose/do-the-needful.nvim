@@ -13,7 +13,6 @@ local _opts = const.opts
 local _telescope_opts = const.telescope_setup
 
 function M.get_opts()
-  -- _opts.configs.project.path = sf("%s/%s", vim.fn.getcwd(), _opts.config_file)
   return utils.deep_copy(_opts)
 end
 
@@ -23,7 +22,7 @@ end
 
 local function validate_config_order(config_order)
   local valid = true
-  local is_list = vim.fn.has("nvim-0.10") == 1 and vim.islist or vim.tbl_islist
+  local is_list = vim.islist
   if not is_list(config_order) then
     return not valid
   end

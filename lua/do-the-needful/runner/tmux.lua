@@ -13,22 +13,54 @@ end
 
 local function build_cmd_args(task)
   dtn.Log.trace(sf("runner.tmux.build_cmd_args(): using selected task %s", task))
-  local cmd_args = { "tmux", "new-window" }
+  local opts = task.tmux or {}
+  local is_split = opts.split == true
+
+  local cmd_args = { "tmux", is_split and "split-window" or "new-window" }
   extend(cmd_args, { "-c", task.cwd or vim.fn.getcwd() })
+
   if task.window and task.window.keep_current then
     extend(cmd_args, { "-d" })
   end
-  if task.window and task.window.open_relative then
-    if task.window.relative == "before" then
-      extend(cmd_args, { "-b" })
-    else
-      extend(cmd_args, { "-a" })
+
+  if is_split then
+    -- Split-specific flags
+    if opts.direction == "horizontal" then
+      extend(cmd_args, { "-h" })
+    elseif opts.direction == "vertical" then
+      extend(cmd_args, { "-v" })
+    end
+    if opts.size then
+      extend(cmd_args, { "-l", tostring(opts.size) })
+    end
+    if opts.full_span then
+      extend(cmd_args, { "-f" })
+    end
+  else
+    -- New-window-specific flags
+    if task.window and task.window.open_relative then
+      if task.window.relative == "before" then
+        extend(cmd_args, { "-b" })
+      else
+        extend(cmd_args, { "-a" })
+      end
+    end
+    if opts.reuse then
+      extend(cmd_args, { "-S" })
+    end
+    local win_name = (task.window and task.window.name) or task.name
+    if win_name then
+      extend(cmd_args, { "-n", win_name })
     end
   end
-  local win_name = (task.window and task.window.name) or task.name
-  if win_name then
-    extend(cmd_args, { "-n", win_name })
+
+  -- Environment variables (both split and new-window)
+  if opts.environment then
+    for k, v in pairs(opts.environment) do
+      extend(cmd_args, { "-e", k .. "=" .. v })
+    end
   end
+
   if task.window and task.window.close then
     extend(cmd_args, { task.cmd })
   else

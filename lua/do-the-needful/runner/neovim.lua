@@ -17,9 +17,15 @@ function M.run(task)
   local close = not task.window or task.window.close ~= false
   local win_name = (task.window and task.window.name) or task.name or "needful"
 
+  local opts = task.neovim or {}
+  local split_cmd = opts.split or "botright split"
+  if opts.size then
+    split_cmd = tostring(opts.size) .. split_cmd
+  end
+
   local prev_win = vim.api.nvim_get_current_win()
   local buf = vim.api.nvim_create_buf(false, true)
-  vim.cmd("botright split")
+  vim.cmd(split_cmd)
   vim.api.nvim_win_set_buf(0, buf)
   local term_win = vim.api.nvim_get_current_win()
 

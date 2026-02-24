@@ -14,6 +14,7 @@ function M.run(task)
   dtn.Log.trace(sf("runner.zellij.run(): running task %s", task))
   local cwd = task.cwd or vim.fn.getcwd()
   local win_name = (task.window and task.window.name) or task.name or "needful"
+  local opts = task.zellij or {}
 
   local args = { "zellij", "run", "--name", win_name, "--cwd", cwd }
 
@@ -21,8 +22,30 @@ function M.run(task)
     table.insert(args, "--close-on-exit")
   end
 
-  if task.window and task.window.keep_current then
+  -- Provider-specific options from task.zellij
+  if opts.direction then
+    vim.list_extend(args, { "--direction", opts.direction })
+  end
+  if opts.floating then
     table.insert(args, "--floating")
+  end
+  if opts.in_place then
+    table.insert(args, "--in-place")
+  end
+  if opts.start_suspended then
+    table.insert(args, "--start-suspended")
+  end
+  if opts.width then
+    vim.list_extend(args, { "--width", tostring(opts.width) })
+  end
+  if opts.height then
+    vim.list_extend(args, { "--height", tostring(opts.height) })
+  end
+  if opts.x then
+    vim.list_extend(args, { "--x", tostring(opts.x) })
+  end
+  if opts.y then
+    vim.list_extend(args, { "--y", tostring(opts.y) })
   end
 
   vim.list_extend(args, { "--", "sh", "-c", task.cmd })

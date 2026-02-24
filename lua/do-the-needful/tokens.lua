@@ -49,6 +49,8 @@ local function get_input_configs(selection)
   return configs
 end
 
+local provider_keys = { "tmux", "zellij", "neovim", "toggleterm" }
+
 local function execute_task(selection, task_cb)
   local task = {
     cmd = selection.cmd,
@@ -57,6 +59,11 @@ local function execute_task(selection, task_cb)
     window = selection.window,
     runner = selection.runner,
   }
+  for _, key in ipairs(provider_keys) do
+    if selection[key] then
+      task[key] = selection[key]
+    end
+  end
   dtn.Log.trace(sf(
     [[Token.execute_task: task generated:
                 %s]],

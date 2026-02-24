@@ -1,0 +1,211 @@
+==============================================================================
+Do The Needful                                                  *do-the-needful*
+
+                                                           *do-the-needful.nvim*
+Task runner with multiple picker and runner backends.
+Pick a task, run it anywhere.
+
+Requires Neovim >= 0.10
+
+Usage:
+
+>lua
+  require("do-the-needful").setup({
+    tasks = {
+      { name = "build", cmd = "make build", tags = { "build" } },
+    },
+  })
+<
+
+COMMANDS ~
+
+  `:Needful [tags...]`       Open task picker, optionally filter by tags
+  `:NeedfulRerun`            Re-run the last executed task
+  `:NeedfulRun <name>`       Run a task by name (tab completion supported)
+  `:NeedfulEdit [scope]`     Edit project or global config
+
+LUA API ~
+
+>lua
+  require("do-the-needful").please()                    -- open picker
+  require("do-the-needful").please({ tags = {"build"} }) -- filter by tags
+  require("do-the-needful").actions()                   -- actions picker
+  require("do-the-needful").rerun()                     -- re-run last task
+  require("do-the-needful").run_by_name("tests")        -- run by name
+  require("do-the-needful").edit_config("project")      -- edit config
+<
+
+DoTheNeedful                                                      *DoTheNeedful*
+
+    Fields: ~
+        {setup}            (fun(opts:table))
+        {telescope_setup}  (fun(opts:table))
+        {Log}              (Logger)
+        {edit_config}      (fun(opts:source))
+        {please}           (fun(opts?:table))
+        {actions}          (fun(opts?:table))
+        {rerun}            (fun())
+        {run_by_name}      (fun(name:string))
+
+
+M.setup({opts?})                                                       *M.setup*
+     Setup do-the-needful with user options.
+
+    Parameters: ~
+        {opts?}  (Opts)  User configuration, merged with defaults
+
+
+M.edit_config({opts?})                                           *M.edit_config*
+     Edit a task config file.
+
+    Parameters: ~
+        {opts?}  (string)  Config scope: "project" (default) or "global"
+
+
+M.please({opts?})                                                     *M.please*
+     Open the task picker. Optionally filter by tags.
+
+    Parameters: ~
+        {opts?}  (table)  Options table, supports `tags` key for filtering
+
+
+M.actions({opts?})                                                   *M.actions*
+     Open the actions picker (edit config, run tasks, etc).
+
+    Parameters: ~
+        {opts?}  (table)  Picker options
+
+
+M.rerun()                                                              *M.rerun*
+     Re-run the last executed task.
+
+
+M.run_by_name({name})                                            *M.run_by_name*
+     Run a task by its name directly, without opening a picker.
+
+    Parameters: ~
+        {name}  (string)  The task name to match
+
+
+==============================================================================
+Configuration                                            *do-the-needful.config*
+
+Handles initialization and management of plugin options.
+User options are merged with defaults from |do-the-needful.constants|.
+
+Config                                                                  *Config*
+
+    Fields: ~
+        {get_opts}         (fun():Opts)
+        {init}             (fun(opts:Opts):Opts)
+        {telescope_setup}  (fun(opts:TelescopeOpts):TelescopeOpts)
+
+
+M.get_opts()                                                        *M.get_opts*
+     Get a deep copy of the current plugin options.
+
+    Returns: ~
+        (Opts)
+
+
+M.get_telescope_opts()                                    *M.get_telescope_opts*
+     Get a deep copy of the current telescope options.
+
+    Returns: ~
+        (TelescopeOpts)
+
+
+M.init({opts?})                                                         *M.init*
+     Initialize plugin configuration with user options.
+
+    Parameters: ~
+        {opts?}  (Opts)  User options to merge with defaults
+
+    Returns: ~
+        (Opts)  options
+
+
+M.telescope_setup({opts?})                                   *M.telescope_setup*
+     Set telescope extension options.
+
+    Parameters: ~
+        {opts?}  (TelescopeOpts)  Telescope-specific options
+
+    Returns: ~
+        (TelescopeOpts)
+
+
+==============================================================================
+Constants                                             *do-the-needful.constants*
+
+Default option values and type definitions for do-the-needful.
+
+TelescopeOpts                                                    *TelescopeOpts*
+
+    Fields: ~
+        {actions}  (table)
+        {tasks}    (table)
+
+
+Opts                                                                      *Opts*
+
+    Fields: ~
+        {log_level}        (string)
+        {tasks}            (table)
+        {config_file}      (string)
+        {config_order}     (table)
+        {edit_mode}        (string)
+        {tag_source}       (boolean)
+        {global_tokens}    (table)
+        {ask_functions}    (table)
+        {picker}           (string)
+        {runner}           (string)
+        {picker_priority}  (string[])
+        {runner_priority}  (string[])
+
+
+Constants                                                            *Constants*
+
+    Fields: ~
+        {get_val}  (fun():Constants._val)
+
+
+Constants._val                                                  *Constants._val*
+
+    Fields: ~
+        {plugin_name}               (string)
+        {task_preview_field_order}  (string[])
+        {token_replacement_fields}  (string[])
+        {lists}                     (table)
+        {opts}                      (Opts)
+        {telescope_opts}            (TelescopeOpts)
+        {telescope_setup}           (table)
+        {task_defaults}             (TaskConfig)
+        {default_task_lines}        (string[])
+        {default_log_level}         (string)
+        {log_levels}                (string[])
+
+
+M.get()                                                                  *M.get*
+     Get a deep copy of all constant values.
+
+    Returns: ~
+        (Constants._val)
+
+
+==============================================================================
+User Commands                                          *do-the-needful.commands*
+
+Registers Neovim user commands for do-the-needful.
+
+Commands:
+  `:Needful [tags...]`         Open task picker, optionally filter by tags
+  `:NeedfulRerun`              Re-run the last executed task
+  `:NeedfulRun <name>`         Run a task by name (tab completion supported)
+  `:NeedfulEdit [scope]`       Edit project or global config
+
+M.register()                                                        *M.register*
+     Register all do-the-needful user commands.
+
+
+vim:tw=78:ts=8:noet:ft=help:norl:

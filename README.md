@@ -3,6 +3,8 @@
 Task runner with multiple picker and runner backends. Pick a task, run it
 anywhere. Task commands can use tokens that are parsed at execution time.
 
+[API Documentation](https://catgoose.github.io/do-the-needful.nvim/)
+
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->

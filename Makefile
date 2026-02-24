@@ -7,6 +7,8 @@ help:
 	@echo "  make test              - Run all mini.test tests"
 	@echo "  make test-file FILE=f  - Run a single test file"
 	@echo "  make docs              - Generate vimdoc and HTML docs"
+	@echo "  make docs-vimdoc       - Generate vimdoc only (lemmy-help)"
+	@echo "  make docs-html         - Generate HTML docs only (LDoc)"
 	@echo "  make clean             - Remove deps/"
 
 test:
@@ -17,12 +19,16 @@ test-file:
 	@echo "Running test file: $(FILE)"
 	@bash $(TEST_SCRIPT) $(FILE)
 
-docs:
-	@echo "Generating docs..."
-	@bash $(DOCS_SCRIPT)
+docs: docs-vimdoc docs-html
+
+docs-vimdoc:
+	scripts/gen_vimdoc.sh
+
+docs-html:
+	scripts/gen_html.sh
 
 clean:
 	@echo "Removing deps/"
 	@rm -rf deps/
 
-.PHONY: help test test-file docs clean
+.PHONY: help test test-file docs docs-vimdoc docs-html clean

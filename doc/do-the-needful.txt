@@ -48,39 +48,39 @@ DoTheNeedful                                                      *DoTheNeedful*
         {run_by_name}      (fun(name:string))
 
 
-M.setup({opts?})                                                       *M.setup*
+M.setup({opts?})                                          *do-the-needful.setup*
      Setup do-the-needful with user options.
 
     Parameters: ~
         {opts?}  (Opts)  User configuration, merged with defaults
 
 
-M.edit_config({opts?})                                           *M.edit_config*
+M.edit_config({opts?})                              *do-the-needful.edit_config*
      Edit a task config file.
 
     Parameters: ~
         {opts?}  (string)  Config scope: "project" (default) or "global"
 
 
-M.please({opts?})                                                     *M.please*
+M.please({opts?})                                        *do-the-needful.please*
      Open the task picker. Optionally filter by tags.
 
     Parameters: ~
         {opts?}  (table)  Options table, supports `tags` key for filtering
 
 
-M.actions({opts?})                                                   *M.actions*
+M.actions({opts?})                                      *do-the-needful.actions*
      Open the actions picker (edit config, run tasks, etc).
 
     Parameters: ~
         {opts?}  (table)  Picker options
 
 
-M.rerun()                                                              *M.rerun*
+M.rerun()                                                 *do-the-needful.rerun*
      Re-run the last executed task.
 
 
-M.run_by_name({name})                                            *M.run_by_name*
+M.run_by_name({name})                               *do-the-needful.run_by_name*
      Run a task by its name directly, without opening a picker.
 
     Parameters: ~
@@ -101,21 +101,21 @@ Config                                                                  *Config*
         {telescope_setup}  (fun(opts:TelescopeOpts):TelescopeOpts)
 
 
-M.get_opts()                                                        *M.get_opts*
+M.get_opts()                                    *do-the-needful.config.get_opts*
      Get a deep copy of the current plugin options.
 
     Returns: ~
         (Opts)
 
 
-M.get_telescope_opts()                                    *M.get_telescope_opts*
+M.get_telescope_opts()                *do-the-needful.config.get_telescope_opts*
      Get a deep copy of the current telescope options.
 
     Returns: ~
         (TelescopeOpts)
 
 
-M.init({opts?})                                                         *M.init*
+M.init({opts?})                                     *do-the-needful.config.init*
      Initialize plugin configuration with user options.
 
     Parameters: ~
@@ -125,7 +125,7 @@ M.init({opts?})                                                         *M.init*
         (Opts)  options
 
 
-M.telescope_setup({opts?})                                   *M.telescope_setup*
+M.telescope_setup({opts?})               *do-the-needful.config.telescope_setup*
      Set telescope extension options.
 
     Parameters: ~
@@ -186,7 +186,7 @@ Constants._val                                                  *Constants._val*
         {log_levels}                (string[])
 
 
-M.get()                                                                  *M.get*
+M.get()                                           *do-the-needful.constants.get*
      Get a deep copy of all constant values.
 
     Returns: ~
@@ -204,7 +204,7 @@ Commands:
   `:NeedfulRun <name>`         Run a task by name (tab completion supported)
   `:NeedfulEdit [scope]`       Edit project or global config
 
-M.register()                                                        *M.register*
+M.register()                                  *do-the-needful.commands.register*
      Register all do-the-needful user commands.
 
 

@@ -1,7 +1,7 @@
 local Path = require("plenary.path")
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").get()
-local Log = require("do-the-needful").Log
+local dtn = require("do-the-needful")
 local sf = require("do-the-needful.utils").string_format
 
 ---@class Edit
@@ -13,7 +13,7 @@ local function populate_config()
   local bufnr = vim.api.nvim_get_current_buf()
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, const.default_task_lines)
   vim.fn.setcursorcharpos(4, 14)
-  Log.trace("edit._populate_config(): populating buffer for nonexisting file")
+  dtn.Log.trace("edit._populate_config(): populating buffer for nonexisting file")
 end
 
 local function edit_file(file)
@@ -27,7 +27,7 @@ local function edit_file(file)
   elseif mode == "tab" then
     vim.cmd.tabnew(file)
   else
-    Log.error(sf("edit.edit_file(): unknown edit mode: %s", mode))
+    dtn.Log.error(sf("edit.edit_file(): unknown edit mode: %s", mode))
   end
 end
 
@@ -38,7 +38,7 @@ function M.edit_config(config)
   if not file_h:exists() or #file_h:read() == 0 then
     populate_config()
   end
-  Log.trace(sf("init.edit_config(): editing config type: %s", config))
+  dtn.Log.trace(sf("init.edit_config(): editing config type: %s", config))
 end
 
 return M

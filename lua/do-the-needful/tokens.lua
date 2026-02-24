@@ -1,7 +1,7 @@
 local utils = require("do-the-needful.utils")
 local get_opts = require("do-the-needful.config").get_opts
 local const = require("do-the-needful.constants").get()
-local Log = require("do-the-needful").Log
+local dtn = require("do-the-needful")
 local sf = utils.string_format
 
 ---@class Token
@@ -19,7 +19,7 @@ local function replace_tokens(str)
       str = utils.escaped_replace(str, k, v())
     end
   end
-  Log.trace(sf("Token.replace_tokens: %s", str))
+  dtn.Log.trace(sf("Token.replace_tokens: %s", str))
   return str
 end
 
@@ -55,8 +55,9 @@ local function execute_task(selection, task_cb)
     name = selection.name,
     cwd = selection.cwd,
     window = selection.window,
+    runner = selection.runner,
   }
-  Log.trace(sf(
+  dtn.Log.trace(sf(
     [[Token.execute_task: task generated:
                 %s]],
     task
@@ -77,7 +78,7 @@ local function ask_tokens(selection, task_cb)
           if input then
             count = count + 1
             selection.cmd = utils.escaped_replace(selection.cmd, token, input)
-            Log.trace(sf(
+            dtn.Log.trace(sf(
               [[Token.ask_tokens: token %s replaced for cmd:
                 %s]],
               token,
@@ -96,7 +97,7 @@ local function ask_tokens(selection, task_cb)
 end
 
 M.replace = function(selection, task_cb)
-  Log.trace(sf(
+  dtn.Log.trace(sf(
     [[Token.replace started for selection:
   %s]],
     selection

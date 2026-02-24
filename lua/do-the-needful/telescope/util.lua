@@ -1,7 +1,7 @@
 local preview = require("do-the-needful.telescope.preview")
 local previewers = require("telescope.previewers")
 local get_opts = require("do-the-needful.config").get_opts
-local Log = require("do-the-needful").Log
+local dtn = require("do-the-needful")
 
 ---@class TelescopeUtil
 ---@field get_telescope_opts fun(opts: table): table
@@ -13,7 +13,7 @@ local M = {}
 function M.get_telescope_opts(opts)
   local telescope_opts = require("do-the-needful.config").get_telescope_opts()
   if opts and next(opts) ~= nil then
-    vim.tbl_extend("keep", telescope_opts, opts)
+    opts = vim.tbl_extend("keep", telescope_opts, opts)
   else
     opts = telescope_opts
   end
@@ -28,7 +28,7 @@ function M.entry_ordinal(task)
 end
 
 function M.entry_display(entry)
-  Log.trace("entry_display", entry)
+  dtn.Log.trace("entry_display", entry)
   local items = { entry.value.name, " " }
   local highlights = {}
   local start = #table.concat(items, "")

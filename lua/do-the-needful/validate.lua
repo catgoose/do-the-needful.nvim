@@ -1,4 +1,4 @@
-local Log = require("do-the-needful").Log
+local dtn = require("do-the-needful")
 local const = require("do-the-needful.constants").get()
 local sf = require("do-the-needful.utils").string_format
 local deep_copy = require("do-the-needful.utils").deep_copy
@@ -10,7 +10,7 @@ local M = {}
 
 local function validate_task_cmd(task, index)
   if not task.cmd or #task.cmd == 0 or type(task.cmd) ~= "string" then
-    Log.warn(
+    dtn.Log.warn(
       sf(
         "validate._validate_task_cmd: Task %s is missing a cmd. Excluding task from aggregation: %s",
         index,
@@ -26,7 +26,7 @@ local function validate_name(config)
   if not config.name or #config.name == 0 then
     local name = string.format("Unnamed %s", config.type)
     config.name = name
-    Log.warn(
+    dtn.Log.warn(
       sf(
         "validate._validate_name: %s is missing a name. Setting value to '%s'.  %s: %s",
         config.type,
@@ -43,7 +43,7 @@ local function validate_tags(config)
     if #config.tags == 0 or config.tags[1] == "" then
       config.tags = nil
     elseif type(config.tags) ~= "table" then
-      Log.warn(
+      dtn.Log.warn(
         sf(
           "validate._validate_tags: %s has an invalid tags property. Expecting a table. task: %s",
           config.type,
@@ -54,7 +54,7 @@ local function validate_tags(config)
     else
       for i, tag in ipairs(config.tags) do
         if type(tag) ~= "string" then
-          Log.warn(
+          dtn.Log.warn(
             sf(
               "validate.validate_tags: %s has an invalid tag. Converting to string. task: %s",
               config.type,
@@ -83,7 +83,7 @@ local function validate_window(task, relative)
     end
   end
   if window.relative and not vim.tbl_contains(relative, window.relative) then
-    Log.warn(
+    dtn.Log.warn(
       sf(
         "Task has an invalid window property: relative. Expecting one of %s. task: %s",
         relative,
@@ -96,7 +96,7 @@ end
 
 local function merge_defaults(config)
   local defaults = const.task_defaults
-  Log.debug(sf(
+  dtn.Log.debug(sf(
     [[validate._merge_defaults:
 Merging:
 
@@ -107,7 +107,7 @@ with defaults: %s]],
     defaults
   ))
   local merged_defaults = vim.tbl_deep_extend("keep", config, deep_copy(defaults))
-  Log.debug(sf(
+  dtn.Log.debug(sf(
     [[validate._merge_defaults:
 Merged:
 

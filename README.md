@@ -1,22 +1,27 @@
 # do-the-needful
 
-Task runner that uses tmux windows to do the needful please. A Telescope
-picker makes selecting tasks simple. Task commands can use tokens that
-are parsed at execution time.
+Task runner with multiple picker and runner backends. Pick a task, run it
+anywhere. Task commands can use tokens that are parsed at execution time.
 
 ![do-the-needful](https://tinyurl.com/mrxj4483 "do-the-needful")
 
 <!--toc:start-->
-
 - [do-the-needful](#do-the-needful)
   - [About](#about)
   - [Screenshots](#screenshots)
+  - [Requirements](#requirements)
   - [Usage](#usage)
+    - [Commands](#commands)
     - [API](#api)
     - [Telescope pickers](#telescope-pickers)
+  - [Pickers](#pickers)
+  - [Runners](#runners)
   - [Features](#features)
     - [Tasks](#tasks)
-    - [Tmux windows](#tmux-windows)
+    - [Window options](#window-options)
+    - [Per-task runner override](#per-task-runner-override)
+    - [Tag filtering](#tag-filtering)
+    - [Re-run last task](#re-run-last-task)
     - [Task metadata](#task-metadata)
     - [Global token replacement](#global-token-replacement)
     - [Prompting for input](#prompting-for-input)
@@ -33,17 +38,23 @@ are parsed at execution time.
     - [Global config](#global-config)
     - [New configs](#new-configs)
     - [tasks JSON schema](#tasks-json-schema)
-  - [Extra](#extra) - [Neovim](#neovim) - [Tmux](#tmux)
-  <!--toc:end-->
+  - [Extra](#extra)
+    - [Neovim](#neovim)
+    - [Tmux](#tmux)
+<!--toc:end-->
 
 ## About
 
-- Tasks can be defined in in setup opts, project or global config
-- Tasks run in tmux windows with configurable options such as to close
-  automatically or to keep current window's focus
-- Task tags make it easy to filter with Telescope picker
-- Tokens can be defined globally or scoped to a task and are parsed by an evaluated
-  function or user input
+- Tasks can be defined in setup opts, project or global config
+- Tasks run via auto-detected backends: tmux, zellij, toggleterm, or a
+  built-in neovim terminal
+- Pick tasks with telescope, fzf-lua, snacks.nvim, or `vim.ui.select`
+- Task tags make it easy to filter in any picker
+- Tokens can be defined globally or scoped to a task and are parsed by an
+  evaluated function or user input
+- Per-task runner override lets you mix backends (e.g. most tasks in tmux,
+  tests in a neovim terminal)
+- Re-run the last executed task with `:NeedfulRerun`
 - When editing a new project or global tasks, a default config will be created
   if one doesn't exist
 
@@ -65,33 +76,103 @@ are parsed at execution time.
 | :----------------------------------------------------------: |
 |          _Spawned task will close upon completion_           |
 
+## Requirements
+
+- Neovim >= 0.10
+- [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
+- One of the following pickers (optional, falls back to `vim.ui.select`):
+  [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim),
+  [fzf-lua](https://github.com/ibhagwan/fzf-lua),
+  [snacks.nvim](https://github.com/folke/snacks.nvim)
+- One of the following runners (optional, falls back to neovim terminal):
+  [tmux](https://github.com/tmux/tmux),
+  [zellij](https://github.com/zellij-org/zellij),
+  [toggleterm.nvim](https://github.com/akinsho/toggleterm.nvim)
+
 ## Usage
+
+### Commands
+
+```vim
+:Needful [tags...]          " Open task picker, optionally filter by tags
+:NeedfulRerun               " Re-run the last executed task
+:NeedfulRun <name>          " Run a task by name (tab completion supported)
+:NeedfulEdit [project|global] " Edit config files
+```
+
+All commands support tab completion.
 
 ### API
 
 ```lua
-require("do-the-needful").please() -- Opens task picker
-require("do-the-needful").actions() -- Opens picker to do the needful or edit configs
-require("do-the-needful").edit_config("project")
-require("do-the-needful").edit_config("global")
+require("do-the-needful").please() -- Open task picker
+require("do-the-needful").please({ tags = { "build" } }) -- Filter by tags
+require("do-the-needful").actions() -- Open actions picker
+require("do-the-needful").rerun() -- Re-run last task
+require("do-the-needful").run_by_name("tests") -- Run task by name
+require("do-the-needful").edit_config("project") -- Edit project config
+require("do-the-needful").edit_config("global") -- Edit global config
 ```
-
-Telescope opts can be passed into `.please()` and `.actions()` functions
 
 ### Telescope pickers
 
+The `:Telescope` extension continues to work for backward compatibility:
+
+```vim
+:Telescope do-the-needful         " Actions picker
+:Telescope do-the-needful please  " Task picker
+:Telescope do-the-needful project " Edit project config
+:Telescope do-the-needful global  " Edit global config
+```
+
+## Pickers
+
+Pickers are auto-detected in priority order. The first available picker is
+used. Set `picker` to use a specific backend or `picker_priority` to change
+the order.
+
+| Picker       | Key           | Requires                    |
+| ------------ | ------------- | --------------------------- |
+| Telescope    | `telescope`   | `telescope.nvim`            |
+| fzf-lua      | `fzf_lua`     | `fzf-lua`                   |
+| snacks       | `snacks`      | `snacks.nvim` with picker   |
+| vim.ui.select| `ui_select`   | Nothing (always available)  |
+
 ```lua
-:Telescope do-the-needful
--- Displays picker to do the needful please or to edit task configs
+-- Use a specific picker
+require("do-the-needful").setup({
+  picker = "fzf_lua",
+})
 
-:Telescope do-the-needful please
--- Displays task picker
+-- Or change the auto-detection order
+require("do-the-needful").setup({
+  picker_priority = { "fzf_lua", "telescope", "snacks", "ui_select" },
+})
+```
 
-:Telescope do-the-needful project
--- Edit project config
+## Runners
 
-:Telescope do-the-needful global
--- Edit global config
+Runners are auto-detected in priority order. The first available runner is
+used. Set `runner` to use a specific backend or `runner_priority` to change
+the order.
+
+| Runner      | Key          | Available when              |
+| ----------- | ------------ | --------------------------- |
+| tmux        | `tmux`       | `$TMUX` is set              |
+| zellij      | `zellij`     | `$ZELLIJ` is set            |
+| toggleterm  | `toggleterm` | `toggleterm.nvim` installed |
+| neovim      | `neovim`     | Always available            |
+
+```lua
+-- Use a specific runner
+require("do-the-needful").setup({
+  runner = "neovim",
+})
+
+-- Or change the auto-detection order
+require("do-the-needful").setup({
+  runner_priority = { "tmux", "zellij", "toggleterm", "neovim" },
+})
 ```
 
 ## Features
@@ -104,26 +185,68 @@ Tasks can be defined in 3 places:
 - Global config: `.tasks.json` located in `vim.fn.stdpath("data")`
 - Project config: `.tasks.json` in the project directory
 
-Tasks are selected using a Telescope picker
+### Window options
 
-### Tmux windows
-
-Tasks run in a new tmux window with the following default options:
+Runner backends read the `window` table from each task:
 
 ```lua
 window = {
-  name = "name", -- name of tmux window
-  close = false, -- close window after execution
-  keep_current = false, -- keep focus on current window when running task
-  open_relative = true, -- open window after/before current window
-  relative = "after", -- relative direction if open_relative = true
-  -- after or before
+  name = "name", -- window/pane name
+  close = false, -- close after execution
+  keep_current = false, -- keep focus on current window
+  open_relative = true, -- open after/before current window (tmux)
+  relative = "after", -- "after" or "before" (tmux)
 }
+```
+
+### Per-task runner override
+
+Individual tasks can specify which runner to use regardless of the global
+setting:
+
+```json
+{
+  "name": "tests",
+  "cmd": "make test",
+  "runner": "neovim"
+}
+```
+
+```lua
+{
+  name = "tests",
+  cmd = "make test",
+  runner = "neovim",
+}
+```
+
+### Tag filtering
+
+Filter tasks by tag using the `:Needful` command or the API:
+
+```vim
+:Needful build
+```
+
+```lua
+require("do-the-needful").please({ tags = { "build" } })
+```
+
+### Re-run last task
+
+Re-run the most recently executed task without opening a picker:
+
+```vim
+:NeedfulRerun
+```
+
+```lua
+require("do-the-needful").rerun()
 ```
 
 ### Task metadata
 
-Tasks metadata can be defined to make it easier to filter with Telescope picker
+Tasks metadata can be defined to make it easier to filter in pickers:
 
 ```lua
 tags = { "eza", "home", "files" },
@@ -131,13 +254,13 @@ tags = { "eza", "home", "files" },
 
 ### Global token replacement
 
-The following task fields are parsed for tokens
+The following task fields are parsed for tokens:
 
 - cmd
 - name
 - cwd
 
-`${tokens}` can be defined to be replaced in task the configuration:
+`${tokens}` can be defined to be replaced in the task configuration:
 
 ```lua
 global_tokens = {
@@ -176,6 +299,8 @@ ask = { -- Used to prompt for input to be passed into task
 
 ```lua
 local opts = {
+  picker = "auto", -- "auto", "telescope", "fzf_lua", "snacks", "ui_select"
+  runner = "auto", -- "auto", "tmux", "zellij", "neovim", "toggleterm"
   tasks = {
     {
       name = "eza", -- name of task
@@ -192,10 +317,10 @@ local opts = {
         },
       },
       window = { -- all window options are optional
-        name = "Eza ~", -- name of tmux window
-        close = false, -- close window after execution
-        keep_current = false, -- switch to window when running task
-        open_relative = true, -- open window after/before current window
+        name = "Eza ~", -- window name
+        close = false, -- close after execution
+        keep_current = false, -- keep focus on current window
+        open_relative = true, -- open after/before current window (tmux)
         relative = "after", -- relative direction if open_relative = true
       },
     },
@@ -246,8 +371,8 @@ return {
   "catgoose/do-the-needful.nvim",
   event = "BufReadPre",
   keys = {
-    { "<leader>;", [[<cmd>Telescope do-the-needful please<cr>]], "n" },
-    { "<leader>:", [[<cmd>Telescope do-the-needful<cr>]], "n" },
+    { "<leader>;", [[<cmd>Needful<cr>]], "n" },
+    { "<leader>:", [[<cmd>NeedfulRerun<cr>]], "n" },
   },
   dependencies = "nvim-lua/plenary.nvim",
   opts = opts,
@@ -256,7 +381,7 @@ return {
 
 ### Telescope setup
 
-In your Telescope setup load the `do-the-needful` extension
+If using Telescope as your picker, load the extension in your Telescope setup:
 
 ```lua
 telescope.load_extension("do-the-needful")
@@ -292,13 +417,17 @@ require("do-the-needful").actions({ prompt_title = "Actions" })
   log_level = "warn",
   tasks = {},
   edit_mode = "buffer",
-  config = ".tasks.json",
+  config_file = ".tasks.json",
   config_order = {
    "project",
    "global",
    "opts",
   },
   tag_source = true,
+  picker = "auto",
+  runner = "auto",
+  picker_priority = { "telescope", "fzf_lua", "snacks", "ui_select" },
+  runner_priority = { "tmux", "zellij", "toggleterm", "neovim" },
   global_tokens = {
     ["${cwd}"] = vim.fn.getcwd,
     ["${do-the-needful}"] = "please",
@@ -360,10 +489,12 @@ the token `${dir}` in the task command.
 
 ## Editing project and global configs
 
-The Telescope picker will easily let you choose which config to edit
+Use the `:NeedfulEdit` command or the actions picker to choose which config
+to edit:
 
-```lua
-:Telescope do-the-needful
+```vim
+:NeedfulEdit project
+:NeedfulEdit global
 ```
 
 ### Project config
@@ -412,6 +543,7 @@ When calling the task config editing functions if the respective
     name: string;
     cmd: string;
     tags: string[];
+    runner: "tmux" | "zellij" | "neovim" | "toggleterm"; // optional override
     ask: {
       "${token}": {
         title: string;
@@ -429,13 +561,6 @@ When calling the task config editing functions if the respective
   }>;
 }
 ```
-
-## Todo
-
-- Add api to add new task to a config
-- Zellij and terminal support
-- Support split in config
-- Support sending to task window on autocmd
 
 ## Extra
 

@@ -1,3 +1,9 @@
+---@mod do-the-needful.config Configuration
+---@brief [[
+---Handles initialization and management of plugin options.
+---User options are merged with defaults from |do-the-needful.constants|.
+---@brief ]]
+
 local const = require("do-the-needful.constants").get()
 local utils = require("do-the-needful.utils")
 local sf = utils.string_format
@@ -12,18 +18,21 @@ local M = {}
 local _opts = const.opts
 local _telescope_opts = const.telescope_setup
 
+--- Get a deep copy of the current plugin options.
+---@return Opts
 function M.get_opts()
-  -- _opts.configs.project.path = sf("%s/%s", vim.fn.getcwd(), _opts.config_file)
   return utils.deep_copy(_opts)
 end
 
+--- Get a deep copy of the current telescope options.
+---@return TelescopeOpts
 function M.get_telescope_opts()
   return utils.deep_copy(_telescope_opts)
 end
 
 local function validate_config_order(config_order)
   local valid = true
-  local is_list = vim.fn.has("nvim-0.10") == 1 and vim.islist or vim.tbl_islist
+  local is_list = vim.islist
   if not is_list(config_order) then
     return not valid
   end
@@ -76,6 +85,9 @@ local function set_local_opts(opts)
   _opts.tasks = nil
 end
 
+--- Initialize plugin configuration with user options.
+---@param opts? Opts User options to merge with defaults
+---@return Opts Resolved options
 function M.init(opts)
   opts = opts or {}
   opts = set_opts_defaults(opts)
@@ -89,6 +101,9 @@ function M.init(opts)
   return M.get_opts()
 end
 
+--- Set telescope extension options.
+---@param opts? TelescopeOpts Telescope-specific options
+---@return TelescopeOpts
 function M.telescope_setup(opts)
   opts = opts or {}
   _telescope_opts = opts

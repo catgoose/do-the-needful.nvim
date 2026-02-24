@@ -6,7 +6,7 @@ help:
 	@echo "Available targets:"
 	@echo "  make test              - Run all mini.test tests"
 	@echo "  make test-file FILE=f  - Run a single test file"
-	@echo "  make docs              - Generate vimdoc with lemmy-help"
+	@echo "  make docs              - Generate vimdoc and HTML docs"
 	@echo "  make clean             - Remove deps/"
 
 test:
@@ -18,7 +18,7 @@ test-file:
 	@bash $(TEST_SCRIPT) $(FILE)
 
 docs:
-	@echo "Generating vimdoc..."
+	@echo "Generating docs..."
 	@bash $(DOCS_SCRIPT)
 
 clean:

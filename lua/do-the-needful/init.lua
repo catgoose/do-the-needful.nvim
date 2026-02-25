@@ -85,6 +85,7 @@ function M.setup(opts)
   require("do-the-needful.commands").register()
 end
 
+---@tag do-the-needful.edit_config
 --- Edit a task config file.
 ---@param opts? string Config scope: "project" (default) or "global"
 function M.edit_config(opts)
@@ -108,6 +109,7 @@ function M.please(opts)
   end, opts)
 end
 
+---@tag do-the-needful.actions
 --- Open the actions picker (edit config, run tasks, etc).
 ---@param opts? table Picker options
 function M.actions(opts)

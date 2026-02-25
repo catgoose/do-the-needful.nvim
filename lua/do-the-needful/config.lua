@@ -24,6 +24,7 @@ function M.get_opts()
   return utils.deep_copy(_opts)
 end
 
+---@tag do-the-needful.config.get_telescope_opts
 --- Get a deep copy of the current telescope options.
 ---@return TelescopeOpts
 function M.get_telescope_opts()
@@ -85,6 +86,7 @@ local function set_local_opts(opts)
   _opts.tasks = nil
 end
 
+---@tag do-the-needful.config.init
 --- Initialize plugin configuration with user options.
 ---@param opts? Opts User options to merge with defaults
 ---@return Opts Resolved options

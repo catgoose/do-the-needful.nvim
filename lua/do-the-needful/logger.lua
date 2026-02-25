@@ -10,6 +10,7 @@ local M = {}
 
 M.log = nil
 
+---@tag do-the-needful.logger.init
 function M.init()
   M.log = require("plenary.log").new({
     plugin = const.plugin_name,

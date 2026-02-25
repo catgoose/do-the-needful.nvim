@@ -6,10 +6,12 @@ local M = {}
 
 M.name = "zellij"
 
+---@tag do-the-needful.runner.zellij.is_available
 function M.is_available()
   return vim.env.ZELLIJ ~= nil
 end
 
+---@tag do-the-needful.runner.zellij.run
 function M.run(task)
   dtn.Log.trace(sf("runner.zellij.run(): running task %s", task))
   local cwd = task.cwd or vim.fn.getcwd()

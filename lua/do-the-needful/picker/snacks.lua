@@ -7,6 +7,7 @@ local M = {}
 
 M.name = "snacks"
 
+---@tag do-the-needful.picker.snacks.is_available
 function M.is_available()
   local ok, snacks = pcall(require, "snacks")
   return ok and snacks.picker ~= nil
@@ -25,6 +26,7 @@ local function format_task_text(task)
   return table.concat(parts, " ")
 end
 
+---@tag do-the-needful.picker.snacks.pick_task
 function M.pick_task(tasks, on_select, _)
   local snacks = require("snacks")
   local items = {}
@@ -51,6 +53,7 @@ function M.pick_task(tasks, on_select, _)
   })
 end
 
+---@tag do-the-needful.picker.snacks.pick_action
 function M.pick_action(action_list, on_select, _)
   local snacks = require("snacks")
   local items = {}

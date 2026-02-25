@@ -55,7 +55,7 @@ local function execute_task(selection, task_cb)
   local task = {
     cmd = selection.cmd,
     name = selection.name,
-    cwd = selection.cwd,
+    cwd = selection.cwd and vim.fn.expand(selection.cwd) or nil,
     window = selection.window,
     runner = selection.runner,
   }

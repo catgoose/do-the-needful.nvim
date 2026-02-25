@@ -30,6 +30,7 @@ local function get_provider(name)
   return nil
 end
 
+---@tag do-the-needful.runner.resolve
 function M.resolve(name)
   if name and name ~= "auto" then
     local provider = get_provider(name)
@@ -50,6 +51,7 @@ function M.resolve(name)
   return nil
 end
 
+---@tag do-the-needful.runner.run
 function M.run(task)
   local runner_name = task.runner
   if not runner_name then

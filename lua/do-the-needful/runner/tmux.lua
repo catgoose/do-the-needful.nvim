@@ -7,6 +7,7 @@ local M = {}
 
 M.name = "tmux"
 
+---@tag do-the-needful.runner.tmux.is_available
 function M.is_available()
   return vim.env.TMUX ~= nil
 end
@@ -77,6 +78,7 @@ local function build_send_to_pane(task, pane)
   return cmd
 end
 
+---@tag do-the-needful.runner.tmux.run
 function M.run(task)
   if not M.is_available() then
     dtn.Log.error("runner.tmux.run(): tmux is not running")

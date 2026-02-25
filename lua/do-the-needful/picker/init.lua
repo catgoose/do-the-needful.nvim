@@ -32,6 +32,7 @@ local function get_provider(name)
   return nil
 end
 
+---@tag do-the-needful.picker.resolve
 function M.resolve(name)
   if name and name ~= "auto" then
     local provider = get_provider(name)
@@ -52,6 +53,7 @@ function M.resolve(name)
   return nil
 end
 
+---@tag do-the-needful.picker.pick_task
 function M.pick_task(tasks, on_select, opts)
   local config = get_opts()
   local provider = M.resolve(config.picker)
@@ -62,6 +64,7 @@ function M.pick_task(tasks, on_select, opts)
   provider.pick_task(tasks, on_select, opts)
 end
 
+---@tag do-the-needful.picker.pick_action
 function M.pick_action(actions, on_select, opts)
   local config = get_opts()
   local provider = M.resolve(config.picker)

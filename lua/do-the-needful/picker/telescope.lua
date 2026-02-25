@@ -6,11 +6,13 @@ local M = {}
 
 M.name = "telescope"
 
+---@tag do-the-needful.picker.telescope.is_available
 function M.is_available()
   local ok = pcall(require, "telescope")
   return ok
 end
 
+---@tag do-the-needful.picker.telescope.pick_task
 function M.pick_task(tasks, on_select, opts)
   local finders = require("telescope.finders")
   local conf = require("telescope.config").values
@@ -45,6 +47,7 @@ function M.pick_task(tasks, on_select, opts)
     :find()
 end
 
+---@tag do-the-needful.picker.telescope.pick_action
 function M.pick_action(action_list, on_select, opts)
   local finders = require("telescope.finders")
   local conf = require("telescope.config").values

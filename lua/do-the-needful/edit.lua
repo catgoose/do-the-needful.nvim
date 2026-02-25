@@ -31,6 +31,7 @@ local function edit_file(file)
   end
 end
 
+---@tag do-the-needful.edit.edit_config
 function M.edit_config(config)
   local file = get_opts().configs[config].path
   edit_file(file)

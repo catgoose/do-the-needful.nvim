@@ -17,6 +17,7 @@ local function run_task(task)
   runner.run(task)
 end
 
+---@tag do-the-needful.telescope.tasks
 function M.tasks(opts)
   local telescope_picker = require("do-the-needful.picker.telescope")
   local tasks = collect.tasks()
@@ -28,6 +29,7 @@ function M.tasks(opts)
   end, opts)
 end
 
+---@tag do-the-needful.telescope.actions
 function M.actions(opts)
   local telescope_picker = require("do-the-needful.picker.telescope")
   local selections = {

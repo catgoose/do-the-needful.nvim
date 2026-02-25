@@ -138,6 +138,7 @@ merged_defaults: %s]],
   return merged_defaults
 end
 
+---@tag do-the-needful.validate.tasks
 function M.tasks(tasks)
   ---@type relative
   local relative = { "after", "before" }

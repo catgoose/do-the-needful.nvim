@@ -6,11 +6,13 @@ local M = {}
 
 M.name = "toggleterm"
 
+---@tag do-the-needful.runner.toggleterm.is_available
 function M.is_available()
   local ok = pcall(require, "toggleterm")
   return ok
 end
 
+---@tag do-the-needful.runner.toggleterm.run
 function M.run(task)
   dtn.Log.trace(sf("runner.toggleterm.run(): running task %s", task))
   local Terminal = require("toggleterm.terminal").Terminal

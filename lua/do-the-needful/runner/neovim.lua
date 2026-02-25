@@ -6,10 +6,12 @@ local M = {}
 
 M.name = "neovim"
 
+---@tag do-the-needful.runner.neovim.is_available
 function M.is_available()
   return true
 end
 
+---@tag do-the-needful.runner.neovim.run
 function M.run(task)
   dtn.Log.trace(sf("runner.neovim.run(): running task %s", task))
   local cwd = task.cwd or vim.fn.getcwd()

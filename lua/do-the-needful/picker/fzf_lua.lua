@@ -7,6 +7,7 @@ local M = {}
 
 M.name = "fzf_lua"
 
+---@tag do-the-needful.picker.fzf_lua.is_available
 function M.is_available()
   local ok = pcall(require, "fzf-lua")
   return ok
@@ -25,6 +26,7 @@ local function format_task_entry(task)
   return table.concat(parts, " ")
 end
 
+---@tag do-the-needful.picker.fzf_lua.pick_task
 function M.pick_task(tasks, on_select, _)
   local fzf = require("fzf-lua")
   local entries = {}
@@ -50,6 +52,7 @@ function M.pick_task(tasks, on_select, _)
   })
 end
 
+---@tag do-the-needful.picker.fzf_lua.pick_action
 function M.pick_action(action_list, on_select, _)
   local fzf = require("fzf-lua")
   local entries = {}

@@ -70,6 +70,7 @@ local function add_metadata(tasks, task_config, source)
   end
 end
 
+---@tag do-the-needful.collect.tasks
 function M.tasks()
   local tasks = {}
   local sources = get_opts().configs

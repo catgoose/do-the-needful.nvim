@@ -10,6 +10,7 @@ local dtn = require("do-the-needful")
 ---@field entry_maker fun(task: table): table
 local M = {}
 
+---@tag do-the-needful.telescope.util.get_telescope_opts
 function M.get_telescope_opts(opts)
   local telescope_opts = require("do-the-needful.config").get_telescope_opts()
   if opts and next(opts) ~= nil then

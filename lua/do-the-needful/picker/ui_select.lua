@@ -7,6 +7,7 @@ local M = {}
 
 M.name = "ui_select"
 
+---@tag do-the-needful.picker.ui_select.is_available
 function M.is_available()
   return true
 end
@@ -24,6 +25,7 @@ local function format_task(task)
   return table.concat(parts, " ")
 end
 
+---@tag do-the-needful.picker.ui_select.pick_task
 function M.pick_task(tasks, on_select, _)
   vim.ui.select(tasks, {
     prompt = "Do the needful:",
@@ -36,6 +38,7 @@ function M.pick_task(tasks, on_select, _)
   end)
 end
 
+---@tag do-the-needful.picker.ui_select.pick_action
 function M.pick_action(action_list, on_select, _)
   vim.ui.select(action_list, {
     prompt = "do-the-needful actions:",

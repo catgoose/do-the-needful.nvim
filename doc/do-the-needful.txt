@@ -55,6 +55,7 @@ M.setup({opts?})                                          *do-the-needful.setup*
         {opts?}  (Opts)  User configuration, merged with defaults
 
 
+                                                    *do-the-needful.edit_config*
 M.edit_config({opts?})                              *do-the-needful.edit_config*
      Edit a task config file.
 
@@ -69,6 +70,7 @@ M.please({opts?})                                        *do-the-needful.please*
         {opts?}  (table)  Options table, supports `tags` key for filtering
 
 
+                                                        *do-the-needful.actions*
 M.actions({opts?})                                      *do-the-needful.actions*
      Open the actions picker (edit config, run tasks, etc).
 
@@ -108,6 +110,7 @@ M.get_opts()                                    *do-the-needful.config.get_opts*
         (Opts)
 
 
+                                      *do-the-needful.config.get_telescope_opts*
 M.get_telescope_opts()                *do-the-needful.config.get_telescope_opts*
      Get a deep copy of the current telescope options.
 
@@ -115,6 +118,7 @@ M.get_telescope_opts()                *do-the-needful.config.get_telescope_opts*
         (TelescopeOpts)
 
 
+                                                    *do-the-needful.config.init*
 M.init({opts?})                                     *do-the-needful.config.init*
      Initialize plugin configuration with user options.
 
